@@ -2,4 +2,5 @@
 # Ces fichiers ne contiennent pas de fonction main
 # Remplacer ... par les fichiers nécessaires 
 add_library(Vector STATIC Vector3.cpp Vector2.cpp)
-add_library(Particle STATIC particle.cpp)
+add_library(Particle STATIC particle.cpp Univers.cpp)
+target_link_libraries(Particle Vector)

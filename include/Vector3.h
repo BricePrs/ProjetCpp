@@ -23,6 +23,7 @@ public:
     Vector3(const Vector3&);
 
     [[maybe_unused]] static Vector3 zero();
+    [[maybe_unused]] static Vector3 random_in_unit_pos_cube();
 
     friend std::ostream &operator<<(std::ostream &out, const Vector3& v);
     std::string to_string() const {

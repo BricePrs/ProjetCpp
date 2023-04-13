@@ -10,26 +10,24 @@
 #include <vector>
 #include "Vector3.h"
 
-#ifndef TP_PERESB_HASSANH_PARTICLE_H
-#define TP_PERESB_HASSANH_PARTICLE_H
+#ifndef PARTICLE_H
+#define PARTICLE_H
 
 enum Category {
-    ELECTRON,
-    PROTON,
-    NEUTRON,
-};
-enum DataStructure {
-    SET,
-    LIST,
-    VECTOR,
-    QUEUE,
+    ELECTRON [[maybe_unused]],
+    PROTON [[maybe_unused]],
+    NEUTRON [[maybe_unused]],
 };
 
+
 class Particle {
+
 public:
     Particle(uint32_t id, Vector3 pos, Vector3 speed, Vector3 strength, double mass, Category category);
     Particle() = default;
     Particle(const Particle &p) = default;
+
+    static Particle random(uint32_t id);
 
     uint32_t get_id() {
         return this->id;
@@ -81,6 +79,10 @@ private:
     Vector3 strength;
     double mass;
     Category category;
+
+    // TODO : Is it better ?
+    // static uint32_t particle_count;
+
 };
 
 

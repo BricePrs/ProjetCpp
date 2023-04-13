@@ -2,6 +2,7 @@
 // Created by brice on 11/04/23.
 //
 
+#include <random>
 #include "Vector3.h"
 
 
@@ -118,7 +119,16 @@ Vector3 &Vector3::operator*=(const Vector3 &v) {
            this->z * this->z;
 }
 
-
+Vector3 Vector3::random_in_unit_pos_cube() {
+    static std::random_device rd;
+    static std::mt19937 mt(rd());
+    static std::uniform_real_distribution<double> dist(0.0, 1.0);
+    return{
+        dist(mt),
+        dist(mt),
+        dist(mt)
+    };
+}
 
 
 Vector3 operator+(const Vector3 &a, const Vector3 &b) {
