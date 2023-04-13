@@ -8,9 +8,10 @@
 #include <set>
 #include <deque>
 #include <vector>
+#include "Vector3.h"
 
-#ifndef TP2_PARTICLE_H
-#define TP2_PARTICLE_H
+#ifndef TP_PERESB_HASSANH_PARTICLE_H
+#define TP_PERESB_HASSANH_PARTICLE_H
 
 enum Category {
     ELECTRON,
@@ -22,11 +23,6 @@ enum DataStructure {
     LIST,
     VECTOR,
     QUEUE,
-};
-struct Vector3 {
-    double x;
-    double y;
-    double z;
 };
 
 class Particle {
@@ -89,4 +85,4 @@ private:
 
 
 
-#endif //TP2_PARTICLE_H
+#endif //TP_PERESB_HASSANH_PARTICLE_H

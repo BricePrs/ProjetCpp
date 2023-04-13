@@ -4,6 +4,7 @@
 #include "particle.h"
 #include <chrono>
 #include <fstream>
+
 auto new_random_vec3(std::mt19937 &gen, std::uniform_real_distribution<double> &distribution) -> Vector3 {
     return Vector3{distribution(gen), distribution(gen), distribution(gen)};
 }
@@ -114,15 +115,13 @@ void data_structures_comparison() {
     run(sizes);
 }
 
-/*
 void update_strengths(std::vector<Particle> &particles) {
     int nb_particles = particles.size();
     Vector3 F_i;
-    Vector3 F_ij;
     Vector3 R_ij;
     double r_ij;
     for (uint32_t i = 0; i<nb_particles; i++) {
-        F_i = = {0.0, 0.0, 0.0};
+        F_i = Vector3();
         for (uint32_t j = 0; j < nb_particles; j++) {
             if (j != i) {
                 R_ij = particles[j].get_pos() - particles[i].get_pos();
@@ -136,8 +135,12 @@ void update_strengths(std::vector<Particle> &particles) {
 
 
 void stromer_verlet(std::vector<Particle> &particles, double t_end, double dt) {
-    std::ofstream file("stromer_verlet.txt");
 
+    std::string source_path = __FILE__;
+    size_t last_separator = source_path.find_last_of("/\\");
+    std::string file_path = source_path.substr(0, last_separator + 1) + "stromer_verlet.txt";
+
+    std::ofstream file(file_path);
     double t = 0.0;
 
     uint32_t nb_particles = particles.size();
@@ -150,10 +153,10 @@ void stromer_verlet(std::vector<Particle> &particles, double t_end, double dt) {
     while (t<t_end) {
         t+=dt;
 
-        std::string file_line = std::to_string(t);
+        std::string file_line = std::to_string(t) + " ";
 
         for (uint32_t i = 0; i<nb_particles; i++) {
-            Particle p = particles[i];
+            Particle &p = particles[i];
             Vector3 new_pos = p.get_pos() + dt * (p.get_speed() + (0.5 / p.get_mass()) * p.get_speed() * dt);
             p.set_pos(new_pos);
             F_old[i] = p.get_strength();
@@ -167,14 +170,13 @@ void stromer_verlet(std::vector<Particle> &particles, double t_end, double dt) {
             p.set_speed(new_speed);
 
             // adding new_pos of each particle to file
-            file_line += p.get_pos() + " ";
-
+            file_line += p.get_pos().to_string() + " ";
         }
         file_line += "\n";
         file << file_line;
     }
+    file.close();
 }
-*/
 
 
 int main() {
@@ -183,7 +185,7 @@ int main() {
 
     // current particles system is composed of the Sun, Earth, Jupiter, Haley comet (4 particles)
     std::vector<Particle> particles = generate_particles_vector(4);
-    //stromer_verlet(particles, 465.5, 0.015);
+    stromer_verlet(particles, 465.5, 0.015);
 
 
 }

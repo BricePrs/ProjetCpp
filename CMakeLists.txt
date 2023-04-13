@@ -27,5 +27,5 @@ add_subdirectory(test)
 
 ## On implémente une démo, un programme de vérification.
 #add_executable(lab2 test/test_lab2.cpp)
-#target_link_libraries(lab2 Vecteur)
+#target_link_libraries(lab2 Vector)
 
