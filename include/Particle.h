@@ -8,7 +8,7 @@
 #include <set>
 #include <deque>
 #include <vector>
-#include "Vector3.h"
+#include "Vector.h"
 
 #ifndef PARTICLE_H
 #define PARTICLE_H
@@ -23,7 +23,7 @@ enum Category {
 class Particle {
 
 public:
-    Particle(uint32_t id, Vector3 pos, Vector3 speed, Vector3 strength, double mass, Category category);
+    Particle(uint32_t id, Vector<3> pos, Vector<3> speed, Vector<3> strength, double mass, Category category);
     Particle() = default;
     Particle(const Particle &p) = default;
 
@@ -33,15 +33,15 @@ public:
         return this->id;
     }
 
-    Vector3 get_pos() {
+    Vector<3> get_pos() {
         return this->pos;
     }
 
-    Vector3 get_speed() {
+    Vector<3> get_speed() {
         return this->speed;
     }
 
-    Vector3 get_strength() {
+    Vector<3> get_strength() {
         return this->strength;
     }
 
@@ -53,15 +53,15 @@ public:
         return this->category;
     }
 
-    void set_pos(Vector3 &new_pos) {
+    void set_pos(Vector<3> &new_pos) {
         this->pos = new_pos;
     }
 
-    void set_speed(Vector3 &new_speed) {
+    void set_speed(Vector<3> &new_speed) {
         this->speed = new_speed;
     }
 
-    void set_strength(Vector3 &new_strength) {
+    void set_strength(Vector<3> &new_strength) {
         this->strength = new_strength;
     }
 
@@ -74,9 +74,9 @@ public:
 
 private:
     uint32_t id;
-    Vector3 pos;
-    Vector3 speed;
-    Vector3 strength;
+    Vector<3> pos;
+    Vector<3> speed;
+    Vector<3> strength;
     double mass;
     Category category;
 

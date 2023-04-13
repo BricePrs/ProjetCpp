@@ -7,7 +7,7 @@
 
 
 #include <array>
-#include "particle.h"
+#include "Particle.h"
 
 class Univers {
 public:

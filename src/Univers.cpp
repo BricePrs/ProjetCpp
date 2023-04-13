@@ -16,11 +16,11 @@ Univers::Univers(uint32_t particle_count) {
 
 void Univers::update_strengths() {
     int nb_particles = this->particles.size();
-    Vector3 F_i;
-    Vector3 R_ij;
+    Vector<3> F_i;
+    Vector<3> R_ij;
     double r_ij;
     for (uint32_t i = 0; i<nb_particles; i++) {
-        F_i = Vector3();
+        F_i = Vector<3>();
         for (uint32_t j = 0; j < nb_particles; j++) {
             if (j != i) {
                 R_ij = this->particles[j].get_pos() - this->particles[i].get_pos();
@@ -43,7 +43,7 @@ void Univers::stromer_verlet(double t_end, double dt) {
 
     uint32_t nb_particles = this->particles.size();
 
-    std::vector<Vector3> F_old(nb_particles);
+    std::vector<Vector<3>> F_old(nb_particles);
 
     // initialization of particles strengths
     update_strengths();
@@ -55,7 +55,7 @@ void Univers::stromer_verlet(double t_end, double dt) {
 
         for (uint32_t i = 0; i<nb_particles; i++) {
             Particle &p = this->particles[i];
-            Vector3 new_pos = p.get_pos() + dt * (p.get_speed() + (0.5 / p.get_mass()) * p.get_speed() * dt);
+            Vector<3> new_pos = p.get_pos() + dt * (p.get_speed() + (0.5 / p.get_mass()) * p.get_speed() * dt);
             p.set_pos(new_pos);
             F_old[i] = p.get_strength();
         }
@@ -64,7 +64,7 @@ void Univers::stromer_verlet(double t_end, double dt) {
 
         for (uint32_t i = 0; i<nb_particles; i++) {
             Particle p = this->particles[i];
-            Vector3 new_speed = p.get_speed() + dt * (0.5 / p.get_mass()) * (p.get_strength() + F_old[i]);
+            Vector<3> new_speed = p.get_speed() + dt * (0.5 / p.get_mass()) * (p.get_strength() + F_old[i]);
             p.set_speed(new_speed);
 
             // adding new_pos of each particle to file

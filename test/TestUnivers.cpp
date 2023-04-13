@@ -3,7 +3,7 @@
 //
 #include <iostream>
 #include <chrono>
-#include "particle.h"
+#include "Particle.h"
 #include "Univers.h"
 
 int main() {
