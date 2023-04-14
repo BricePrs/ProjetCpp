@@ -4,6 +4,8 @@
 #include "Particle.h"
 #include <chrono>
 #include <fstream>
+#include <deque>
+#include <set>
 
 auto new_random_vec3(std::mt19937 &gen, std::uniform_real_distribution<double> &distribution) -> Vector<3> {
     return Vector<3>{distribution(gen), distribution(gen), distribution(gen)};
@@ -14,14 +16,14 @@ auto new_random_double(std::mt19937 &gen, std::uniform_real_distribution<double>
 }
 
 
-std::list<Particle> generate_particles_list(uint32_t nb_particles) {
+std::list<Particle<3>> generate_particles_list(uint32_t nb_particles) {
     std::random_device rd;
     std::mt19937 mt(rd());
     std::uniform_real_distribution<double> dist(-500.0, 500.0);
 
     // particle set creations
-    std::list<Particle> particles_list;
-    std::list<Particle>::iterator particles_it = particles_list.begin();
+    std::list<Particle<3>> particles_list;
+    std::list<Particle<3>>::iterator particles_it = particles_list.begin();
 
     for (uint i = 0; i < nb_particles; i++ ) {
         Particle new_part = Particle(i, new_random_vec3(mt, dist), new_random_vec3(mt, dist), new_random_vec3(mt, dist),
@@ -31,13 +33,13 @@ std::list<Particle> generate_particles_list(uint32_t nb_particles) {
     return particles_list;
 }
 
-std::deque<Particle> generate_particles_queue(uint32_t nb_particles) {
+std::deque<Particle<3>> generate_particles_queue(uint32_t nb_particles) {
     std::random_device rd;
     std::mt19937 mt(rd());
     std::uniform_real_distribution<double> dist(-500.0, 500.0);
 
     // particle set creations
-    std::deque<Particle> particles_queue;
+    std::deque<Particle<3>> particles_queue;
 
     for (uint i = 0; i < nb_particles; i++ ) {
         Particle new_part = Particle(i, new_random_vec3(mt, dist), new_random_vec3(mt, dist), new_random_vec3(mt, dist),
@@ -47,13 +49,13 @@ std::deque<Particle> generate_particles_queue(uint32_t nb_particles) {
     return particles_queue;
 }
 
-std::set<Particle> generate_particles_set(uint32_t nb_particles) {
+std::set<Particle<3>> generate_particles_set(uint32_t nb_particles) {
     std::random_device rd;
     std::mt19937 mt(rd());
-    std::uniform_real_distribution<double> dist(-500.0, 500.0);
+    std::uniform_real_distribution<double> dist(-50000.0, 50000.0);
 
     // particle set creations
-    std::set<Particle> particles_set;
+    std::set<Particle<3>> particles_set;
     for (uint i = 0; i < nb_particles; i++ ) {
         Particle new_part = Particle(i, new_random_vec3(mt, dist), new_random_vec3(mt, dist), new_random_vec3(mt, dist),
                                      new_random_double(mt, dist), static_cast<Category>(rand() % 3));
@@ -62,13 +64,13 @@ std::set<Particle> generate_particles_set(uint32_t nb_particles) {
     return particles_set;
 }
 
-std::vector<Particle> generate_particles_vector(uint32_t nb_particles) {
+std::vector<Particle<3>> generate_particles_vector(uint32_t nb_particles) {
     std::random_device rd;
     std::mt19937 mt(rd());
     std::uniform_real_distribution<double> dist(-500.0, 500.0);
 
     // particle set creations
-    std::vector<Particle> particles_vector(nb_particles);
+    std::vector<Particle<3>> particles_vector(nb_particles);
 
     for (uint i = 0; i < nb_particles; i++ ) {
         Particle new_part = Particle(i, new_random_vec3(mt, dist), new_random_vec3(mt, dist), new_random_vec3(mt, dist),
@@ -83,19 +85,19 @@ void run(std::list<uint32_t> particles_sizes) {
     std::chrono::duration<double> elapsed_seconds_set, elapsed_seconds_list, elapsed_seconds_queue, elapsed_seconds_vector;
     for (auto size: particles_sizes) {
         auto start = std::chrono::steady_clock::now();
-        std::list<Particle> particles_list = generate_particles_list(size);
+        std::list<Particle<3>> particles_list = generate_particles_list(size);
         elapsed_seconds_list = std::chrono::steady_clock::now() - start;
 
         start = std::chrono::steady_clock::now();
-        std::set<Particle> particles_set = generate_particles_set(size);
+        std::set<Particle<3>> particles_set = generate_particles_set(size);
         elapsed_seconds_set = std::chrono::steady_clock::now() - start;
 
         start = std::chrono::steady_clock::now();
-        std::vector<Particle> particles_vector = generate_particles_vector(size);
+        std::vector<Particle<3>> particles_vector = generate_particles_vector(size);
         elapsed_seconds_vector = std::chrono::steady_clock::now() - start;
 
         start = std::chrono::steady_clock::now();
-        std::deque<Particle> particles_deque = generate_particles_queue(size);
+        std::deque<Particle<3>> particles_deque = generate_particles_queue(size);
         elapsed_seconds_queue = std::chrono::steady_clock::now() - start;
 
 
@@ -115,7 +117,7 @@ void data_structures_comparison() {
     run(sizes);
 }
 
-void update_strengths(std::vector<Particle> &particles) {
+void update_strengths(std::vector<Particle<3>> &particles) {
     int nb_particles = particles.size();
     Vector<3> F_i;
     Vector<3> R_ij;
@@ -134,7 +136,7 @@ void update_strengths(std::vector<Particle> &particles) {
 }
 
 
-void stromer_verlet(std::vector<Particle> &particles, double t_end, double dt) {
+void stromer_verlet(std::vector<Particle<3>> &particles, double t_end, double dt) {
 
     std::string source_path = __FILE__;
     size_t last_separator = source_path.find_last_of("/\\");
@@ -156,7 +158,7 @@ void stromer_verlet(std::vector<Particle> &particles, double t_end, double dt) {
         std::string file_line = std::to_string(t) + " ";
 
         for (uint32_t i = 0; i<nb_particles; i++) {
-            Particle &p = particles[i];
+            Particle<3> &p = particles[i];
             Vector<3> new_pos = p.get_pos() + dt * (p.get_speed() + (0.5 / p.get_mass()) * p.get_speed() * dt);
             p.set_pos(new_pos);
             F_old[i] = p.get_strength();
@@ -184,7 +186,7 @@ int main() {
     data_structures_comparison();
 
     // current particles system is composed of the Sun, Earth, Jupiter, Haley comet (4 particles)
-    std::vector<Particle> particles = generate_particles_vector(4);
+    std::vector<Particle<3>> particles = generate_particles_vector(4);
     stromer_verlet(particles, 465.5, 0.015);
 
 

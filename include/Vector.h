@@ -95,7 +95,7 @@ Vector<n> operator/(double a, const Vector<n> &b);
 template <unsigned int n>
 Vector<n> operator/(const Vector<n> &a, double b);
 
-#include "Vector_impl.h"
+#include "Vector.txx"
 
 #endif //TP_PERESB_HASSANH_VECTOR_H
 

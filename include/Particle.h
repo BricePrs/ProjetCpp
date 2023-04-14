@@ -4,10 +4,6 @@
 
 #include <random>
 #include <iostream>
-#include <list>
-#include <set>
-#include <deque>
-#include <vector>
 #include "Vector.h"
 
 #ifndef PARTICLE_H
@@ -19,11 +15,10 @@ enum Category {
     NEUTRON [[maybe_unused]],
 };
 
-
+template <unsigned int n>
 class Particle {
-
 public:
-    Particle(uint32_t id, Vector<3> pos, Vector<3> speed, Vector<3> strength, double mass, Category category);
+    Particle(uint32_t id, Vector<n> pos, Vector<n> speed, Vector<n> strength, double mass, Category category);
     Particle() = default;
     Particle(const Particle &p) = default;
 
@@ -33,15 +28,15 @@ public:
         return this->id;
     }
 
-    Vector<3> get_pos() {
+    Vector<n> get_pos() {
         return this->pos;
     }
 
-    Vector<3> get_speed() {
+    Vector<n> get_speed() {
         return this->speed;
     }
 
-    Vector<3> get_strength() {
+    Vector<n> get_strength() {
         return this->strength;
     }
 
@@ -53,15 +48,15 @@ public:
         return this->category;
     }
 
-    void set_pos(Vector<3> &new_pos) {
+    void set_pos(Vector<n> &new_pos) {
         this->pos = new_pos;
     }
 
-    void set_speed(Vector<3> &new_speed) {
+    void set_speed(Vector<n> &new_speed) {
         this->speed = new_speed;
     }
 
-    void set_strength(Vector<3> &new_strength) {
+    void set_strength(Vector<n> &new_strength) {
         this->strength = new_strength;
     }
 
@@ -70,13 +65,22 @@ public:
         return id < p.id;
     }
 
-    friend std::ostream& operator<<(std::ostream& os, const Particle& p);
+    friend std::ostream& operator<<(std::ostream& os, const Particle& p) {
+        os << "Particle : { "
+           << " id: " << p.id
+           << " , pos : " << p.pos
+           << " , speed : " << p.speed
+           << " , strength : " << p.strength
+           << " , mass : " << p.mass
+           << " , category : " << p.category << "\n";
+        return os;
+    }
 
 private:
     uint32_t id;
-    Vector<3> pos;
-    Vector<3> speed;
-    Vector<3> strength;
+    Vector<n> pos;
+    Vector<n> speed;
+    Vector<n> strength;
     double mass;
     Category category;
 
@@ -84,6 +88,8 @@ private:
     // static uint32_t particle_count;
 
 };
+
+#include "Particle.txx"
 
 
 
