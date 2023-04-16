@@ -68,84 +68,6 @@ build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 # /home/brice/Documents/Ensimag/2A/cpp/ProjetCpp/CMakeLists.txt
 # =============================================================================
 
-# =============================================================================
-# Object build statements for STATIC_LIBRARY target Vector
-
-
-#############################################
-# Order-only phony target for Vector
-
-build cmake_object_order_depends_target_Vector: phony || src/CMakeFiles/Vector.dir
-
-build src/CMakeFiles/Vector.dir/Vector3.cpp.o: CXX_COMPILER__Vector_Debug /home/brice/Documents/Ensimag/2A/cpp/ProjetCpp/src/Vector3.cpp || cmake_object_order_depends_target_Vector
-  DEP_FILE = src/CMakeFiles/Vector.dir/Vector3.cpp.o.d
-  FLAGS = -pg -g -fdiagnostics-color=always -std=gnu++17
-  INCLUDES = -I/home/brice/Documents/Ensimag/2A/cpp/ProjetCpp/include
-  OBJECT_DIR = src/CMakeFiles/Vector.dir
-  OBJECT_FILE_DIR = src/CMakeFiles/Vector.dir
-
-build src/CMakeFiles/Vector.dir/Vector2.cpp.o: CXX_COMPILER__Vector_Debug /home/brice/Documents/Ensimag/2A/cpp/ProjetCpp/src/Vector2.cpp || cmake_object_order_depends_target_Vector
-  DEP_FILE = src/CMakeFiles/Vector.dir/Vector2.cpp.o.d
-  FLAGS = -pg -g -fdiagnostics-color=always -std=gnu++17
-  INCLUDES = -I/home/brice/Documents/Ensimag/2A/cpp/ProjetCpp/include
-  OBJECT_DIR = src/CMakeFiles/Vector.dir
-  OBJECT_FILE_DIR = src/CMakeFiles/Vector.dir
-
-
-# =============================================================================
-# Link build statements for STATIC_LIBRARY target Vector
-
-
-#############################################
-# Link the static library src/libVector.a
-
-build src/libVector.a: CXX_STATIC_LIBRARY_LINKER__Vector_Debug src/CMakeFiles/Vector.dir/Vector3.cpp.o src/CMakeFiles/Vector.dir/Vector2.cpp.o
-  LANGUAGE_COMPILE_FLAGS = -pg -g
-  OBJECT_DIR = src/CMakeFiles/Vector.dir
-  POST_BUILD = :
-  PRE_LINK = :
-  TARGET_FILE = src/libVector.a
-  TARGET_PDB = Vector.a.dbg
-
-# =============================================================================
-# Object build statements for STATIC_LIBRARY target Particle
-
-
-#############################################
-# Order-only phony target for Particle
-
-build cmake_object_order_depends_target_Particle: phony || cmake_object_order_depends_target_Vector
-
-build src/CMakeFiles/Particle.dir/particle.cpp.o: CXX_COMPILER__Particle_Debug /home/brice/Documents/Ensimag/2A/cpp/ProjetCpp/src/particle.cpp || cmake_object_order_depends_target_Particle
-  DEP_FILE = src/CMakeFiles/Particle.dir/particle.cpp.o.d
-  FLAGS = -pg -g -fdiagnostics-color=always -std=gnu++17
-  INCLUDES = -I/home/brice/Documents/Ensimag/2A/cpp/ProjetCpp/include
-  OBJECT_DIR = src/CMakeFiles/Particle.dir
-  OBJECT_FILE_DIR = src/CMakeFiles/Particle.dir
-
-build src/CMakeFiles/Particle.dir/Univers.cpp.o: CXX_COMPILER__Particle_Debug /home/brice/Documents/Ensimag/2A/cpp/ProjetCpp/src/Univers.cpp || cmake_object_order_depends_target_Particle
-  DEP_FILE = src/CMakeFiles/Particle.dir/Univers.cpp.o.d
-  FLAGS = -pg -g -fdiagnostics-color=always -std=gnu++17
-  INCLUDES = -I/home/brice/Documents/Ensimag/2A/cpp/ProjetCpp/include
-  OBJECT_DIR = src/CMakeFiles/Particle.dir
-  OBJECT_FILE_DIR = src/CMakeFiles/Particle.dir
-
-
-# =============================================================================
-# Link build statements for STATIC_LIBRARY target Particle
-
-
-#############################################
-# Link the static library src/libParticle.a
-
-build src/libParticle.a: CXX_STATIC_LIBRARY_LINKER__Particle_Debug src/CMakeFiles/Particle.dir/particle.cpp.o src/CMakeFiles/Particle.dir/Univers.cpp.o || src/libVector.a
-  LANGUAGE_COMPILE_FLAGS = -pg -g
-  OBJECT_DIR = src/CMakeFiles/Particle.dir
-  POST_BUILD = :
-  PRE_LINK = :
-  TARGET_FILE = src/libParticle.a
-  TARGET_PDB = Particle.a.dbg
-
 
 #############################################
 # Utility command for edit_cache
@@ -181,7 +103,7 @@ build src/rebuild_cache: phony src/CMakeFiles/rebuild_cache.util
 #############################################
 # Order-only phony target for VectorTests
 
-build cmake_object_order_depends_target_VectorTests: phony || cmake_object_order_depends_target_Vector
+build cmake_object_order_depends_target_VectorTests: phony || test/CMakeFiles/VectorTests.dir
 
 build test/CMakeFiles/VectorTests.dir/test_vector.cpp.o: CXX_COMPILER__VectorTests_Debug /home/brice/Documents/Ensimag/2A/cpp/ProjetCpp/test/test_vector.cpp || cmake_object_order_depends_target_VectorTests
   DEP_FILE = test/CMakeFiles/VectorTests.dir/test_vector.cpp.o.d
@@ -198,9 +120,8 @@ build test/CMakeFiles/VectorTests.dir/test_vector.cpp.o: CXX_COMPILER__VectorTes
 #############################################
 # Link the executable test/VectorTests
 
-build test/VectorTests: CXX_EXECUTABLE_LINKER__VectorTests_Debug test/CMakeFiles/VectorTests.dir/test_vector.cpp.o | src/libVector.a || src/libVector.a
+build test/VectorTests: CXX_EXECUTABLE_LINKER__VectorTests_Debug test/CMakeFiles/VectorTests.dir/test_vector.cpp.o
   FLAGS = -pg -g
-  LINK_LIBRARIES = src/libVector.a
   OBJECT_DIR = test/CMakeFiles/VectorTests.dir
   POST_BUILD = :
   PRE_LINK = :
@@ -208,37 +129,68 @@ build test/VectorTests: CXX_EXECUTABLE_LINKER__VectorTests_Debug test/CMakeFiles
   TARGET_PDB = VectorTests.dbg
 
 # =============================================================================
-# Object build statements for EXECUTABLE target TestLab
+# Object build statements for EXECUTABLE target TestLab2
 
 
 #############################################
-# Order-only phony target for TestLab
+# Order-only phony target for TestLab2
 
-build cmake_object_order_depends_target_TestLab: phony || cmake_object_order_depends_target_Particle cmake_object_order_depends_target_Vector
+build cmake_object_order_depends_target_TestLab2: phony || test/CMakeFiles/TestLab2.dir
 
-build test/CMakeFiles/TestLab.dir/test_lab2.cpp.o: CXX_COMPILER__TestLab_Debug /home/brice/Documents/Ensimag/2A/cpp/ProjetCpp/test/test_lab2.cpp || cmake_object_order_depends_target_TestLab
-  DEP_FILE = test/CMakeFiles/TestLab.dir/test_lab2.cpp.o.d
+build test/CMakeFiles/TestLab2.dir/test_lab2.cpp.o: CXX_COMPILER__TestLab2_Debug /home/brice/Documents/Ensimag/2A/cpp/ProjetCpp/test/test_lab2.cpp || cmake_object_order_depends_target_TestLab2
+  DEP_FILE = test/CMakeFiles/TestLab2.dir/test_lab2.cpp.o.d
   FLAGS = -pg -g -fdiagnostics-color=always -std=gnu++17
   INCLUDES = -I/home/brice/Documents/Ensimag/2A/cpp/ProjetCpp/include
-  OBJECT_DIR = test/CMakeFiles/TestLab.dir
-  OBJECT_FILE_DIR = test/CMakeFiles/TestLab.dir
+  OBJECT_DIR = test/CMakeFiles/TestLab2.dir
+  OBJECT_FILE_DIR = test/CMakeFiles/TestLab2.dir
 
 
 # =============================================================================
-# Link build statements for EXECUTABLE target TestLab
+# Link build statements for EXECUTABLE target TestLab2
 
 
 #############################################
-# Link the executable test/TestLab
+# Link the executable test/TestLab2
 
-build test/TestLab: CXX_EXECUTABLE_LINKER__TestLab_Debug test/CMakeFiles/TestLab.dir/test_lab2.cpp.o | src/libVector.a src/libParticle.a src/libVector.a || src/libParticle.a src/libVector.a
+build test/TestLab2: CXX_EXECUTABLE_LINKER__TestLab2_Debug test/CMakeFiles/TestLab2.dir/test_lab2.cpp.o
   FLAGS = -pg -g
-  LINK_LIBRARIES = src/libVector.a  src/libParticle.a  src/libVector.a
-  OBJECT_DIR = test/CMakeFiles/TestLab.dir
+  OBJECT_DIR = test/CMakeFiles/TestLab2.dir
   POST_BUILD = :
   PRE_LINK = :
-  TARGET_FILE = test/TestLab
-  TARGET_PDB = TestLab.dbg
+  TARGET_FILE = test/TestLab2
+  TARGET_PDB = TestLab2.dbg
+
+# =============================================================================
+# Object build statements for EXECUTABLE target TestLennardJones
+
+
+#############################################
+# Order-only phony target for TestLennardJones
+
+build cmake_object_order_depends_target_TestLennardJones: phony || test/CMakeFiles/TestLennardJones.dir
+
+build test/CMakeFiles/TestLennardJones.dir/test_lennard_jones.cpp.o: CXX_COMPILER__TestLennardJones_Debug /home/brice/Documents/Ensimag/2A/cpp/ProjetCpp/test/test_lennard_jones.cpp || cmake_object_order_depends_target_TestLennardJones
+  DEP_FILE = test/CMakeFiles/TestLennardJones.dir/test_lennard_jones.cpp.o.d
+  FLAGS = -pg -g -fdiagnostics-color=always -std=gnu++17
+  INCLUDES = -I/home/brice/Documents/Ensimag/2A/cpp/ProjetCpp/include
+  OBJECT_DIR = test/CMakeFiles/TestLennardJones.dir
+  OBJECT_FILE_DIR = test/CMakeFiles/TestLennardJones.dir
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target TestLennardJones
+
+
+#############################################
+# Link the executable test/TestLennardJones
+
+build test/TestLennardJones: CXX_EXECUTABLE_LINKER__TestLennardJones_Debug test/CMakeFiles/TestLennardJones.dir/test_lennard_jones.cpp.o
+  FLAGS = -pg -g
+  OBJECT_DIR = test/CMakeFiles/TestLennardJones.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = test/TestLennardJones
+  TARGET_PDB = TestLennardJones.dbg
 
 # =============================================================================
 # Object build statements for EXECUTABLE target TestUnivers
@@ -247,10 +199,10 @@ build test/TestLab: CXX_EXECUTABLE_LINKER__TestLab_Debug test/CMakeFiles/TestLab
 #############################################
 # Order-only phony target for TestUnivers
 
-build cmake_object_order_depends_target_TestUnivers: phony || cmake_object_order_depends_target_Particle cmake_object_order_depends_target_Vector
+build cmake_object_order_depends_target_TestUnivers: phony || test/CMakeFiles/TestUnivers.dir
 
-build test/CMakeFiles/TestUnivers.dir/TestUnivers.cpp.o: CXX_COMPILER__TestUnivers_Debug /home/brice/Documents/Ensimag/2A/cpp/ProjetCpp/test/TestUnivers.cpp || cmake_object_order_depends_target_TestUnivers
-  DEP_FILE = test/CMakeFiles/TestUnivers.dir/TestUnivers.cpp.o.d
+build test/CMakeFiles/TestUnivers.dir/test_universe.cpp.o: CXX_COMPILER__TestUnivers_Debug /home/brice/Documents/Ensimag/2A/cpp/ProjetCpp/test/test_universe.cpp || cmake_object_order_depends_target_TestUnivers
+  DEP_FILE = test/CMakeFiles/TestUnivers.dir/test_universe.cpp.o.d
   FLAGS = -pg -g -fdiagnostics-color=always -std=gnu++17
   INCLUDES = -I/home/brice/Documents/Ensimag/2A/cpp/ProjetCpp/include
   OBJECT_DIR = test/CMakeFiles/TestUnivers.dir
@@ -264,9 +216,8 @@ build test/CMakeFiles/TestUnivers.dir/TestUnivers.cpp.o: CXX_COMPILER__TestUnive
 #############################################
 # Link the executable test/TestUnivers
 
-build test/TestUnivers: CXX_EXECUTABLE_LINKER__TestUnivers_Debug test/CMakeFiles/TestUnivers.dir/TestUnivers.cpp.o | src/libParticle.a src/libVector.a || src/libParticle.a src/libVector.a
+build test/TestUnivers: CXX_EXECUTABLE_LINKER__TestUnivers_Debug test/CMakeFiles/TestUnivers.dir/test_universe.cpp.o
   FLAGS = -pg -g
-  LINK_LIBRARIES = src/libParticle.a  src/libVector.a
   OBJECT_DIR = test/CMakeFiles/TestUnivers.dir
   POST_BUILD = :
   PRE_LINK = :
@@ -299,19 +250,13 @@ build test/rebuild_cache: phony test/CMakeFiles/rebuild_cache.util
 # =============================================================================
 # Target aliases.
 
-build Particle: phony src/libParticle.a
+build TestLab2: phony test/TestLab2
 
-build TestLab: phony test/TestLab
+build TestLennardJones: phony test/TestLennardJones
 
 build TestUnivers: phony test/TestUnivers
 
-build Vector: phony src/libVector.a
-
 build VectorTests: phony test/VectorTests
-
-build libParticle.a: phony src/libParticle.a
-
-build libVector.a: phony src/libVector.a
 
 # =============================================================================
 # Folder targets.
@@ -328,14 +273,14 @@ build all: phony src/all test/all
 #############################################
 # Folder: /home/brice/Documents/Ensimag/2A/cpp/ProjetCpp/cmake-build-debug/src
 
-build src/all: phony src/libVector.a src/libParticle.a
+build src/all: phony
 
 # =============================================================================
 
 #############################################
 # Folder: /home/brice/Documents/Ensimag/2A/cpp/ProjetCpp/cmake-build-debug/test
 
-build test/all: phony test/VectorTests test/TestLab test/TestUnivers
+build test/all: phony test/VectorTests test/TestLab2 test/TestLennardJones test/TestUnivers
 
 # =============================================================================
 # Built-in targets
