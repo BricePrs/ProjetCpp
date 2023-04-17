@@ -8,8 +8,12 @@
 #include "Particle.h"
 
 class Cell {
+public:
+    void place(uint32_t id);
+    std::vector<uint32_t> get_particles();
+    void empty();
 private:
-    std::vector<uint32_t> particles;
+    std::vector<uint32_t> _particles;
 };
 
 template <unsigned int n>
@@ -19,7 +23,8 @@ public:
 
     Universe(uint32_t particle_count, Vector<n> bottom_left, Vector<n> top_right, double cell_size);
 
-    void simulate(double t_end, double dt);
+    void simulate_without_grid(double t_end, double dt);
+    void simulate_with_grid(double t_end, double dt);
 
 private:
 
@@ -36,16 +41,21 @@ private:
 
     void init_grid(CellID size);
 
-    template<typename... Args>
-    CellID get_cell_id(Args... args);
     CellID get_cell_id(Vector<n> position);
+    CellID get_cell_id(CellID id);
     Cell get_cell_with_id(CellID id);
     std::vector<CellID> get_cell_neighbours(CellID id);
     uint32_t get_cell_linear_id(Universe::CellID id);
+    CellID get_cell_dimentional_id(uint32_t id);
+    void empty_grid();
 
     void place_particles();
-    void update_strengths();
+    void update_strengths_without_grid();
+    void update_strengths_with_grid();
 };
+
+
+
 
 #include "Universe.txx"
 
