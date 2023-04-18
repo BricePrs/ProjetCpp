@@ -48,7 +48,7 @@ std::vector<typename Universe<n>::CellID> Universe<n>::get_cell_neighbours(CellI
 }
 
 template <unsigned int n>
-Universe<n>::Universe(uint32_t particle_count, Vector<n> bottom_left, Vector<n> top_right, double cell_size)
+Universe<n>::Universe(Vector<n> bottom_left, Vector<n> top_right, double cell_size)
         : _bottom_left(bottom_left), _top_right(top_right), _cell_size(cell_size)
 {
     Vector<n> caract_length = top_right - bottom_left;
@@ -57,13 +57,20 @@ Universe<n>::Universe(uint32_t particle_count, Vector<n> bottom_left, Vector<n> 
         cells_count[i] = floor(caract_length[i]/cell_size);
     }
     init_grid(cells_count);
+}
 
-    this->_particles.reserve(particle_count);
-    static uint32_t id = 0;
-    for (uint32_t particle_id = id; particle_id < id + particle_count; particle_id++) {
-        this->_particles.push_back(Particle<n>::random(particle_id));
+template<unsigned int n>
+void Universe<n>::add(Vector<n> position, Vector<n> velocity, Vector<n> force, double mass, Category category) {
+    static uint32_t max_id;
+    _particles.push_back(Particle<n>(max_id, position, velocity, force, mass, category));
+    max_id++;
+}
+
+template<unsigned int n>
+void Universe<n>::random_fill(uint32_t particle_count) {
+    for (uint32_t i = 0; i < particle_count; i++) {
+        this->_particles.push_back(Particle<n>::random(_particles.size()));
     }
-    id += particle_count;
 }
 
 template <unsigned int n>
@@ -162,10 +169,13 @@ void Universe<n>::simulate_without_grid(double t_end, double dt) {
 
     std::vector<Vector<n>> F_old(nb_particles);
 
+    std::cout << "t = " << t << std::endl;
     // initialization of particles strengths
     update_strengths_without_grid();
 
     while (t<t_end) {
+        std::cout << "t = " << t << std::endl;
+
         t+=dt;
 
         for (uint32_t i = 0; i<nb_particles; i++) {
@@ -196,8 +206,8 @@ void Universe<n>::simulate_with_grid(double t_end, double dt) {
     // initialization of particles strengths
     update_strengths_with_grid();
 
-
     while (t<t_end) {
+        std::cout << "t = " << t << std::endl;
         place_particles();
         t+=dt;
 
@@ -224,6 +234,7 @@ typename Universe<n>::CellID Universe<n>::get_cell_id(Vector<n> position) {
     CellID result;
     for (int i = 0; i < n; i++) {
         result[i] = floor(rel_position[i]/this->_cell_size);
+        assert(0 <= result[i] && result[i] < _grid_dimensions[i]);
     }
     return result;
 }
@@ -252,11 +263,11 @@ void Universe<n>::place_particles() {
 
 template<unsigned int n>
 uint32_t Universe<n>::get_cell_linear_id(Universe::CellID id) {
-    uint32_t cell_linear_id;
-    uint32_t fact = n;
+    uint32_t cell_linear_id = 0;
+    uint32_t fact = 1;
     for (int i = 0; i < n; i++) {
         cell_linear_id += fact * id[i];
-        fact *= n;
+        fact *= _grid_dimensions[i];
     }
     return cell_linear_id;
 }
@@ -294,4 +305,8 @@ std::vector<uint32_t> Cell::get_particles() {
 
 void Cell::empty() {
     _particles.clear();
+}
+
+Cell::Cell() {
+    _particles = std::vector<uint32_t>();
 }

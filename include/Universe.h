@@ -9,6 +9,8 @@
 
 class Cell {
 public:
+    Cell();
+
     void place(uint32_t id);
     std::vector<uint32_t> get_particles();
     void empty();
@@ -21,7 +23,10 @@ class Universe {
 public:
     typedef std::array<int32_t, n> CellID;
 
-    Universe(uint32_t particle_count, Vector<n> bottom_left, Vector<n> top_right, double cell_size);
+    Universe(Vector<n> bottom_left, Vector<n> top_right, double cell_size);
+
+    void add(Vector<n> position, Vector<n> velocity, Vector<n> force, double mass, Category category);
+    void random_fill(uint32_t particle_count);
 
     void simulate_without_grid(double t_end, double dt);
     void simulate_with_grid(double t_end, double dt);

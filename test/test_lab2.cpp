@@ -187,7 +187,7 @@ int main() {
 
     // current particles system is composed of the Sun, Earth, Jupiter, Haley comet (4 particles)
     std::vector<Particle<3>> particles = generate_particles_vector(4);
-    stromer_verlet(particles, 465.5, 0.015);
+    stromer_verlet(particles, 468.5, 0.015);
 
 
 }
