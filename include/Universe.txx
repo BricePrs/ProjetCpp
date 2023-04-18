@@ -203,7 +203,7 @@ void Universe<n>::simulate_with_grid(double t_end, double dt) {
     uint32_t nb_particles = this->_particles.size();
     std::vector<Vector<n>> F_old(nb_particles);
 
-    // initialization of particles strengths
+    // initializatiParticleon of particles strengths
     update_strengths_with_grid();
 
     while (t<t_end) {
