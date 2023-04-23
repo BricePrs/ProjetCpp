@@ -4,6 +4,69 @@
 
 #include "Universe.h"
 #include <cstdarg>
+#include <fstream>
+#include <sstream>
+#include <iomanip>
+
+
+void write_header(std::ostream& os) {
+    os << "<VTKFile type=\"UnstructuredGrid\" version=\"0.1\" byte_order=\"BigEndian\">\n"
+          "<UnstructuredGrid>\n";
+}
+
+void write_footer(std::ostream& os) {
+    os << "</UnstructuredGrid>\n"
+          "</VTKFile>\n";
+}
+void write_cells(std::ostream& os) {
+    os << "<Cells>\n"
+          "<DataArray type=\"Int32\" Name=\"connectivity\" format=\"ascii\">\n"
+          "</DataArray>\n"
+          "<DataArray type=\"Int32\" Name=\"offsets\" format=\"ascii\">\n"
+          "</DataArray>\n"
+          "<DataArray type=\"UInt8\" Name=\"types\" format=\"ascii\">\n"
+          "</DataArray>\n"
+          "</Cells>\n";
+}
+
+template <unsigned int n>
+void write_particles(std::ostream& os, std::vector<Particle<n>> &particles) {
+    static_assert(n <= 3, "Cannot write for n greater than 3");
+    os << "<Points>\n";
+    os << "<DataArray name=\"Position\" type=\"Float32\" NumberOfComponents=\"3\" format=\"ascii\">\n";
+    for (Particle<n> &particle : particles) {
+        for (int i = 0; i < n; i++) {
+            os << particle.get_pos()[i];
+            os << " ";
+        }
+        for (int i = n; i < 3; i++) {
+            os << "0 ";
+        }
+    }
+
+    os << "\n</DataArray>\n";
+    os << "</Points>\n";
+
+    os << "<PointData Vectors=\"vector\">";
+
+    os << "<DataArray Name=\"Velocity\" type=\"Float32\" NumberOfComponents=\"" << n << "\" format=\"ascii\">\n";
+    for (Particle<n> &particle : particles) {
+        for (int i = 0; i < n; i++) {
+            os << particle.get_speed()[i];
+            os << " ";
+        }
+    }
+    os << "\n</DataArray>\n";
+
+    os << "<DataArray Name=\"Masse\" type=\"Float32\" format=\"ascii\">\n";
+    for (Particle<n> &particle : particles) {
+        os << particle.get_mass();
+        os << " ";
+    }
+    os << "\n</DataArray>\n";
+    os << "</PointData>\n";
+
+}
 
 template <unsigned int n>
 void Universe<n>::init_grid(CellID size) {
@@ -20,6 +83,26 @@ void Universe<n>::init_grid(CellID size) {
     _grid_dimensions = size;
 }
 
+template <unsigned int n>
+void Universe<n>::save_state(const std::string &filename) {
+    static_assert(n <= 3, "Cannot save state for dimensions greater than 3");
+    std::ofstream outfile;
+    outfile.open(filename);
+
+    write_header(outfile);
+
+    outfile << "<Piece NumberOfPoints=\"" << _particles.size() << "\" NumberOfCells=\"0\">\n";
+
+    write_particles<n>(outfile, _particles);
+    write_cells(outfile);
+
+    outfile << "</Piece>\n";
+
+    write_footer(outfile);
+
+    outfile.close();
+}
+
 template<unsigned int n>
 std::vector<typename Universe<n>::CellID> Universe<n>::get_cell_neighbours(CellID id) {
     static int32_t neightbour_count = pow(3, n);
@@ -33,9 +116,9 @@ std::vector<typename Universe<n>::CellID> Universe<n>::get_cell_neighbours(CellI
         bool skip = false;
         for (int j = 0; j < n; j++) {
             offset[j] = neightbour_value % 3;
-            neightbour_value -= offset[j];
+            neightbour_value /= 3;
             neightbour[j] += offset[j] - 1;
-            if (neightbour[j] < 0 || neightbour[j] > _grid_dimensions[j]) {
+            if (neightbour[j] < 0 || neightbour[j] >= _grid_dimensions[j]) {
                 skip = true;
                 break;
             }
@@ -60,9 +143,9 @@ Universe<n>::Universe(Vector<n> bottom_left, Vector<n> top_right, double cell_si
 }
 
 template<unsigned int n>
-void Universe<n>::add(Vector<n> position, Vector<n> velocity, Vector<n> force, double mass, Category category) {
+void Universe<n>::add(Vector<n> position, Vector<n> velocity, double mass, Category category) {
     static uint32_t max_id;
-    _particles.push_back(Particle<n>(max_id, position, velocity, force, mass, category));
+    _particles.push_back(Particle<n>(max_id, position, velocity, mass, category));
     max_id++;
 }
 
@@ -74,83 +157,50 @@ void Universe<n>::random_fill(uint32_t particle_count) {
 }
 
 template <unsigned int n>
-void Universe<n>::update_strengths_without_grid() {
+void Universe<n>::update_strengths_without_grid(bool gravitational,bool lennard_jones) {
+
+    reset_forces();
+
     int nb_particles = this->_particles.size();
-    Vector<n> F_i;
-    Vector<n> R_ij;
-    double r_ij;
-    double r_ij_sq;
-    double r_cut = 2.5;
-
-    // parameters for Lennard Jones' potential
-    double eps = 1.0;
-    double sigma = 1.0;
-    double sigma_exp_six = sigma * sigma * sigma * sigma * sigma * sigma;
-
     for (uint32_t i = 0; i<nb_particles; i++) {
-        F_i = Vector<n>();
-        for (uint32_t j = 0; j < nb_particles; j++) {
-            if (j != i) {
-                R_ij = this->_particles[j].get_pos() - this->_particles[i].get_pos();
-                r_ij = R_ij.length();
-                r_ij_sq = r_ij * r_ij;
-
-                // gravitational strength
-                F_i += (this->_particles[i].get_mass() * this->_particles[j].get_mass() / r_ij_sq) * R_ij;
-
-                if (r_ij <= r_cut) {
-                    double r_ij_exp_six = r_ij_sq * r_ij_sq * r_ij_sq;
-                    double sigma_ov_r_ij = sigma_exp_six/r_ij_exp_six;
-                    // interactions (Lennard-Jones)
-                    F_i += 24.0 * eps * 1/r_ij_sq * (sigma_ov_r_ij) * (1.0 - 2.0 * sigma_ov_r_ij) * R_ij;
-                }
-            }
+        Particle<n> &p1 = this->_particles[i];
+        for (uint32_t j = i + 1; j < nb_particles; j++) {
+            Particle<n> &p2 = this->_particles[j];
+            Particle<n>::compute_forces(p1, p2, gravitational, lennard_jones);
         }
-        this->_particles[i].set_strength(F_i);
     }
 }
 
 template <unsigned int n>
-void Universe<n>::update_strengths_with_grid() {
-    int nb_particles = this->_particles.size();
-    Vector<n> F_i;
-    Vector<n> R_ij;
-    double r_ij;
-    double r_ij_sq;
-    double r_cut = 2.5;
+void Universe<n>::update_strengths_with_grid(bool gravitational,bool lennard_jones) {
 
-    // parameters for Lennard Jones' potential
-    double eps = 1.0;
-    double sigma = 1.0;
-    double sigma_exp_six = sigma * sigma * sigma * sigma * sigma * sigma;
+    reset_forces();
 
     for (int32_t cell_id = 0; cell_id < _cells.size(); cell_id++) {
         std::vector<uint32_t> current_cell_particles = _cells[cell_id].get_particles();
         std::vector<uint32_t> neightbour_particles;
-        for (CellID neightbour_cell_id: get_cell_neighbours(get_cell_dimentional_id(cell_id))) {
+        CellID current_cell_id = get_cell_dimentional_id(cell_id);
+        for (CellID neightbour_cell_id: get_cell_neighbours(current_cell_id)) {
+            bool skip = false;
+            for (int i = 0; i < n; i++) {
+                if (neightbour_cell_id[i] < current_cell_id[i]) { skip = true ;}
+            }
+            if (skip) {continue;}
             std::vector neightbour_cell_particles = get_cell_with_id(neightbour_cell_id).get_particles();
             neightbour_particles.insert(neightbour_particles.end(), neightbour_cell_particles.begin(), neightbour_cell_particles.end());
         }
         for (uint32_t current_particle_id: current_cell_particles) {
-            Particle<n> current_particle = _particles[current_particle_id];
+            Particle<n> &current_particle = _particles[current_particle_id];
             for (uint32_t neightbour_particle_id: neightbour_particles) {
-                if (current_particle_id == neightbour_particle_id) continue;
-                Particle<n> neightbour_particle = _particles[neightbour_particle_id];
-                R_ij = neightbour_particle.get_pos() - current_particle.get_pos();
-                r_ij = R_ij.length();
-                r_ij_sq = r_ij * r_ij;
+                Particle<n> &neightbour_particle = _particles[neightbour_particle_id];
 
-                // gravitational strength
-                F_i += (current_particle.get_mass() * neightbour_particle.get_mass() / r_ij_sq) * R_ij;
-
-                if (r_ij <= r_cut) {
-                    double r_ij_exp_six = r_ij_sq * r_ij_sq * r_ij_sq;
-                    double sigma_ov_r_ij = sigma_exp_six/r_ij_exp_six;
-                    // interactions (Lennard-Jones)
-                    F_i += 24.0 * eps * 1/r_ij_sq * (sigma_ov_r_ij) * (1.0 - 2.0 * sigma_ov_r_ij) * R_ij;
+                bool skip = false;
+                for (int i = 0; i < n; i++) {
+                    if (current_particle.get_pos()[i] < neightbour_particle.get_pos()[i]) { skip = true ;}
                 }
+                if (skip) {continue;}
+                Particle<n>::compute_forces(current_particle, neightbour_particle, gravitational, lennard_jones);
             }
-            current_particle.set_strength(F_i);
         }
     }
 }
@@ -161,7 +211,7 @@ void Universe<n>::update_strengths_with_grid() {
  * @param dt : time step
  */
 template <unsigned int n>
-void Universe<n>::simulate_without_grid(double t_end, double dt) {
+void Universe<n>::simulate_without_grid(double t_end, double dt, bool gravitational,bool lennard_jones) {
 
     double t = 0.0;
 
@@ -171,60 +221,85 @@ void Universe<n>::simulate_without_grid(double t_end, double dt) {
 
     std::cout << "t = " << t << std::endl;
     // initialization of particles strengths
-    update_strengths_without_grid();
+    update_strengths_without_grid(gravitational, lennard_jones);
 
+    std::stringstream ss;
+    ss << "output_" << std::setfill('0') << std::setw(5) << 0 << ".vtu";
+    save_state(ss.str());
+
+    uint32_t iter = 0;
     while (t<t_end) {
+        iter++;
+
         std::cout << "t = " << t << std::endl;
 
         t+=dt;
 
         for (uint32_t i = 0; i<nb_particles; i++) {
             Particle<n> &p = this->_particles[i];
-            Vector<n> new_pos = p.get_pos() + dt * (p.get_speed() + (0.5 / p.get_mass()) * p.get_speed() * dt);
+            Vector<n> new_pos = p.get_pos() + dt * (p.get_speed() + (0.5 / p.get_mass()) * p.get_strength() * dt);
             p.set_pos(new_pos);
             F_old[i] = p.get_strength();
         }
 
-        update_strengths_without_grid();
+        update_strengths_without_grid(gravitational, lennard_jones);
 
         for (uint32_t i = 0; i<nb_particles; i++) {
-            Particle p = this->_particles[i];
+            Particle<n> &p = this->_particles[i];
             Vector<n> new_speed = p.get_speed() + dt * (0.5 / p.get_mass()) * (p.get_strength() + F_old[i]);
             p.set_speed(new_speed);
         }
+
+        std::stringstream ss;
+        ss << "output_" << std::setfill('0') << std::setw(5) << iter << ".vtu";
+        save_state(ss.str());
     }
 }
 
 template<unsigned int n>
-void Universe<n>::simulate_with_grid(double t_end, double dt) {
+void Universe<n>::simulate_with_grid(double t_end, double dt, bool gravitational, bool lennard_jones) {
 
     double t = 0.0;
 
     uint32_t nb_particles = this->_particles.size();
     std::vector<Vector<n>> F_old(nb_particles);
 
-    // initialization of particles strengths
-    update_strengths_with_grid();
+    place_particles();
 
+    // initialization of particles strengths
+    update_strengths_with_grid(gravitational, lennard_jones);
+
+    std::stringstream ss;
+    ss << "output_" << std::setfill('0') << std::setw(5) << 0 << ".vtu";
+    save_state(ss.str());
+
+
+    uint32_t iter = 0;
     while (t<t_end) {
+        iter++;
         std::cout << "t = " << t << std::endl;
-        place_particles();
         t+=dt;
 
         for (uint32_t i = 0; i<nb_particles; i++) {
             Particle<n> &p = this->_particles[i];
-            Vector<n> new_pos = p.get_pos() + dt * (p.get_speed() + (0.5 / p.get_mass()) * p.get_speed() * dt);
+            Vector<n> new_pos = p.get_pos() + dt * (p.get_speed() + (0.5 / p.get_mass()) * p.get_strength() * dt);
             p.set_pos(new_pos);
             F_old[i] = p.get_strength();
         }
+        place_particles();
 
-        update_strengths_with_grid();
+
+        update_strengths_with_grid(gravitational, lennard_jones);
 
         for (uint32_t i = 0; i<nb_particles; i++) {
-            Particle p = this->_particles[i];
+            Particle<n> &p = this->_particles[i];
             Vector<n> new_speed = p.get_speed() + dt * (0.5 / p.get_mass()) * (p.get_strength() + F_old[i]);
             p.set_speed(new_speed);
         }
+
+        std::stringstream ss;
+        ss << "output_" << std::setfill('0') << std::setw(5) << iter << ".vtu";
+        save_state(ss.str());
     }
 }
 
@@ -274,7 +349,7 @@ uint32_t Universe<n>::get_cell_linear_id(Universe::CellID id) {
 
 template<unsigned int n>
 typename Universe<n>::CellID Universe<n>::get_cell_dimentional_id(uint32_t id) {
-    CellID result;
+    CellID result = std::array<int32_t, n>();
     uint32_t i = 0;
     while (id != 0) {
         result[i] = id % n;
@@ -287,6 +362,13 @@ template<unsigned int n>
 void Universe<n>::empty_grid() {
     for (Cell cell: _cells) {
         cell.empty();
+    }
+}
+
+template<unsigned int n>
+void Universe<n>::reset_forces() {
+    for (Particle<n> &p: _particles) {
+        p.set_strength(Vector<n>::zero());
     }
 }
 

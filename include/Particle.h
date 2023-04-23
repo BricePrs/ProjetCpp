@@ -18,7 +18,7 @@ enum Category {
 template <unsigned int n>
 class Particle {
 public:
-    Particle(uint32_t id, Vector<n> pos, Vector<n> speed, Vector<n> strength, double mass, Category category);
+    Particle(uint32_t id, Vector<n> pos, Vector<n> speed, double mass, Category category);
     Particle() = default;
     Particle(const Particle &p) = default;
 
@@ -37,7 +37,7 @@ public:
     }
 
     Vector<n> get_strength() {
-        return this->strength;
+        return this->force;
     }
 
     double get_mass() {
@@ -48,16 +48,16 @@ public:
         return this->category;
     }
 
-    void set_pos(Vector<n> &new_pos) {
+    inline void set_pos(const Vector<n> &new_pos) {
         this->pos = new_pos;
     }
 
-    void set_speed(Vector<n> &new_speed) {
+    inline void set_speed(const Vector<n> &new_speed) {
         this->speed = new_speed;
     }
 
-    void set_strength(Vector<n> &new_strength) {
-        this->strength = new_strength;
+    inline void set_strength(const Vector<n> &new_strength) {
+        this->force = new_strength;
     }
 
 
@@ -65,22 +65,39 @@ public:
         return id < p.id;
     }
 
+    bool operator==(const Particle &p) const {
+        return id == p.id;
+    }
+
+    bool operator!=(const Particle &p) const {
+        return id != p.id;
+    }
+
     friend std::ostream& operator<<(std::ostream& os, const Particle& p) {
         os << "Particle : { "
            << " id: " << p.id
            << " , pos : " << p.pos
            << " , speed : " << p.speed
-           << " , strength : " << p.strength
+           << " , strength : " << p.force
            << " , mass : " << p.mass
            << " , category : " << p.category << "\n";
         return os;
     }
 
+    static void compute_forces(Particle &a, Particle &b, bool gravitational, bool lennard_jones);
+
 private:
+    inline static double r_cut = 2.5;
+
+    // parameters for Lennard Jones' potential
+    inline static double eps = 1.0;
+    inline static double sigma = 1.0;
+    inline static double sigma_exp_six = pow(sigma, 6);
+
     uint32_t id;
     Vector<n> pos;
     Vector<n> speed;
-    Vector<n> strength;
+    Vector<n> force;
     double mass;
     Category category;
 
@@ -88,6 +105,8 @@ private:
     // static uint32_t particle_count;
 
 };
+
+
 
 #include "Particle.txx"
 

@@ -1,0 +1,1 @@
+/usr/bin/c++ -pg CMakeFiles/TestLab2.dir/test_lab2.cpp.o -o TestLab2 

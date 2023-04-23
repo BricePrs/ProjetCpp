@@ -19,12 +19,21 @@ Vector<n>::Vector(Args... args) : components{static_cast<double>(args)...} {
     static_assert(sizeof...(Args) == n, "Wrong number of arguments provided");
 }
 
+template<unsigned int n>
+Vector<n>::Vector(double a) {
+    for (unsigned int i = 0; i < n; i++) {
+        components[i] = a;
+    }
+}
+
 /// Copy constructor
 template <unsigned int n>
 Vector<n>::Vector(const Vector<n> &v) {
-    for (int i = 0; i<n; i++)
+    for (int i = 0; i < n; i++) {
         this->components[i] = v.components[i];
+    }
 }
+
 template <unsigned int n>
 [[maybe_unused]] Vector<n> Vector<n>::zero() {
     return Vector{};
@@ -99,7 +108,6 @@ template <unsigned int n>
 
 template <unsigned int n>
 [[maybe_unused]] Vector<n> Vector<n>::lerp(const Vector<n>&a, const Vector<n>&b, double x) {
-    assert(n==2);
     return a * (1.-x) + b * x;
 }
 

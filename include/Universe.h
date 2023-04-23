@@ -6,13 +6,14 @@
 #define TP_PERESB_HASSANH_UNIVERSE_H
 #include <array>
 #include "Particle.h"
+#include "unordered_dense.h"
 
 class Cell {
 public:
     Cell();
 
     void place(uint32_t id);
-    std::vector<uint32_t> get_particles();
+    unordered_dense::map<uint32_t> get_particles();
     void empty();
 private:
     std::vector<uint32_t> _particles;
@@ -25,11 +26,13 @@ public:
 
     Universe(Vector<n> bottom_left, Vector<n> top_right, double cell_size);
 
-    void add(Vector<n> position, Vector<n> velocity, Vector<n> force, double mass, Category category);
+    void add(Vector<n> position, Vector<n> velocity, double mass, Category category);
     void random_fill(uint32_t particle_count);
 
-    void simulate_without_grid(double t_end, double dt);
-    void simulate_with_grid(double t_end, double dt);
+    void simulate_without_grid(double t_end, double dt, bool gravitational,bool lennard_jones);
+    void simulate_with_grid(double t_end, double dt, bool gravitational,bool lennard_jones);
+
+    void save_state(const std::string &filename);
 
 private:
 
@@ -55,8 +58,9 @@ private:
     void empty_grid();
 
     void place_particles();
-    void update_strengths_without_grid();
-    void update_strengths_with_grid();
+    void update_strengths_without_grid(bool gravitational,bool lennard_jones);
+    void update_strengths_with_grid(bool gravitational,bool lennard_jones);
+    void reset_forces();
 };
 
 

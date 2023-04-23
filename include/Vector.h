@@ -17,6 +17,8 @@ public:
 public:
 
     Vector() = default;
+    Vector(double a);
+
     template <typename... Args>
     Vector(Args... args);
     Vector(const Vector&);
@@ -73,6 +75,7 @@ public:
     [[maybe_unused]] static Vector normalized(const Vector &v);
 
 };
+
 
 template <unsigned int n>
 Vector<n> operator+(const Vector<n> &a, const Vector<n> &b);

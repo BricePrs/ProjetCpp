@@ -128,7 +128,7 @@ void update_strengths(std::vector<Particle<3>> &particles) {
             if (j != i) {
                 R_ij = particles[j].get_pos() - particles[i].get_pos();
                 r_ij = R_ij.length();
-                F_i += (particles[i].get_mass() * particles[j].get_mass() / (r_ij*r_ij)) * R_ij;
+                F_i += (particles[i].get_mass() * particles[j].get_mass() / (r_ij*r_ij*r_ij)) * R_ij;
             }
         }
         particles[i].set_strength(F_i);
@@ -159,7 +159,7 @@ void stromer_verlet(std::vector<Particle<3>> &particles, double t_end, double dt
 
         for (uint32_t i = 0; i<nb_particles; i++) {
             Particle<3> &p = particles[i];
-            Vector<3> new_pos = p.get_pos() + dt * (p.get_speed() + (0.5 / p.get_mass()) * p.get_speed() * dt);
+            Vector<3> new_pos = p.get_pos() + dt * (p.get_speed() + (0.5 / p.get_mass()) * p.get_strength() * dt);
             p.set_pos(new_pos);
             F_old[i] = p.get_strength();
         }
