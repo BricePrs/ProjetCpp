@@ -1,25 +1,51 @@
-//
-// Created by brice on 13/04/23.
-//
+/**
+ * @file Universe.h
+ * @brief Definition of the Universe class.
+ */
 
 #ifndef TP_PERESB_HASSANH_UNIVERSE_H
 #define TP_PERESB_HASSANH_UNIVERSE_H
+
 #include <array>
 #include "Particle.h"
 
+/**
+ * @class Cell
+ * @brief Class representing a cell in the grid.
+ */
 class Cell {
 public:
+    /**
+     * @brief Default constructor.
+     */
     Cell();
 
+    /**
+     * @brief Place a particle in the cell.
+     * @param id Particle ID.
+     */
     void place(uint32_t id);
+
+    /**
+     * @brief Get the IDs of all particles in the cell.
+     * @return Vector of particle IDs.
+     */
     std::vector<uint32_t> get_particles();
+
+    /**
+     * @brief Remove all particles from the cell.
+     */
     void empty();
 
-    std::vector<int32_t> _neightbours;
+    std::vector<int32_t> _neightbours; ///< Indices of neighbouring cells.
 private:
-    std::vector<uint32_t> _particles;
+    std::vector<uint32_t> _particles; ///< IDs of particles in the cell.
 };
 
+/**
+ * @class Universe
+ * @brief Class representing the simulation universe.
+ */
 template <unsigned int n>
 class Universe {
 public:
@@ -33,34 +59,61 @@ public:
     void save_state(const std::string &filename);
 
 private:
-    static const std::array<int, n> neighbour_cell_offsets;
+    static const std::array<int, n> neighbour_cell_offsets; ///< the offset to get the neightbour of a cell for each dimension
 
-    std::vector<Particle<n>> _particles;
+    std::vector<Particle<n>> _particles; ///< The universe particles
 
     // Simulation Constraints
-    Vector<n> _bottom_left;
-    Vector<n> _top_right;
+    Vector<n> _bottom_left; /// Particule postion can't go below this
+    Vector<n> _top_right;///< Particule postion can't go above this
 
     // Grid characteristics
-    double _cell_size;
-    std::vector<Cell> _cells;
-    std::array<int32_t, n> _grid_dimensions;
+    double _cell_size; ///< The size of each grid cell
+    std::vector<Cell> _cells; ///< The array of cells
+    std::array<int32_t, n> _grid_dimensions; ///< The dimensions of the grid
 
+    /// @brief Initialize the universe grid with the dimensions `size`
+    /// @param size the dimensions of the grid
     void init_grid(std::array<int32_t, n> size);
 
-    // Cell utility functions
-    int32_t get_cell_id(Vector<n> position);
-    Cell get_cell_with_id(int32_t id);
-    std::vector<int32_t> compute_cell_neighbours(int32_t id);
-    std::vector<int32_t> get_cell_upper_neighbours(uint32_t dimension, int32_t id);
-    std::vector<int32_t> get_cell_lower_neighbours(uint32_t dimension, int32_t id);
 
+    /*
+     * Cell utility functions
+     */
+
+    /// @brief Compute the id of the cell that contains `position`
+    /// @param postion
+    int32_t get_cell_id(Vector<n> position);
+
+    /// @brief Getter for the cell with id `id`
+    /// @param id
+    Cell get_cell_with_id(int32_t id);
+
+    /// @brief Compute the neightbour cell of cell with id `id`
+    /// @param id
+    std::vector<int32_t> compute_cell_neighbours(int32_t id);
+
+    /// @brief Empty the grid
     void empty_grid();
+
+    /// @brief place all the universe's particles in their coresponding cell
     void place_particles();
 
-    // Simulation utility functions
-    void update_strengths_without_grid(bool gravitational,bool lennard_jones);
-    void update_strengths_with_grid(bool gravitational,bool lennard_jones);
+    /*
+     * Simulation utility functions
+     */
+
+    /// @brief Update all the particles forces field without using the grid
+    /// @param gravitational should the gravitational force be taken into account
+    /// @param lennard_jones should the lennard_jones potential force be taken into account
+    void update_forces_without_grid(bool gravitational, bool lennard_jones);
+
+    /// @brief Update all the particles forces field using the grid
+    /// @param gravitational should the gravitational force be taken into account
+    /// @param lennard_jones should the lennard_jones potential force be taken into account
+    void update_forces_with_grid(bool gravitational, bool lennard_jones);
+
+    /// @brief Reset all particles forces to zero
     void reset_forces();
 
 };

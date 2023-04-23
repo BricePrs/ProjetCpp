@@ -31,8 +31,6 @@
 *.out
 *.app
 
-
-
 debug_build
 release_build
 .idea

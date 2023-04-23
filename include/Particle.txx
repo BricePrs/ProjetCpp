@@ -7,13 +7,9 @@
 #include "Particle.h"
 
 template <unsigned int n>
-Particle<n>::Particle(uint32_t id, Vector<n> pos, Vector<n> speed, double mass, Category category) {
-    this->id = id;
-    this->pos = pos;
-    this->speed = speed;
-    this->force = Vector<n>::zero();
-    this->mass = mass;
-    this->category = category;
+Particle<n>::Particle(uint32_t id, Vector<n> pos, Vector<n> speed, double mass, Category category) :
+    _id(id), _position(pos), _speed(speed), _mass(mass), _category(category), _force(Vector<n>::zero())
+{
 }
 
 
@@ -56,7 +52,7 @@ void Particle<n>::compute_forces(Particle &a, Particle &b, bool gravitational, b
         }
     }
 
-    a.set_strength(a.get_strength()+F_i);
-    b.set_strength(b.get_strength()+-F_i);
+    a.set_force(a.get_strength() + F_i);
+    b.set_force(b.get_strength() + -F_i);
 }
 

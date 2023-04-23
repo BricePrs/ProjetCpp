@@ -130,15 +130,6 @@ void Universe<n>::save_state(const std::string &filename) {
 }
 
 
-template<unsigned int n>
-std::vector<int32_t> Universe<n>::get_cell_upper_neighbours(uint32_t dimension, int32_t id) {
-    return id + neighbour_cell_offsets[dimension];
-}
-
-template<unsigned int n>
-std::vector<int32_t> Universe<n>::get_cell_lower_neighbours(uint32_t dimension, int32_t id) {
-    return id - neighbour_cell_offsets[dimension];
-}
 
 template<unsigned int n>
 std::vector<int32_t> Universe<n>::compute_cell_neighbours(int32_t id) {
@@ -193,7 +184,7 @@ void Universe<n>::random_fill(uint32_t particle_count) {
 }
 
 template <unsigned int n>
-void Universe<n>::update_strengths_without_grid(bool gravitational,bool lennard_jones) {
+void Universe<n>::update_forces_without_grid(bool gravitational, bool lennard_jones) {
 
     reset_forces();
 
@@ -208,7 +199,7 @@ void Universe<n>::update_strengths_without_grid(bool gravitational,bool lennard_
 }
 
 template <unsigned int n>
-void Universe<n>::update_strengths_with_grid(bool gravitational,bool lennard_jones) {
+void Universe<n>::update_forces_with_grid(bool gravitational, bool lennard_jones) {
 
     place_particles();
     reset_forces();
@@ -240,9 +231,9 @@ void Universe<n>::simulate(double t_end, double dt, bool gravitational, bool len
 
     // initialization of particles strengths
     if (use_grid) {
-        update_strengths_with_grid(gravitational, lennard_jones);
+        update_forces_with_grid(gravitational, lennard_jones);
     } else {
-        update_strengths_without_grid(gravitational, lennard_jones);
+        update_forces_without_grid(gravitational, lennard_jones);
     }
 
     std::stringstream ss;
@@ -263,9 +254,9 @@ void Universe<n>::simulate(double t_end, double dt, bool gravitational, bool len
         }
 
         if (use_grid) {
-            update_strengths_with_grid(gravitational, lennard_jones);
+            update_forces_with_grid(gravitational, lennard_jones);
         } else {
-            update_strengths_without_grid(gravitational, lennard_jones);
+            update_forces_without_grid(gravitational, lennard_jones);
         }
 
         for (uint32_t i = 0; i<nb_particles; i++) {
@@ -312,7 +303,7 @@ void Universe<n>::empty_grid() {
 template<unsigned int n>
 void Universe<n>::reset_forces() {
     for (Particle<n> &p: _particles) {
-        p.set_strength(Vector<n>::zero());
+        p.set_force(Vector<n>::zero());
     }
 }
 
