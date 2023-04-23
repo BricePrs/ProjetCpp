@@ -28,7 +28,7 @@ public:
         return this->id;
     }
 
-    Vector<n> get_pos() {
+    inline Vector<n> get_pos() {
         return this->pos;
     }
 
