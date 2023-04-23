@@ -26,5 +26,5 @@ add_subdirectory(src)
 add_subdirectory(test)
 
 
-add_subdirectory(vendors)
+#add_subdirectory(vendors)
 
