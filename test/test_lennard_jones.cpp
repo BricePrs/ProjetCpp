@@ -1,6 +1,23 @@
 //
 // Created by helen on 14/04/23.
 //
+/**
+ * Test that displays Lennard-Jones potential for a system composed of 2 particles.
+ * This test answers to the first question of Lab 4.
+ *
+ * Here are the commands to execute in gnuplot (each command needs to be on separate lines)
+ * after running the test to display the actual graph:
+ * set xlabel "r"
+ * set ylabel "U"
+ * set xzeroaxis lt -1 lw 1
+ * set yrange [-3: 5]
+ * plot "lennard_jones.dat" u 1:2 with line lt2 title "U (Lennard Jones' potential)
+ *
+ * Notes:
+ * F (interaction based on Lennard Jones' potential) is repulsive when 0 <= r < 1.12 and attractive when r > 1.12
+ * when r = 1.12, the 2 particles are in equilibrium (F=0).
+ */
+
 #include <vector>
 #include <Particle.h>
 #include <fstream>
@@ -22,7 +39,7 @@ std::vector<Particle<3>> generate_particles_vector(uint32_t nb_particles) {
     std::vector<Particle<3>> particles_vector(nb_particles);
 
     for (uint i = 0; i < nb_particles; i++ ) {
-        Particle new_part = Particle(i, new_random_vec3(mt, dist), new_random_vec3(mt, dist), new_random_vec3(mt, dist),
+        Particle new_part = Particle(i, new_random_vec3(mt, dist), new_random_vec3(mt, dist),
                                      new_random_double(mt, dist), static_cast<Category>(rand() % 3));
         particles_vector[i] = new_part;
     }
@@ -63,17 +80,4 @@ void lennard_jones_potential(std::vector<Particle<3>> particles) {
 int main() {
     std::vector<Particle<3>> particles = generate_particles_vector(2);
     lennard_jones_potential(particles);
-
-    /**
-     * Commands in gnuplot after running the test:
-     * set xlabel "r"
-     * set ylabel "U"
-     * set xzeroaxis lt -1 lw 1
-     * set yrange [-3: 5]
-     * plot "lennard_jones.dat" u 1:2 with line lt2 title "U (Lennard Jones' potential)
-     *
-     * Notes:
-     * F (interaction based on Lennard Jones' potential) is repulsive when 0 <= r < 2^(1/6) and attractive when r > 2^(1/6)
-     * when r = 2^(1/6), the 2 particles are in equilibrium (F=0) .
-     */
 }
