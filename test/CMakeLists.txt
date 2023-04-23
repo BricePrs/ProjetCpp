@@ -1,5 +1,5 @@
 # Créer un executable à partir de fichiers sources
-add_executable(VectorTests  test_vector.cpp)
+#add_executable(TestVector  test_vector.cpp)
 add_executable(TestDataStructures test_data_structures.cpp)
 add_executable(TestEulerEDO test_euler_edo.cpp)
 add_executable(TestLennardJones test_lennard_jones.cpp)
@@ -10,3 +10,13 @@ add_executable(TestSystemeSolaire test_solar_system.cpp)
 # Fait le lien avec la bibliothèque créée précedemment
 # Les entêtes sont automatiquement détectés.
 
+
+# G TESTS ####
+enable_testing()
+include_directories(${GTEST_INCLUDE_DIRS})
+include(GoogleTest)
+
+# UNIT TESTS ####
+add_executable(TestVectors  test_vector.cpp)
+target_link_libraries(TestVectors -lgtest)
+gtest_discover_tests(TestVectors)
