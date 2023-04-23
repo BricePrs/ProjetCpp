@@ -117,13 +117,13 @@ void data_structures_comparison() {
     run(sizes);
 }
 
-void update_strengths(std::vector<Particle<3>> &particles) {
+void update_strengths(std::vector<Particle<2>> &particles) {
     int nb_particles = particles.size();
-    Vector<3> F_i;
-    Vector<3> R_ij;
+    Vector<2> F_i;
+    Vector<2> R_ij;
     double r_ij;
     for (uint32_t i = 0; i<nb_particles; i++) {
-        F_i = Vector<3>();
+        F_i = Vector<2>();
         for (uint32_t j = 0; j < nb_particles; j++) {
             if (j != i) {
                 R_ij = particles[j].get_pos() - particles[i].get_pos();
@@ -136,7 +136,7 @@ void update_strengths(std::vector<Particle<3>> &particles) {
 }
 
 
-void stromer_verlet(std::vector<Particle<3>> &particles, double t_end, double dt) {
+void stromer_verlet(std::vector<Particle<2>> &particles, double t_end, double dt) {
 
     std::string source_path = __FILE__;
     size_t last_separator = source_path.find_last_of("/\\");
@@ -147,7 +147,7 @@ void stromer_verlet(std::vector<Particle<3>> &particles, double t_end, double dt
 
     uint32_t nb_particles = particles.size();
 
-    std::vector<Vector<3>> F_old(nb_particles);
+    std::vector<Vector<2>> F_old(nb_particles);
 
     // initialization of particles strengths
     update_strengths(particles);
@@ -158,8 +158,8 @@ void stromer_verlet(std::vector<Particle<3>> &particles, double t_end, double dt
         std::string file_line = std::to_string(t) + " ";
 
         for (uint32_t i = 0; i<nb_particles; i++) {
-            Particle<3> &p = particles[i];
-            Vector<3> new_pos = p.get_pos() + dt * (p.get_speed() + (0.5 / p.get_mass()) * p.get_strength() * dt);
+            Particle<2> &p = particles[i];
+            Vector<2> new_pos = p.get_pos() + dt * (p.get_speed() + (0.5 / p.get_mass()) * p.get_strength() * dt);
             p.set_pos(new_pos);
             F_old[i] = p.get_strength();
         }
@@ -168,7 +168,7 @@ void stromer_verlet(std::vector<Particle<3>> &particles, double t_end, double dt
 
         for (uint32_t i = 0; i<nb_particles; i++) {
             Particle p = particles[i];
-            Vector<3> new_speed = p.get_speed() + dt * (0.5 / p.get_mass()) * (p.get_strength() + F_old[i]);
+            Vector<2> new_speed = p.get_speed() + dt * (0.5 / p.get_mass()) * (p.get_strength() + F_old[i]);
             p.set_speed(new_speed);
 
             // adding new_pos of each particle to file
@@ -180,13 +180,31 @@ void stromer_verlet(std::vector<Particle<3>> &particles, double t_end, double dt
     file.close();
 }
 
+std::vector<Particle<2>> solar_system(uint32_t nb_particles, std::vector<Vector<2>> initial_pos, std::vector<Vector<2>> initial_speed, std::vector<double> initial_mass) {
+    std::random_device rd;
+    std::mt19937 mt(rd());
+    std::uniform_real_distribution<double> dist(-500.0, 500.0);
+
+    // particle set creations
+    std::vector<Particle<2>> particles_vector(nb_particles);
+
+    for (int i = 0; i < nb_particles; i++ ) {
+        Particle new_part = Particle(i, initial_pos[i], initial_speed[i], Vector<2>(dist(mt), dist(mt)),
+                                     initial_mass[i], static_cast<Category>(rand() % 3));
+        particles_vector[i] = new_part;
+    }
+    return particles_vector;
+}
 
 int main() {
     // comparison of particles
     data_structures_comparison();
 
     // current particles system is composed of the Sun, Earth, Jupiter, Haley comet (4 particles)
-    std::vector<Particle<3>> particles = generate_particles_vector(4);
+    std::vector<Vector<2>> initial_pos = {Vector<2>(0.0, 0.0), Vector<2>(0.0, 1.0), Vector<2>(0.0, 5.36), Vector<2>(34.75, 0.0)};
+    std::vector<Vector<2>> initial_speed = {Vector<2>(0.0, 0.0), Vector<2>(-1.0, 0.0), Vector<2>(-0.425, 0.0), Vector<2>(0.0, 0.0296)};
+    std::vector<double> initial_mass = {1.0, 3.0e-6, 9.55e-4, 1.0e-14};
+    std::vector<Particle<2>> particles = solar_system(4, initial_pos, initial_speed, initial_mass);
     stromer_verlet(particles, 468.5, 0.015);
 
 
