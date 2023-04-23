@@ -6,14 +6,13 @@
 #define TP_PERESB_HASSANH_UNIVERSE_H
 #include <array>
 #include "Particle.h"
-#include "unordered_dense.h"
 
 class Cell {
 public:
     Cell();
 
     void place(uint32_t id);
-    unordered_dense::map<uint32_t> get_particles();
+    std::vector<uint32_t> get_particles();
     void empty();
 private:
     std::vector<uint32_t> _particles;
