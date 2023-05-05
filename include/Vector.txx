@@ -15,14 +15,14 @@
 /// Value constructor
 template <unsigned int n>
 template <typename... Args>
-Vector<n>::Vector(Args... args) : components{static_cast<double>(args)...} {
+Vector<n>::Vector(Args... args) : _components{static_cast<double>(args)...} {
     static_assert(sizeof...(Args) == n, "Wrong number of arguments provided");
 }
 
 template<unsigned int n>
 Vector<n>::Vector(double a) {
     for (unsigned int i = 0; i < n; i++) {
-        components[i] = a;
+        _components[i] = a;
     }
 }
 
@@ -30,9 +30,45 @@ Vector<n>::Vector(double a) {
 template <unsigned int n>
 Vector<n>::Vector(const Vector<n> &v) {
     for (int i = 0; i < n; i++) {
-        this->components[i] = v.components[i];
+        this->_components[i] = v._components[i];
     }
 }
+
+// Move constructor
+template <unsigned int n>
+Vector<n>::Vector(Vector<n>&& other) noexcept {
+    // Move the components from the other vector
+    for (unsigned int i = 0; i < n; ++i) {
+        _components[i] = std::move(other._components[i]);
+    }
+}
+
+// Move assignment operator
+template <unsigned int n>
+Vector<n>& Vector<n>::operator=(Vector<n>&& other)  noexcept {
+    if (this != &other) {
+        // Move the components from the other vector
+        for (unsigned int i = 0; i < n; ++i) {
+            _components[i] = std::move(other._components[i]);
+        }
+    }
+    return *this;
+}
+
+/**
+ * @brief Copy assignment operator.
+ */
+template <unsigned int n>
+Vector<n>& Vector<n>::operator=(const Vector<n>& other) {
+    if (this != &other) {
+        // Copy the components from the other vector
+        for (unsigned int i = 0; i < n; ++i) {
+            _components[i] = other._components[i];
+        }
+    }
+    return *this;
+}
+
 
 template <unsigned int n>
 [[maybe_unused]] Vector<n> Vector<n>::zero() {
@@ -44,31 +80,33 @@ template <unsigned int n>
 template <unsigned int n>
 double Vector<n>::operator[](int i) const {
     assert(i >= 0 && i < n);
-    return this->components[i];
+    return this->_components[i];
 }
 
 template <unsigned int n>
 double &Vector<n>::operator[](int i) {
     assert(i >= 0 && i < n);
-    return this->components[i];
+    return this->_components[i];
 }
 
 template <unsigned int n>
 Vector<n> &Vector<n>::operator+=(const Vector<n> &v) {
     for (int i =0; i<n; i++)
-        this->components[i] += v.components[i];
+        this->_components[i] += v._components[i];
     return *this;
 }
 
 template <unsigned int n>
 Vector<n> &Vector<n>::operator-=(const Vector<n>&v) {
-    return *this += v*(-1.);
+    for (int i =0; i<n; i++)
+        this->_components[i] -= v._components[i];
+    return *this;
 }
 
 template <unsigned int n>
 Vector<n> &Vector<n>::operator*=(double a) {
     for(int i = 0; i<n; i++)
-        this->components[i] *= a;
+        this->_components[i] *= a;
     return *this;
 }
 
@@ -78,15 +116,27 @@ Vector<n> &Vector<n>::operator/=(double a) {
     return *this*=(1./a);
 }
 
-template <unsigned int n>
-Vector<n> Vector<n>::operator-() const {
-    return (-1.)**this;
+template<unsigned int n>
+Vector<n> &Vector<n>::operator/=(Vector<n> v) {
+    for (int i = 0; i<n; i++) {
+        assert(v._components[i] != 0);
+        this->_components[i] /= v._components[i];
+    }
+    return *this;
 }
 
 template <unsigned int n>
-Vector<n> &Vector<n>::operator*=(const Vector<n>&v) {
+Vector<n> Vector<n>::operator-() const {
+    Vector<n> result = Vector<n>::zero();
+    for (int i=0; i<n; i++)
+        result[i] = -(this->_components[i]);
+    return result;
+}
+
+template <unsigned int n>
+Vector<n> &Vector<n>::operator*=(const Vector<n> &v) {
     for (int i = 0; i<n; i++)
-        this->components[i] *= v.components[i];
+        this->_components[i] *= v._components[i];
     return *this;
 }
 
@@ -102,7 +152,7 @@ template <unsigned int n>
 [[maybe_unused]] double Vector<n>::dot(const Vector<n>&a, const Vector<n>&b) {
     double result = 0.0;
     for (int i = 0; i<n; i++)
-        result += a.components[i] * b.components[i];
+        result += a._components[i] * b._components[i];
     return result;
 }
 
@@ -120,7 +170,7 @@ template <unsigned int n>
 [[maybe_unused]] Vector<n> &Vector<n>::normalize() {
     double l = this->length();
     for (int i=0; i<n; i++)
-        this->components[i] /= l;
+        this->_components[i] /= l;
     return *this;
 }
 
@@ -141,42 +191,79 @@ Vector<n> Vector<n>::random_in_unit_pos_cube() {
     static std::uniform_real_distribution<double> dist(0.0, 1.0);
     Vector<n> result = Vector<n>();
     for (int i = 0; i<n; i++)
-        result.components[i] = dist(mt);
+        result._components[i] = dist(mt);
     return result;
 }
 
 template <unsigned int n>
-Vector<n> operator+(const Vector<n>&a, const Vector<n>&b) {
-    return Vector<n>(a) += b;
+Vector<n> operator+(Vector<n>a, const Vector<n>&b) {
+    return a += b;
 }
 
 template <unsigned int n>
-Vector<n> operator-(const Vector<n>&a, const Vector<n>&b) {
-    return Vector<n>(a) += -b;
+Vector<n> operator-(Vector<n>a, const Vector<n>&b) {
+    return a -= b;
 }
 
 template <unsigned int n>
-Vector<n> operator*(const Vector<n> &a, const Vector<n> &b) {
-    return Vector<n>(a)*=b;
+Vector<n> operator*(Vector<n> a, const Vector<n> &b) {
+    return a*=b;
 }
 template <unsigned int n>
-Vector<n> operator*(double a, const Vector<n> &b) {
-    return Vector<n>(b)*=a;
+Vector<n> operator*(double a, Vector<n> b) {
+    return b*=a;
 }
 template <unsigned int n>
-Vector<n> operator*(const Vector<n> &a, double b) {
-    return Vector<n>(a)*=b;
+Vector<n> operator*(Vector<n> a, double b) {
+    return a*=b;
 }
 template <unsigned int n>
-Vector<n> operator/(double a, const Vector<n> &b) {
-    Vector<n> result(b);
+Vector<n> operator/(double a, Vector<n> b) {
     for (int i=0; i<n; i++)
-        result.components[i] =a/b.components[i];
-    return result;
+        b._components[i] = a / b._components[i];
+    return b;
 }
 
 template <unsigned int n>
-Vector<n> operator/(const Vector<n> &a, double b) {
-    return Vector<n>(a)/=b;
+Vector<n> operator/(Vector<n> a, double b) {
+    return a/=b;
+}
+
+template <unsigned int n>
+Vector<n> operator/(Vector<n> a, const Vector<n> &b) {
+    return a/=b;
+}
+
+template<unsigned int n>
+Vector<n> &Vector<n>::operator%=(const Vector<n> &v) {
+    for (int i = 0; i < n; ++i) {
+        _components[i] = fmod(_components[i], v[i]);
+        if (_components[i] < 0) {
+            _components[i] += v[i];
+        }
+    }
+}
+
+
+template<unsigned int n>
+Vector<n> &Vector<n>::operator%=(double b) {
+    for (double &c: _components) {
+        c=fmod(c, b);
+        if (c < 0) {
+            c += b;
+        }
+    }
+    return *this;
+}
+
+
+template <unsigned int n>
+Vector<n> operator%(Vector<n> a, const Vector<n> &b) {
+    return Vector<n>(a)%=b;
+}
+
+template <unsigned int n>
+Vector<n> operator%(Vector<n> a, double b) {
+    return Vector<n>(a)%=b;
 }
 

@@ -29,30 +29,29 @@ Particle<n> Particle<n>::random(uint32_t id) {
 }
 
 template<unsigned int n>
-void Particle<n>::compute_forces(Particle &a, Particle &b, bool gravitational, bool lennard_jones) {
-    if (a == b) return;
+inline void Particle<n>::compute_forces(Particle &a, Particle &b, bool gravitational, bool lennard_jones) {
+    double F_length = 0.;
 
-    Vector<n> F_i;
+    Vector<n> R_ij(b.get_pos() - a.get_pos());
+    double r_ij_sq = R_ij.sq_length();
 
-    Vector<n> R_ij = b.get_pos() - a.get_pos();
-    double r_ij = R_ij.length();
-    double r_ij_sq = r_ij * r_ij;
-
-    // gravitational strength
-    if (gravitational) {
-        F_i = (a.get_mass() * b.get_mass() / r_ij_sq / r_ij) * R_ij;
-    }
-
+    // interactions (Lennard-Jones)
     if (lennard_jones) {
-        if (r_ij <= r_cut) {
-            double r_ij_exp_six = r_ij_sq * r_ij_sq * r_ij_sq;
-            double sigma_ov_r_ij = sigma_exp_six / r_ij_exp_six;
-            // interactions (Lennard-Jones)
-            F_i = 24.0 * eps * 1 / r_ij_sq * (sigma_ov_r_ij) * (1.0 - 2.0 * sigma_ov_r_ij) * R_ij;
+        if (r_ij_sq <= r_cut_sq) {
+            double one_over_rij_sq = 1./r_ij_sq;
+            double one_over_r_ij_exp_six = one_over_rij_sq * one_over_rij_sq * one_over_rij_sq;
+            double sigma_ov_r_ij = sigma_exp_six * one_over_r_ij_exp_six;
+            F_length += (24.0 * eps * one_over_rij_sq * (sigma_ov_r_ij) * (1.0 - 2.0 * sigma_ov_r_ij));
         }
     }
 
-    a.set_force(a.get_strength() + F_i);
-    b.set_force(b.get_strength() + -F_i);
+    // gravitational strength
+    if (gravitational) {
+        F_length += (a.get_mass() * b.get_mass() / r_ij_sq / sqrt(r_ij_sq));
+    }
+
+    Vector F_i = F_length * R_ij;
+    a.apply_force(F_i);
+    b.apply_force(-F_i);
 }
 

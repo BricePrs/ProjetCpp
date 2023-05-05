@@ -72,7 +72,7 @@ public:
         @brief Gets the position of the particle in the n-dimensional world.
         @return The position of the particle.
         */
-    inline Vector<n> get_pos() {
+    const Vector<n> &get_pos() {
         return this->_position;
     }
 
@@ -80,7 +80,7 @@ public:
         @brief Gets the speed of the particle in the n-dimensional world.
         @return The speed of the particle.
         */
-    Vector<n> get_speed() {
+    const Vector<n> &get_speed() {
         return this->_speed;
     }
 
@@ -88,7 +88,7 @@ public:
         @brief Gets the force acting on the particle in the n-dimensional world.
         @return The force acting on the particle.
         */
-    Vector<n> get_strength() {
+    const Vector<n> &get_strength() {
         return this->_force;
     }
 
@@ -96,7 +96,7 @@ public:
         @brief Gets the mass of the particle.
         @return The mass of the particle.
         */
-    double get_mass() {
+    const double &get_mass() {
         return this->_mass;
     }
 
@@ -104,7 +104,7 @@ public:
         @brief Gets the category (type) of the particle.
         @return The category (type) of the particle.
         */
-    Category get_category() {
+    const Category &get_category() {
         return this->_category;
     }
 
@@ -128,6 +128,9 @@ public:
         this->_force = new_force;
     }
 
+    inline void apply_force(const Vector<n> &new_force) {
+        this->_force += new_force;
+    }
 
     bool operator<(const Particle &p) const {
         return _id < p._id;
@@ -162,10 +165,10 @@ public:
     static void compute_forces(Particle &a, Particle &b, bool gravitational, bool lennard_jones);
 
 private:
-    inline static double r_cut = 2.5;
+    inline static double r_cut_sq = 2.5*2.5;
 
     // parameters for Lennard Jones' potential
-    inline static double eps = 1.0;
+    inline static double eps = 5.0;
     inline static double sigma = 1.0;
     inline static double sigma_exp_six = pow(sigma, 6);
 
@@ -179,9 +182,6 @@ private:
 };
 
 
-
 #include "Particle.txx"
-
-
 
 #endif //TP_PERESB_HASSANH_PARTICLE_H

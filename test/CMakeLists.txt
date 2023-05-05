@@ -5,6 +5,8 @@ add_executable(TestEulerEDO test_euler_edo.cpp)
 add_executable(TestLennardJones test_lennard_jones.cpp)
 add_executable(TestUnivers test_universe.cpp)
 add_executable(TestSystemeSolaire test_solar_system.cpp)
+add_executable(TestCollision test_collision.cpp)
+add_executable(TestCollision3D test_collision_3D.cpp)
 
 
 # Fait le lien avec la bibliothèque créée précedemment

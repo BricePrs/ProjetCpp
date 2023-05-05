@@ -10,8 +10,7 @@ set(CMAKE_CXX_STANDARD 17)
 ## Indique les options de compilations pour le projet
 ## -pg : donne la possibilité de faire du profiling
 ## -Wall : affiche les warnings
-set(CMAKE_CXX_FLAGS "-Wall")
-set(CMAKE_CXX_FLAGS "-pg")
+set(CMAKE_CXX_FLAGS "-Wall -pg ")
 
 ## Définir la localisation des entêtes.
 ## include_directories sera propagé à l'ensemble du projet
@@ -27,4 +26,23 @@ add_subdirectory(test)
 
 
 #add_subdirectory(vendors)
+
+# Find Doxygen package
+find_package(Doxygen REQUIRED)
+
+# Set input and output documentation files
+set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile)
+set(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
+
+# Configure the input file
+configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
+
+# Add a custom target to generate documentation
+add_custom_target(
+        doc ALL
+        COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+        COMMENT "Generating API documentation with Doxygen"
+        VERBATIM
+)
 

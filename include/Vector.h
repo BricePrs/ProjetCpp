@@ -13,7 +13,7 @@ public:
     /**
      * @brief Components of the vector.
      */
-    double components[n];
+    double _components[n];
 
     /**
      * @brief Default constructor.
@@ -27,6 +27,26 @@ public:
     Vector(double a);
 
     /**
+     * @brief Move constructor for Vector class.
+     * @param other The other Vector object to move from.
+     */
+    Vector<n>(Vector<n>&& other) noexcept ;
+
+    /**
+     * @brief Move assignment operator for Vector class.
+     * @param other The other Vector object to move from.
+     * @return A reference to the current Vector object.
+     */
+    Vector<n>& operator=(Vector<n>&& other) noexcept;
+
+    /**
+    * @brief Copy assignment operator for Vector class.
+    * @param other The other Vector object to copy from.
+    * @return A reference to the current Vector object.
+    */
+    Vector<n>& operator=(const Vector<n>& other);
+
+    /**
      * @brief Variadic constructor that initializes the components with the given values.
      * @tparam Args The types of the arguments.
      * @param args The values to initialize the components with.
@@ -38,7 +58,7 @@ public:
      * @brief Copy constructor.
      * @param other The vector to copy from.
      */
-    Vector(const Vector& other);
+    Vector(const Vector& v);
 
     /**
      * @brief Returns a zero vector.
@@ -60,8 +80,8 @@ public:
      */
     friend std::ostream &operator<< (std::ostream &out, const Vector &v) {
         out << "(";
-        for(int i = 0; i<n-1; i++) out << v.components[i] << ", ";
-        out << v.components[n-1] << ")";
+        for(int i = 0; i<n-1; i++) out << v._components[i] << ", ";
+        out << v._components[n - 1] << ")";
         return out;
     }
 
@@ -72,8 +92,8 @@ public:
     std::string to_string() const {
         std::string result = "(";
         for(int i =0; i<n-1; i++)
-            result += std::to_string(components[i]) + ", ";
-        result += std::to_string(components[n-1]) + ")";
+            result += std::to_string(_components[i]) + ", ";
+        result += std::to_string(_components[n - 1]) + ")";
         return result;
     }
     /**
@@ -132,6 +152,27 @@ public:
     Vector &operator/=(double scalar);
 
     /**
+     * @brief Divides each component of this vector by each component of v.
+     * @param scalar v the divisor
+     * @return A reference to this vector.
+     */
+    Vector &operator/=(Vector<n> v);
+
+    /**
+ * @brief Apply modulo v[i] to each component i of this vector
+ * @param scalar v the divisor
+ * @return A reference to this vector.
+ */
+    Vector &operator%=(const Vector<n> &v);
+
+    /**
+ * @brief Apply modulo v to each component of this vector
+ * @param scalar v
+ * @return A reference to this vector.
+ */
+    Vector &operator%=(double v);
+
+    /**
      * @brief operator== Compares two vectors for equality.
      * @param a The first vector.
      * @param b The second vector.
@@ -139,7 +180,7 @@ public:
      */
     friend bool operator==(const Vector &a, const Vector &b) {
         for (int i=0; i<n; i++) {
-            if (a.components[i] != b.components[i])
+            if (a._components[i] != b._components[i])
                 return false;
         }
         return true;
@@ -154,6 +195,7 @@ public:
     friend bool operator!=(const Vector &a, const Vector &b) {
         return !(a==b);
     }
+
     /**
      * @brief sq_length Returns the square of the length of the vector.
      * @return The square of the length of the vector.
@@ -205,6 +247,7 @@ public:
     [[maybe_unused]] static Vector normalized(const Vector &v);
 };
 
+
 /**
  * @brief Adds two vectors component-wise.
  * @tparam n The number of components in the vectors.
@@ -213,7 +256,7 @@ public:
  * @return The vector resulting from adding the two input vectors component-wise.
  */
 template <unsigned int n>
-Vector<n> operator+(const Vector<n> &a, const Vector<n> &b);
+Vector<n> operator+(Vector<n> a, const Vector<n> &b);
 
 /**
  * @brief Subtracts two vectors component-wise.
@@ -223,7 +266,7 @@ Vector<n> operator+(const Vector<n> &a, const Vector<n> &b);
  * @return The vector resulting from subtracting the second vector from the first component-wise.
  */
 template <unsigned int n>
-Vector<n> operator-(const Vector<n> &a, const Vector<n> &b);
+Vector<n> operator-(Vector<n> a, const Vector<n> &b);
 
 /**
  * @brief Multiplies two vectors component-wise.
@@ -233,7 +276,7 @@ Vector<n> operator-(const Vector<n> &a, const Vector<n> &b);
  * @return The vector resulting from multiplying the two input vectors component-wise.
  */
 template <unsigned int n>
-Vector<n> operator*(const Vector<n> &a, const Vector<n> &b);
+Vector<n> operator*(Vector<n> a, const Vector<n> &b);
 
 /**
  * @brief Multiplies a vector by a scalar.
@@ -243,7 +286,7 @@ Vector<n> operator*(const Vector<n> &a, const Vector<n> &b);
  * @return The vector resulting from multiplying the input vector by the scalar.
  */
 template <unsigned int n>
-Vector<n> operator*(double a, const Vector<n> &b);
+Vector<n> operator*(double a, Vector<n> b);
 
 /**
  * @brief Multiplies a vector by a scalar.
@@ -253,17 +296,7 @@ Vector<n> operator*(double a, const Vector<n> &b);
  * @return The vector resulting from multiplying the input vector by the scalar.
  */
 template <unsigned int n>
-Vector<n> operator*(const Vector<n> &a, double b);
-
-/**
- * @brief Divides a scalar by a vector component-wise.
- * @tparam n The number of components in the vector.
- * @param a The scalar to divide.
- * @param b The vector to divide into.
- * @return The vector resulting from dividing the scalar by the input vector component-wise.
- */
-template <unsigned int n>
-Vector<n> operator/(double a, const Vector<n> &b);
+Vector<n> operator*(Vector<n> a, double b);
 
 /**
  * @brief Divides a vector by a scalar.
@@ -273,7 +306,40 @@ Vector<n> operator/(double a, const Vector<n> &b);
  * @return The vector resulting from dividing the input vector by the scalar.
  */
 template <unsigned int n>
-Vector<n> operator/(const Vector<n> &a, double b);
+Vector<n> operator/(Vector<n> a, double b);
+
+
+
+/**
+ * @brief Apply modulo b[i] to each component a[i] of this vector
+ * @tparam n The number of components in the vector.
+ * @param a The vector to divide.
+ * @param b The modulo.
+ * @return The vector resulting from the modulo.
+ */
+template <unsigned int n>
+Vector<n> operator%(Vector<n> a, const Vector<n> &b);
+
+/**
+ * @brief Apply modulo b to each component a[i] of this vector
+ * @tparam n The number of components in the vector.
+ * @param a The vector to divide.
+ * @param b The scalar
+ * @return The vector resulting from the modulo.
+ */
+template <unsigned int n>
+Vector<n> operator%(Vector<n> a, double b);
+
+
+/**
+ * @brief Divides a vector by a scalar.
+ * @tparam n The number of components in the vector.
+ * @param a The vector to divide.
+ * @param b The scalar to divide the vector by.
+ * @return The vector resulting from dividing the input vector by the scalar.
+ */
+template <unsigned int n>
+Vector<n> operator/(Vector<n> a, const Vector<n> &b);
 
 #include "Vector.txx"
 
