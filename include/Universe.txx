@@ -285,11 +285,11 @@ void Universe<n>::apply_boundary_force(Particle<n>& particle, const std::vector<
     for (uint32_t i = 0; i < n; ++i) {
         Vector dir = Vector<n>::unit(i);
         if (boundaries[1+2*i]) {
-            particle.apply_force(dir * Particle<n>::compute_lennard_jones_intensity(
+            particle.apply_force(-dir * Particle<n>::compute_lennard_jones_intensity(
                     pow(particle.get_pos()[i] - _constraints.bottom_left[i], 2.)));
         }
         if (boundaries[1+2*i+1]) {
-            particle.apply_force(-dir * Particle<n>::compute_lennard_jones_intensity(
+            particle.apply_force(dir * Particle<n>::compute_lennard_jones_intensity(
                     pow(particle.get_pos()[i] - _constraints.top_right[i], 2.)));
         }
     }

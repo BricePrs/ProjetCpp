@@ -9,13 +9,13 @@
 int main() {
     auto start = std::chrono::steady_clock::now();
 
-    SimulationConstraints constraints = SimulationConstraints(Vector<2>(-3.), Vector<2>(3.));
+    SimulationConstraints constraints = SimulationConstraints(Vector<2>(-30.), Vector<2>(30.));
     Universe<2> universe(constraints, 2.5);
 
 
     universe.add(
             Vector<2>(0., 2.),
-            Vector<2>(10., 10.),
+            Vector<2>(40., -40.),
             1.,
             NEUTRON
     );
@@ -29,7 +29,7 @@ int main() {
         5.,
         100,
         1000,
-        Reflexive
+        ReflexivePotential
     };
 
     universe.simulate(settings);
