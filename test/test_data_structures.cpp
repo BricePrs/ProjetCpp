@@ -12,6 +12,7 @@
 #include <fstream>
 #include <deque>
 #include <set>
+#include <list>
 
 auto new_random_vec3(std::mt19937 &gen, std::uniform_real_distribution<double> &distribution) -> Vector<3> {
     return Vector<3>{distribution(gen), distribution(gen), distribution(gen)};

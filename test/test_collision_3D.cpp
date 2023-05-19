@@ -1,14 +1,11 @@
-//
-// Created by brice on 13/04/23.
-//
 #include <iostream>
 #include <chrono>
 #include "Particle.h"
 #include "Universe.h"
 
 int main() {
-    auto start = std::chrono::steady_clock::now();
-    Universe<3> univers(Vector<3>(-200.), Vector<3>(200.), 2.5);
+    SimulationConstraints constraints = SimulationConstraints(Vector<3>(-200.), Vector<3>(200.));
+    Universe<3> univers(constraints, 2.5);
 
     double spacing = pow(2., 1./6.)*.1;
 
@@ -17,8 +14,11 @@ int main() {
 
     std::cout << "Instantiating " << a << " and " << b << " particles." << std::endl;
 
-    univers.simulate(19.5, 0.00005, false, true, true, 2000);
+    SimulationSettings settings = SimulationSettings();
+    settings.lennard_jones_interaction = true;
+    settings.physics_time_total = 19.5;
+    settings.physics_time_step = 0.00005;
+    settings.iter_count_until_save = 2000;
+    univers.simulate(settings);
 
-    std::chrono::duration<double> elapsed_seconds = std::chrono::steady_clock::now() - start;
-    std::cout << "Time elapsed for a universe " << elapsed_seconds.count() << "s\n";
 }

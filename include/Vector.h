@@ -1,7 +1,3 @@
-//
-// Created by helen on 13/04/23.
-//
-
 #ifndef TP_PERESB_HASSANH_VECTOR_H
 #define TP_PERESB_HASSANH_VECTOR_H
 
@@ -86,7 +82,7 @@ public:
      */
     friend std::ostream &operator<< (std::ostream &out, const Vector &v) {
         out << "(";
-        for(int i = 0; i<n-1; i++) out << v._components[i] << ", ";
+        for(uint32_t  i = 0; i<n-1; i++) out << v._components[i] << ", ";
         out << v._components[n - 1] << ")";
         return out;
     }
@@ -107,14 +103,14 @@ public:
      * @param i The index of the component to retrieve.
      * @return The value of the i-th component.
      */
-    double operator[](int i) const;
+    double operator[](uint32_t i) const;
 
     /**
      * @brief Returns a reference to the i-th component of the vector.
      * @param i The index of the component to retrieve.
      * @return A reference to the i-th component.
      */
-    double &operator[](int i);
+    double &operator[](uint32_t i);
 
     /**
      * @brief Adds another vector to this vector.

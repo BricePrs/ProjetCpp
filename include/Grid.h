@@ -1,7 +1,3 @@
-//
-// Created by brice on 19/05/23.
-//
-
 #ifndef TP_PERESB_HASSANH_GRID_H
 #define TP_PERESB_HASSANH_GRID_H
 

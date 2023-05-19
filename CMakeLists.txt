@@ -25,6 +25,10 @@ add_subdirectory(src)
 add_subdirectory(test)
 
 
+## On crée la démo pour la bibliothèque
+add_subdirectory(demo)
+
+
 #add_subdirectory(vendors)
 
 # Find Doxygen package

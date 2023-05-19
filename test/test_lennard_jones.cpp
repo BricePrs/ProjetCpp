@@ -1,6 +1,3 @@
-//
-// Created by helen on 14/04/23.
-//
 /**
  * Test that displays Lennard-Jones potential for a system composed of 2 particles.
  * This test answers to the first question of Lab 4.

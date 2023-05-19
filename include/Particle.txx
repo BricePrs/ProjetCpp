@@ -1,7 +1,3 @@
-//
-// Created by helen on 23/02/23.
-//
-#include <list>
 #include <random>
 #include <iostream>
 #include "Particle.h"
@@ -56,9 +52,6 @@ inline void Particle<n>::compute_forces(Particle &a, Particle &b, bool gravitati
     // interactions (Lennard-Jones)
     if (lennard_jones) {
         if (r_ij_sq <= r_cut_sq) {
-            double one_over_rij_sq = 1./r_ij_sq;
-            double one_over_r_ij_exp_six = one_over_rij_sq * one_over_rij_sq * one_over_rij_sq;
-            double sigma_ov_r_ij = sigma_exp_six * one_over_r_ij_exp_six;
             F_length += compute_lennard_jones_intensity(r_ij_sq);
         }
     }

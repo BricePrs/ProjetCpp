@@ -6,8 +6,6 @@
 
 #include <iostream>
 #include <cmath>
-#include <cassert>
-
 #include "Vector.h"
 
 #include <gtest/gtest.h>

@@ -1,7 +1,3 @@
-//
-// Created by brice on 13/04/23.
-//
-
 #include "Universe.h"
 #include <fstream>
 #include <sstream>
@@ -48,7 +44,7 @@ void write_particles(std::ostream& os, std::vector<Particle<n>> &particles) {
     os << "<Points>\n";
     os << "<DataArray name=\"Position\" type=\"Float32\" NumberOfComponents=\"3\" format=\"ascii\">\n";
     for (Particle<n> &particle : particles) {
-        for (int i = 0; i < n; ++i) {
+        for (uint32_t i = 0; i < n; ++i) {
             os << particle.get_pos()[i];
             os << " ";
         }
@@ -64,7 +60,7 @@ void write_particles(std::ostream& os, std::vector<Particle<n>> &particles) {
 
     os << "<DataArray Name=\"Velocity\" type=\"Float32\" NumberOfComponents=\"" << n << "\" format=\"ascii\">\n";
     for (Particle<n> &particle : particles) {
-        for (int i = 0; i < n; ++i) {
+        for (uint32_t i = 0; i < n; ++i) {
             os << particle.get_speed()[i];
             os << " ";
         }
@@ -109,7 +105,7 @@ template<unsigned int n>
 int Universe<n>::add_packed_particles(Vector<n> bottom_left, Vector<n> top_right, Vector<n> velocity, double mass, Category category, Vector<n> particle_count) {
     Vector<n> spacing = (top_right - bottom_left) / (particle_count - Vector<n>(1.));
     int particle_total = 1.;
-    for (int dim = 0; dim < n; ++dim) {
+    for (uint32_t  dim = 0; dim < n; ++dim) {
         particle_total *= particle_count[dim];
     }
 
@@ -117,15 +113,13 @@ int Universe<n>::add_packed_particles(Vector<n> bottom_left, Vector<n> top_right
     index[0] = -1;
     for (int i = 0; i < particle_total; ++i) {
         index[0] += 1;
-        for (int dim = 0; dim < n; ++dim) {
+        for (uint32_t  dim = 0; dim < n; ++dim) {
             if (index[dim] >= particle_count[dim]) {
                 index[dim] = 0;
                 index[dim + 1]++;
             }
         }
-        auto a = index * spacing;
         add(bottom_left + index * spacing, velocity, mass, category);
-
     }
     return particle_total;
 }
@@ -180,7 +174,7 @@ void Universe<n>::init_grid(double cell_size) {
     _grid.grid_dimensions = grid_dimensions;
     _grid.neighbour_cell_offsets = compute_offsets_array(_grid.grid_dimensions);
 
-    for (int32_t i = 0; i < _grid.cells_count; ++i) {
+    for (uint32_t i = 0; i < _grid.cells_count; ++i) {
         compute_cell_neighbours(i, _grid.cells[i]);
     }
 }
@@ -193,7 +187,7 @@ void Universe<n>::compute_cell_neighbours(int32_t id, Cell &cell) {
     // Computing the cell coordinates in coords
     std::array<int32_t, n> coords;
     int32_t id_coords = id;
-    for (int i = 0; i < n; ++i) {
+    for (uint32_t i = 0; i < n; ++i) {
         coords[i] = id_coords % _grid.grid_dimensions[i];
         id_coords /= _grid.grid_dimensions[i];
     }
@@ -203,7 +197,6 @@ void Universe<n>::compute_cell_neighbours(int32_t id, Cell &cell) {
 
 
     std::vector<int32_t> neighbours;
-
     for (int i = 0; i < neighbour_count; ++i) {
 
         int32_t neighbour_id = 0;
@@ -211,7 +204,7 @@ void Universe<n>::compute_cell_neighbours(int32_t id, Cell &cell) {
         bool skip = false;
         int32_t neighbour_offset_value = i;
 
-        for (int j = 0; j < n; ++j) {
+        for (uint32_t j = 0; j < n; ++j) {
             neighbour_coords[j] += (neighbour_offset_value % 3) - 1;
             neighbour_offset_value /= 3;
             if (_settings.boundary_behaviour == Periodic) {
@@ -239,7 +232,7 @@ void Universe<n>::compute_cell_neighbours(int32_t id, Cell &cell) {
     // repeat two bool for each dimension
     bool is_boundary = false;
     auto boundaries = std::vector<bool>(1 + 2*n);
-    for (int j = 0; j < 2*n; ++j) {
+    for (uint32_t j = 0; j < 2*n; ++j) {
         if (coords[j] == 0) {
             boundaries[1+2*j] = true;
             is_boundary = true;
@@ -315,8 +308,6 @@ double Universe<n>::compute_kinetic_energy() {
 
 template <unsigned int n>
 void Universe<n>::update_forces_with_grid() {
-
-    std::array<bool, 2*n> boundary_test;
 
     for (int32_t cell_id : _grid.active_cells) {
         Cell &current_cell = _grid.cells[cell_id];
@@ -441,7 +432,7 @@ template<unsigned int n>
 inline int32_t Universe<n>::get_cell_id(Vector<n> position) {
     Vector<n> rel_position = (position - _constraints.bottom_left) / _grid.cell_size;
     int32_t result = 0;
-    for (int i = 0; i < n; ++i) {
+    for (uint32_t i = 0; i < n; ++i) {
         int32_t coord = floor(rel_position[i]);
         if (coord < 0 || _grid.grid_dimensions[i] < coord) {
             return -1;
@@ -479,14 +470,14 @@ void Universe<n>::update_particles_cells() {
         for (auto it = particle_set.begin(); it != particle_set.end();) {
 
             int32_t new_cell_id = get_cell_id(_particles[*it].get_pos());
-            if (0 > new_cell_id || new_cell_id >= _grid.cells_count) {
+            if (0 > new_cell_id || new_cell_id >= (int) _grid.cells_count) {
                 switch (_settings.boundary_behaviour) {
                     case Reflexive: {
-                        while (0 > new_cell_id || new_cell_id >= _grid.cells_count) {
+                        while (0 > new_cell_id || new_cell_id >= (int) _grid.cells_count) {
                             Vector rel_pos = _particles[*it].get_pos() - _constraints.center;
                             Vector<n> offset;
                             Vector<n> p_velocity = _particles[*it].get_speed();
-                            for (int i = 0; i < n; ++i) {
+                            for (uint32_t i = 0; i < n; ++i) {
                                 offset[i] = fabs(rel_pos[i]) - _constraints.width[i];
                                 if (offset[i] >= 0.) {
                                     p_velocity[i] = -p_velocity[i];
@@ -520,7 +511,7 @@ void Universe<n>::update_particles_cells() {
                         break;
                 }
             }
-            if (new_cell_id != cell_id) {
+            if (new_cell_id != (int) cell_id) {
                 _grid.cells[new_cell_id].place(*it);
                 it = particle_set.erase(it);
             } else {

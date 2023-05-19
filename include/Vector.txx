@@ -29,7 +29,7 @@ Vector<n>::Vector(double a) {
 /// Copy constructor
 template <unsigned int n>
 Vector<n>::Vector(const Vector<n> &v) {
-    for (int i = 0; i < n; i++) {
+    for (uint32_t i = 0; i < n; i++) {
         this->_components[i] = v._components[i];
     }
 }
@@ -78,34 +78,34 @@ template <unsigned int n>
 /* OPERATORS */
 
 template <unsigned int n>
-double Vector<n>::operator[](int i) const {
+double Vector<n>::operator[](uint32_t i) const {
     assert(i >= 0 && i < n);
     return this->_components[i];
 }
 
 template <unsigned int n>
-double &Vector<n>::operator[](int i) {
+double &Vector<n>::operator[](uint32_t i) {
     assert(i >= 0 && i < n);
     return this->_components[i];
 }
 
 template <unsigned int n>
 Vector<n> &Vector<n>::operator+=(const Vector<n> &v) {
-    for (int i =0; i<n; i++)
+    for (uint32_t i =0; i<n; i++)
         this->_components[i] += v._components[i];
     return *this;
 }
 
 template <unsigned int n>
 Vector<n> &Vector<n>::operator-=(const Vector<n>&v) {
-    for (int i =0; i<n; i++)
+    for (uint32_t i =0; i<n; i++)
         this->_components[i] -= v._components[i];
     return *this;
 }
 
 template <unsigned int n>
 Vector<n> &Vector<n>::operator*=(double a) {
-    for(int i = 0; i<n; i++)
+    for(uint32_t i = 0; i<n; i++)
         this->_components[i] *= a;
     return *this;
 }
@@ -118,7 +118,7 @@ Vector<n> &Vector<n>::operator/=(double a) {
 
 template<unsigned int n>
 Vector<n> &Vector<n>::operator/=(Vector<n> v) {
-    for (int i = 0; i<n; i++) {
+    for (uint32_t i = 0; i<n; i++) {
         assert(v._components[i] != 0);
         this->_components[i] /= v._components[i];
     }
@@ -128,14 +128,14 @@ Vector<n> &Vector<n>::operator/=(Vector<n> v) {
 template <unsigned int n>
 Vector<n> Vector<n>::operator-() const {
     Vector<n> result = Vector<n>::zero();
-    for (int i=0; i<n; i++)
+    for (uint32_t i=0; i<n; i++)
         result[i] = -(this->_components[i]);
     return result;
 }
 
 template <unsigned int n>
 Vector<n> &Vector<n>::operator*=(const Vector<n> &v) {
-    for (int i = 0; i<n; i++)
+    for (uint32_t  i = 0; i<n; i++)
         this->_components[i] *= v._components[i];
     return *this;
 }
@@ -151,7 +151,7 @@ template <unsigned int n>
 template <unsigned int n>
 [[maybe_unused]] double Vector<n>::dot(const Vector<n>&a, const Vector<n>&b) {
     double result = 0.0;
-    for (int i = 0; i<n; i++)
+    for (uint32_t i = 0; i<n; i++)
         result += a._components[i] * b._components[i];
     return result;
 }
@@ -169,7 +169,7 @@ template <unsigned int n>
 template <unsigned int n>
 [[maybe_unused]] Vector<n> &Vector<n>::normalize() {
     double l = this->length();
-    for (int i=0; i<n; i++)
+    for (uint32_t i=0; i<n; i++)
         this->_components[i] /= l;
     return *this;
 }
@@ -190,7 +190,7 @@ Vector<n> Vector<n>::random_in_unit_pos_cube() {
     static std::mt19937 mt(rd());
     static std::uniform_real_distribution<double> dist(0.0, 1.0);
     Vector<n> result = Vector<n>();
-    for (int i = 0; i<n; i++)
+    for (uint32_t  i = 0; i<n; i++)
         result._components[i] = dist(mt);
     return result;
 }
@@ -219,7 +219,7 @@ Vector<n> operator*(Vector<n> a, double b) {
 }
 template <unsigned int n>
 Vector<n> operator/(double a, Vector<n> b) {
-    for (int i=0; i<n; i++)
+    for (uint32_t  i=0; i<n; i++)
         b._components[i] = a / b._components[i];
     return b;
 }
@@ -236,7 +236,7 @@ Vector<n> operator/(Vector<n> a, const Vector<n> &b) {
 
 template<unsigned int n>
 Vector<n> &Vector<n>::operator%=(const Vector<n> &v) {
-    for (int i = 0; i < n; ++i) {
+    for (uint32_t i = 0; i < n; ++i) {
         _components[i] = fmod(_components[i], v[i]);
         if (_components[i] < 0) {
             _components[i] += v[i];
