@@ -60,11 +60,17 @@ public:
      */
     Vector(const Vector& v);
 
-    /**
-     * @brief Returns a zero vector.
-     * @return A zero vector.
-     */
-    [[maybe_unused]] static Vector zero();
+	/**
+	 * @brief Returns a zero vector.
+	 * @return A zero vector.
+	 */
+	[[maybe_unused]] static Vector zero();
+
+	/**
+	 * @brief Returns a vector with 1 on the i-dimension and 0 for all the other components
+	 * @return A zero vector.
+	 */
+	[[maybe_unused]] static Vector unit(uint32_t i) { Vector z = zero(); z[i] = 1.; return z; };
 
     /**
      * @brief Returns a random vector in the unit positive cube.

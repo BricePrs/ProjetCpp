@@ -164,22 +164,33 @@ public:
       */
     static void compute_forces(Particle &a, Particle &b, bool gravitational, bool lennard_jones);
 
+    static inline double compute_lennard_jones_intensity(double dist_sq);
+    inline double kinetic_energy();
+
+    inline void apply_gravity();
+
+
+    static double get_eps() { return eps; };
+
 private:
     inline static double r_cut_sq = 2.5*2.5;
 
     // parameters for Lennard Jones' potential
     inline static double eps = 5.0;
+    inline static double CST_G = -9.81;
     inline static double sigma = 1.0;
     inline static double sigma_exp_six = pow(sigma, 6);
 
     uint32_t _id{};
     Vector<n> _position;
     Vector<n> _speed;
-    Vector<n> _force;
     double _mass{};
     Category _category;
+    Vector<n> _force;
 
 };
+
+
 
 
 #include "Particle.txx"

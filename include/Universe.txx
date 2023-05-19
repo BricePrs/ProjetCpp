@@ -81,6 +81,30 @@ void write_particles(std::ostream& os, std::vector<Particle<n>> &particles) {
 
 }
 
+
+template <unsigned int n>
+void Universe<n>::save_state(const std::string &filename) {
+    static_assert(n <= 3, "Cannot save state for dimensions greater than 3");
+    std::ofstream outfile;
+    outfile.open(filename);
+
+    write_header(outfile);
+
+    outfile << "<Piece NumberOfPoints=\"" << _particles.size() << "\" NumberOfCells=\"0\">\n";
+
+    write_particles<n>(outfile, _particles);
+    write_cells(outfile);
+
+    outfile << "</Piece>\n";
+
+    write_footer(outfile);
+
+    outfile.close();
+}
+
+
+
+
 template<unsigned int n>
 int Universe<n>::add_packed_particles(Vector<n> bottom_left, Vector<n> top_right, Vector<n> velocity, double mass, Category category, Vector<n> particle_count) {
     Vector<n> spacing = (top_right - bottom_left) / (particle_count - Vector<n>(1.));
@@ -106,87 +130,140 @@ int Universe<n>::add_packed_particles(Vector<n> bottom_left, Vector<n> top_right
     return particle_total;
 }
 
-template <unsigned int n>
-void Universe<n>::init_grid(std::array<int32_t, n> size) {
-    // Calculate total number of cells
-    _cells_count = 1;
-    for (auto dim : size) {
-        assert(dim > 0);
-        _cells_count *= dim;
+template<unsigned int n>
+int Universe<n>::fill_sphere(Vector<n> bottom_left, Vector<n> top_right, Vector<n> velocity, double mass, Category category, Vector<n> particle_count) {
+    Vector<n> spacing = (top_right - bottom_left) / (particle_count - Vector<n>(1.));
+    int particle_total = 1.;
+    for (int dim = 0; dim < n; ++dim) {
+        particle_total *= particle_count[dim];
     }
 
-    // Resize cells vector
-    _cells.resize(_cells_count);
+    Vector<n> index = Vector<n>(0.);
+    index[0] = -1;
+    for (int i = 0; i < particle_total; ++i) {
+        index[0] += 1;
+        for (int dim = 0; dim < n; ++dim) {
+            if (index[dim] >= particle_count[dim]) {
+                index[dim] = 0;
+                index[dim + 1]++;
+            }
+        }
+        auto a = index * spacing;
+        add(bottom_left + index * spacing, velocity, mass, category);
 
-    // Set grid dimensions
-    _grid_dimensions = size;
-    _neighbour_cell_offsets = compute_offsets_array(_grid_dimensions);
-
-    for (int32_t i = 0; i < _cells_count; ++i) {
-        _cells[i]._neightbours = compute_cell_neighbours(i);
     }
-
-
+    return particle_total;
 }
 
 template <unsigned int n>
-void Universe<n>::save_state(const std::string &filename) {
-    static_assert(n <= 3, "Cannot save state for dimensions greater than 3");
-    std::ofstream outfile;
-    outfile.open(filename);
+void Universe<n>::init_grid(double cell_size) {
 
-    write_header(outfile);
+    _grid.cell_size = cell_size;
 
-    outfile << "<Piece NumberOfPoints=\"" << _particles.size() << "\" NumberOfCells=\"0\">\n";
+    Vector<n> caract_length = _constraints.width*2.;
+    std::array<int32_t, n> grid_dimensions;
+    for (uint32_t i = 0; i < n; ++i) {
+        grid_dimensions[i] = floor(caract_length[i] / cell_size);
+    }
 
-    write_particles<n>(outfile, _particles);
-    write_cells(outfile);
+    // Compute total number of cells
+    _grid.cells_count = 1;
+    for (auto dim : grid_dimensions) {
+        assert(dim > 0);
+        _grid.cells_count *= dim;
+    }
 
-    outfile << "</Piece>\n";
+    _grid.cells = std::vector<Cell>(_grid.cells_count);
+    _grid.active_cells.reserve(_grid.cells_count, false);
 
-    write_footer(outfile);
+    // Set grid dimensions
+    _grid.grid_dimensions = grid_dimensions;
+    _grid.neighbour_cell_offsets = compute_offsets_array(_grid.grid_dimensions);
 
-    outfile.close();
+    for (int32_t i = 0; i < _grid.cells_count; ++i) {
+        compute_cell_neighbours(i, _grid.cells[i]);
+    }
 }
 
 
 
 template<unsigned int n>
-std::vector<int32_t> Universe<n>::compute_cell_neighbours(int32_t id) {
-    static int32_t neightbour_count = pow(3, n);
+void Universe<n>::compute_cell_neighbours(int32_t id, Cell &cell) {
+
+    // Computing the cell coordinates in coords
+    std::array<int32_t, n> coords;
+    int32_t id_coords = id;
+    for (int i = 0; i < n; ++i) {
+        coords[i] = id_coords % _grid.grid_dimensions[i];
+        id_coords /= _grid.grid_dimensions[i];
+    }
+
+    // A cell has 3^n neighbours (including the cell)
+    static int32_t neighbour_count = pow(3, n);
+
 
     std::vector<int32_t> neighbours;
 
-    for (int i = 0; i < neightbour_count; ++i) {
-        int32_t neightbour_id = id;
-        int32_t neightbour_value = i;
+    for (int i = 0; i < neighbour_count; ++i) {
+
+        int32_t neighbour_id = 0;
+        std::array<int32_t, n> neighbour_coords(coords);
         bool skip = false;
+        int32_t neighbour_offset_value = i;
+
         for (int j = 0; j < n; ++j) {
-            neightbour_id += (neightbour_value % 3 - 1) * _neighbour_cell_offsets[j];
-            neightbour_value /= 3;
-            if (neightbour_id < 0 || neightbour_id >= _cells.size()) {
+            neighbour_coords[j] += (neighbour_offset_value % 3) - 1;
+            neighbour_offset_value /= 3;
+            if (_settings.boundary_behaviour == Periodic) {
+                neighbour_coords[j] %= _grid.grid_dimensions[j];
+                if (neighbour_coords[j] < 0) {
+                    neighbour_coords[j] += _grid.grid_dimensions[j];
+                }
+            } else if (neighbour_coords[j] < 0 || neighbour_coords[j] >= _grid.grid_dimensions[j]) {
                 skip = true;
                 break;
             }
+
+            neighbour_id += neighbour_coords[j] * _grid.neighbour_cell_offsets[j];
         }
-        if (skip) continue;
-        assert(neightbour_value == 0);
-        neighbours.push_back(neightbour_id);
+
+        if (skip) {
+            continue;
+        }
+
+        neighbours.push_back(neighbour_id);
     }
-    return neighbours;
+
+    // First bool is set to true if the cell is not a boundary
+    // Next two bool are set to true if the left (resp. right) is a boundary of the first dimension
+    // repeat two bool for each dimension
+    bool is_boundary = false;
+    auto boundaries = std::vector<bool>(1 + 2*n);
+    for (int j = 0; j < 2*n; ++j) {
+        if (coords[j] == 0) {
+            boundaries[1+2*j] = true;
+            is_boundary = true;
+        }
+        if (coords[j] == _grid.grid_dimensions[1] - 1) {
+            boundaries[1+2*j+1] = true;
+            is_boundary = true;
+        }
+    }
+
+    // Setting the first elt of the cell boundaries to true if there is at least one boundary, else to false
+    boundaries[0] = is_boundary;
+
+    // Setting the cells' neighbours
+    cell._neighbours = neighbours;
+    cell.is_boundary = boundaries;
 }
 
 
 template <unsigned int n>
-Universe<n>::Universe(Vector<n> bottom_left, Vector<n> top_right, double cell_size, BoundaryBehaviour boundary_behaviour)
-        : _bottom_left(bottom_left), _top_right(top_right), _cell_size(cell_size), _boundary_behaviour(boundary_behaviour), _center((bottom_left + top_right)/2.), _width(_center-bottom_left)
+Universe<n>::Universe(SimulationConstraints<n> constraints, double cell_size)
+        : _constraints(constraints)
 {
-    Vector<n> caract_length = top_right - bottom_left;
-    std::array<int32_t, n> cells_count;
-    for (uint32_t i = 0; i < n; ++i) {
-        cells_count[i] = floor(caract_length[i]/cell_size);
-    }
-    init_grid(cells_count);
+    init_grid(cell_size);
 }
 
 template<unsigned int n>
@@ -199,90 +276,100 @@ void Universe<n>::add(Vector<n> position, Vector<n> velocity, double mass, Categ
 template<unsigned int n>
 void Universe<n>::random_fill(uint32_t particle_count) {
     for (uint32_t i = 0; i < particle_count; ++i) {
-        this->_particles.push_back(Particle<n>::random(_particles.size()));
+        _particles.push_back(Particle<n>::random(_particles.size()));
     }
 }
 
 template <unsigned int n>
-void Universe<n>::update_forces_without_grid(bool gravitational, bool lennard_jones) {
-
-    reset_forces();
-
-    int nb_particles = this->_particles.size();
-    for (uint32_t i = 0; i<nb_particles; ++i) {
-        Particle<n> &p1 = this->_particles[i];
-        for (uint32_t j = i + 1; j < nb_particles; ++j) {
-            Particle<n> &p2 = this->_particles[j];
-            Particle<n>::compute_forces(p1, p2, gravitational, lennard_jones);
+void Universe<n>::apply_boundary_force(Particle<n>& particle, const std::vector<bool>& boundaries) {
+    for (uint32_t i = 0; i < n; ++i) {
+        Vector dir = Vector<n>::unit(i);
+        if (boundaries[1+2*i]) {
+            particle.apply_force(dir * Particle<n>::compute_lennard_jones_intensity(
+                    pow(particle.get_pos()[i] - _constraints.bottom_left[i], 2.)));
+        }
+        if (boundaries[1+2*i+1]) {
+            particle.apply_force(-dir * Particle<n>::compute_lennard_jones_intensity(
+                    pow(particle.get_pos()[i] - _constraints.top_right[i], 2.)));
         }
     }
 }
 
-template <unsigned int n>
-void update_forces_with_grid_range(std::vector<Particle<n>> &particles, std::vector<Cell> &cells, bool gravitational, bool lennard_jones, int32_t grid_lb, int32_t grid_ub) {
-    uint32_t closest = 0;
-    for (int32_t cell_id = grid_lb; cell_id < grid_ub; ++cell_id) {
-        std::vector<uint32_t> &current_cell_particles = cells[cell_id].get_particles();
+template<unsigned int n>
+void Universe<n>::balance_kinetic_energy() {
+    double current_kinetic_energy = compute_kinetic_energy();
+    double beta = sqrt(_settings.goal_kinetic_energy / current_kinetic_energy);
+    for (Particle particle: _particles) {
+        particle.set_speed(particle.get_speed()*beta);
+    }
+}
 
+template<unsigned int n>
+double Universe<n>::compute_kinetic_energy() {
+    double energy = 0;
+    for (Particle particle: _particles) {
+        energy += particle.kinetic_energy();
+    }
+    return energy;
+}
+
+template <unsigned int n>
+void Universe<n>::update_forces_with_grid() {
+
+    std::array<bool, 2*n> boundary_test;
+
+    for (int32_t cell_id : _grid.active_cells) {
+        Cell &current_cell = _grid.cells[cell_id];
+        std::vector<uint32_t> &current_cell_particles = current_cell.get_particles();
         // Now that we have all the neighbour particles, we can update those
         for (uint32_t current_particle_id: current_cell_particles) {
-            uint32_t closest_local = 0;
-            Particle<n> &current_particle = particles[current_particle_id];
-            for (int32_t neightbour_cell: cells[cell_id]._neightbours) {
-                for (uint32_t neightbour_particle_id: cells[neightbour_cell].get_particles()) {
-                    if (current_particle_id >= neightbour_particle_id) { continue; }
-                    Particle<n> &neightbour_particle = particles[neightbour_particle_id];
-                    if (lennard_jones || gravitational) {
-                        Particle<n>::compute_forces(current_particle, neightbour_particle, gravitational, lennard_jones);
+            Particle<n> &current_particle = _particles[current_particle_id];
+            for (int32_t neighbour_cell: _grid.cells[cell_id]._neighbours) {
+                // If the neighbour cells is not active we don't check it
+                if (!_grid.active_cells.contains(neighbour_cell)) { continue; }
+                for (uint32_t neighbour_particle_id: _grid.cells[neighbour_cell].get_particles()) {
+                    if (current_particle_id >= neighbour_particle_id) { continue; }
+                    Particle<n> &neighbour_particle = _particles[neighbour_particle_id];
+                    if (_settings.lennard_jones_interaction || _settings.gravitational_interaction) {
+                        Particle<n>::compute_forces(
+                                current_particle,
+                                neighbour_particle,
+                                _settings.lennard_jones_interaction,
+                                _settings.gravitational_interaction
+                        );
                     }
                 }
             }
-        }
-    }
-}
 
-template <unsigned int n>
-void Universe<n>::update_forces_with_grid(bool gravitational, bool lennard_jones, uint32_t threads) {
-    if (threads <= 1) {
-        update_forces_with_grid_range(gravitational, lennard_jones, 0, _cells_count);
-    } else {
-        struct ThreadArgs {
-            bool gravitational;
-            bool lennard_jones;
-            int32_t lb;
-            int32_t ub;
-        };
-        std::unique_ptr<pthread_t> thread_array[threads];
+            if (_settings.external_gravity) {
+                current_particle.apply_gravity();
+            }
 
-        for (int i = 0; i < threads; ++i) {
-            ThreadArgs args = { gravitational, lennard_jones, i * _cells_count / threads, (i+1) * _cells_count / threads };
-            pthread_create(thread_array[i], nullptr, update_forces_with_grid_range, &args);
         }
 
-    }
-    uint32_t closest = 0;
-    for (int32_t cell_id = 0; cell_id < _cells_count; ++cell_id) {
-        std::vector<uint32_t> &current_cell_particles = _cells[cell_id].get_particles();
-
-        // Now that we have all the neighbour particles, we can update those
-        for (uint32_t current_particle_id: current_cell_particles) {
-            uint32_t closest_local = 0;
-            Particle<n> &current_particle = _particles[current_particle_id];
-            for (int32_t neightbour_cell: _cells[cell_id]._neightbours) {
-                for (uint32_t neightbour_particle_id: _cells[neightbour_cell].get_particles()) {
-                    if (current_particle_id >= neightbour_particle_id) { continue; }
-                    Particle<n> &neightbour_particle = _particles[neightbour_particle_id];
-                    if (lennard_jones || gravitational) {
-                        Particle<n>::compute_forces(current_particle, neightbour_particle, gravitational, lennard_jones);
-                    }
-                }
+        // Adding the eventual forces exercised on the current particle by the boundaries
+        if (_settings.boundary_behaviour == ReflexivePotential && current_cell.is_boundary[0]) {
+            std::vector<bool> &boundaries = current_cell.is_boundary;
+            for (uint32_t current_particle_id: current_cell_particles) {
+                apply_boundary_force(_particles[current_particle_id], boundaries);
             }
         }
     }
 }
 
 template<unsigned int n>
-void Universe<n>::simulate(double t_end, double dt, bool gravitational, bool lennard_jones, bool use_grid, uint32_t save_each, uint32_t threads) {
+void Universe<n>::simulate(SimulationSettings settings) {
+
+    // Initializing simulation
+    _settings = settings;
+
+    // Actual simulation
+    compute_simulation();
+
+}
+
+template<unsigned int n>
+void Universe<n>::compute_simulation() {
 
     auto starting_time = std::chrono::steady_clock::now();
 
@@ -290,17 +377,13 @@ void Universe<n>::simulate(double t_end, double dt, bool gravitational, bool len
 
     uint32_t nb_particles = this->_particles.size();
     std::vector<Vector<n>> F_old(nb_particles);
-    auto max_iter = static_cast<int32_t>(t_end/dt);
-    auto max_digits_to_save = static_cast<int32_t>(ceil(log10( max_iter/save_each))+1);
+    auto max_iter           = static_cast<int32_t>(_settings.physics_time_total/_settings.physics_time_step);
+    auto max_digits_to_save = static_cast<int32_t>(ceil(log10(max_iter/_settings.iter_count_until_save))+1);
 
     reset_forces();
     // initialization of particles strengths
-    if (use_grid) {
-        place_particles();
-        update_forces_with_grid(gravitational, lennard_jones, threads);
-    } else {
-        update_forces_without_grid(gravitational, lennard_jones, threads);
-    }
+    place_particles();
+    update_forces_with_grid();
 
     std::stringstream ss;
     ss << "output_" << std::setfill('0') << std::setw(max_digits_to_save) << 0 << ".vtu";
@@ -308,8 +391,10 @@ void Universe<n>::simulate(double t_end, double dt, bool gravitational, bool len
 
     uint32_t iter_until_next_display = 0;
     uint32_t iter = 0;
-    while (t<t_end) {
+    while (t < _settings.physics_time_total) {
         iter++;
+
+        // Displaying real time info about pending simulation
         if (iter_until_next_display == 0) {
             iter_until_next_display = max_iter/1000;
             std::stringstream ss;
@@ -319,30 +404,32 @@ void Universe<n>::simulate(double t_end, double dt, bool gravitational, bool len
         } else {
             iter_until_next_display--;
         }
-        t+=dt;
+        t+=_settings.physics_time_step;
 
-        for (uint32_t i = 0; i<nb_particles; ++i) {
-            Particle<n> &p = this->_particles[i];
-            Vector new_pos = p.get_pos() + dt * (p.get_speed() + (0.5 / p.get_mass()) * p.get_strength() * dt);
-            p.set_pos(new_pos);
-            F_old[i] = p.get_strength();
-            p.set_force(Vector<n>::zero()); // Resetting all forces to zero
+        for (uint32_t cell_id : _grid.active_cells) {
+            Cell &cell = _grid.cells[cell_id];
+            for (uint32_t particle_id: cell.get_particles()) {
+                Particle<n> &p = _particles[particle_id];
+                Vector new_pos = p.get_pos() + _settings.physics_time_step * (p.get_speed() + (0.5 / p.get_mass()) * p.get_strength() * _settings.physics_time_step);
+                p.set_pos(new_pos);
+                F_old[p.get_id()] = p.get_strength();
+                p.set_force(Vector<n>::zero()); // Resetting all forces to zero
+            }
         }
 
-        if (use_grid) {
-            update_particles_cells();
-            update_forces_with_grid(gravitational, lennard_jones, threads);
-        } else {
-            update_forces_without_grid(gravitational, lennard_jones, threads);
+        update_particles_cells();
+        update_forces_with_grid();
+
+        for (uint32_t cell_id : _grid.active_cells) {
+            Cell &cell = _grid.cells[cell_id];
+            for (uint32_t particle_id: cell.get_particles()) {
+                Particle<n> &p = _particles[particle_id];
+                Vector<n> new_speed = p.get_speed() + _settings.physics_time_step * (0.5 / p.get_mass()) * (p.get_strength() + F_old[p.get_id()]);
+                p.set_speed(new_speed);
+            }
         }
 
-        for (uint32_t i = 0; i<nb_particles; i++) {
-            Particle<n> &p = this->_particles[i];
-            Vector<n> new_speed = p.get_speed() + dt * (0.5 / p.get_mass()) * (p.get_strength() + F_old[i]);
-            p.set_speed(new_speed);
-        }
-
-        if (save_each != 0 && iter%save_each == 0) {
+        if (_settings.iter_count_until_save != 0 && iter%_settings.iter_count_until_save == 0) {
             std::stringstream ss;
             ss << "output_" << std::setfill('0') << std::setw(max_digits_to_save) << iter << ".vtu";
             save_state(ss.str());
@@ -352,10 +439,20 @@ void Universe<n>::simulate(double t_end, double dt, bool gravitational, bool len
 
 template<unsigned int n>
 inline int32_t Universe<n>::get_cell_id(Vector<n> position) {
-    Vector<n> rel_position = (position - _bottom_left) / this->_cell_size;
+    Vector<n> rel_position = (position - _constraints.bottom_left) / _grid.cell_size;
     int32_t result = 0;
     for (int i = 0; i < n; ++i) {
-        result += floor(rel_position[i]) * _neighbour_cell_offsets[i];
+        int32_t coord = floor(rel_position[i]);
+        if (coord < 0 || _grid.grid_dimensions[i] < coord) {
+            return -1;
+        } else if (coord == _grid.grid_dimensions[i]) {
+            if (position[i] <= _constraints.top_right[i]){
+                coord -= 1;
+            } else {
+                return -1;
+            }
+        }
+        result += coord * _grid.neighbour_cell_offsets[i];
     }
     return result;
 }
@@ -365,60 +462,85 @@ template<unsigned int n>
 void Universe<n>::place_particles() {
     empty_grid();
     for (Particle particle: _particles) {
-        _cells[get_cell_id(particle.get_pos())].place(particle.get_id());
+        int32_t id = get_cell_id(particle.get_pos());
+        assert(id >= 0);
+        _grid.cells[id].place(particle.get_id());
     }
 }
 
 template<unsigned int n>
 void Universe<n>::update_particles_cells() {
-    for (int32_t cell_id = 0; cell_id < _cells_count; cell_id++) {
-        Cell &cell = _cells[cell_id];
+
+    for (uint32_t cell_id: _grid.active_cells) {
+
+        Cell &cell = _grid.cells[cell_id];
         auto &particle_set = cell.get_particles();
+
         for (auto it = particle_set.begin(); it != particle_set.end();) {
+
             int32_t new_cell_id = get_cell_id(_particles[*it].get_pos());
-            if (0 > new_cell_id && new_cell_id >= _cells_count) {
-                switch (_boundary_behaviour) {
+            if (0 > new_cell_id || new_cell_id >= _grid.cells_count) {
+                switch (_settings.boundary_behaviour) {
                     case Reflexive: {
-                        Vector rel_pos = _particles[*it].get_pos() - _center;
-                        Vector<n> p_velocity = _particles[*it].get_speed();
-                        for (int i = 0; i < n; ++i) {
-                            rel_pos[i] = fmax((fabs(rel_pos[i]) - _width[i]), 0.);
-                            if (rel_pos[i] > 0.) {
-                                p_velocity[i] = -p_velocity[i];
+                        while (0 > new_cell_id || new_cell_id >= _grid.cells_count) {
+                            Vector rel_pos = _particles[*it].get_pos() - _constraints.center;
+                            Vector<n> p_velocity = _particles[*it].get_speed();
+                            for (int i = 0; i < n; ++i) {
+                                rel_pos[i] = fmax((fabs(rel_pos[i]) - _constraints.width[i]), 0.);
+                                if (rel_pos[i] > 0.) {
+                                    p_velocity[i] = -p_velocity[i];
+                                }
                             }
+                            _particles[*it].set_speed(p_velocity);
+                            _particles[*it].set_pos(_particles[*it].get_pos() - 2.*rel_pos);
+                            new_cell_id = get_cell_id(_particles[*it].get_pos());
                         }
-                        _particles[*it].set_speed(p_velocity);
-                        new_cell_id = get_cell_id(_particles[*it].get_pos() - rel_pos);
                     }
                         break;
                     case Absorption: {
-                        _particles.erase(_particles.begin() + *it);
                         it = particle_set.erase(it);
                         continue;
                     }
                     case Periodic: {
-                        _particles[*it].set_pos(
-                                (_particles[*it].get_pos() - _bottom_left) % (_top_right - _bottom_left)+_bottom_left);
-                        new_cell_id = get_cell_id(_particles[*it].get_pos());
-                    }
+                            _particles[*it].set_pos(
+                                    (_particles[*it].get_pos() - _constraints.bottom_left) %
+                                    (_constraints.top_right- _constraints.bottom_left) +
+                                    _constraints.bottom_left
+                            );
+                            new_cell_id = get_cell_id(_particles[*it].get_pos());
+                        }
+                        break;
+                    default:
                         break;
                 }
             }
             if (new_cell_id != cell_id) {
-                _cells[new_cell_id].place(*it);
+                _grid.cells[new_cell_id].place(*it);
                 it = particle_set.erase(it);
-
             } else {
                 ++it;
             }
+        }
+    }
 
+    update_active_cells();
+
+}
+
+template<unsigned int n>
+void Universe<n>::update_active_cells() {
+    for (uint32_t cell_id = 0; cell_id < _grid.cells.size(); ++cell_id) {
+        if (_grid.cells[cell_id].get_particles().empty()) {
+            _grid.active_cells.erase(cell_id);
+        } else {
+            _grid.active_cells.insert(cell_id);
         }
     }
 }
 
 template<unsigned int n>
 void Universe<n>::empty_grid() {
-    for (Cell &cell: _cells) {
+    for (Cell &cell: _grid.cells) {
         cell.empty();
     }
 }
@@ -432,29 +554,6 @@ void Universe<n>::reset_forces() {
 
 template<unsigned int n>
 Cell Universe<n>::get_cell_with_id(int32_t id) {
-    return _cells[id];
+    return _grid.cells[id];
 }
 
-void Cell::place(uint32_t id) {
-    _particles.push_back(id);
-}
-
-std::vector<uint32_t> &Cell::get_particles() {
-    return _particles;
-}
-
-void Cell::empty() {
-    _particles.erase(_particles.begin(), _particles.end());
-}
-
-Cell::Cell() {
-    _particles = std::vector<uint32_t>();
-}
-
-void Cell::lock() {
-    pthread_mutex_lock(&this->mutex)
-}
-
-void Cell::unlock() {
-    pthread_mutex_unlock(&this->mutex)
-}

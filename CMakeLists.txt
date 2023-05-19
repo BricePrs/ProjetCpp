@@ -10,7 +10,7 @@ set(CMAKE_CXX_STANDARD 17)
 ## Indique les options de compilations pour le projet
 ## -pg : donne la possibilité de faire du profiling
 ## -Wall : affiche les warnings
-set(CMAKE_CXX_FLAGS "-Wall -pg ")
+set(CMAKE_CXX_FLAGS "-Wall -pg")
 
 ## Définir la localisation des entêtes.
 ## include_directories sera propagé à l'ensemble du projet

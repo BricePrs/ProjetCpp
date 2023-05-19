@@ -242,6 +242,7 @@ Vector<n> &Vector<n>::operator%=(const Vector<n> &v) {
             _components[i] += v[i];
         }
     }
+    return *this;
 }
 
 

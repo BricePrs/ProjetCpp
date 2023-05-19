@@ -9,54 +9,46 @@
 #include <array>
 #include <unordered_set>
 #include <set>
-#include <thread>
 
 #include "emhash_set8.h"
 #include "ankerl_hash.h"
+
 #include "Particle.h"
+#include "Cell.h"
+#include "Grid.h"
 
 enum BoundaryBehaviour {
     Reflexive,
+    ReflexivePotential,
     Absorption,
     Periodic,
 };
 
-/**
- * @class Cell
- * @brief Class representing a cell in the grid.
- */
-class Cell {
-public:
-    /**
-     * @brief Default constructor.
-     */
-    Cell();
+struct SimulationSettings {
 
-    /**
-     * @brief Place a particle in the cell.
-     * @param id Particle ID.
-     */
-    void place(uint32_t id);
-
-    /**
-     * @brief Get the IDs of all particles in the cell.
-     * @return Vector of particle IDs.
-     */
-    std::vector<uint32_t> &get_particles();
-
-    /**
-     * @brief Remove all particles from the cell.
-     */
-    void empty();
-
-    void lock();
-    void unlock();
-
-    std::vector<int32_t> _neightbours; ///< Indices of neighbouring cells.
-private:
-    std::vector<uint32_t> _particles; ///< IDs of particles in the cell.
-    pthread_mutex_t mutex;
+	bool                external_gravity                   = false;		    ///< Should the external gravity be applied
+	bool                gravitational_interaction          = false;		    ///< Should the gravitational interaction be applied
+	bool                lennard_jones_interaction          = false;		    ///< Should the Lennard-Jones interaction be applied
+	double              goal_kinetic_energy                = -1;   		    ///< The kinetic energy goal set by the user to force the system's kinetic energy to this level every 1000 physics iterations
+	double              physics_time_step                  = -1.;  		    ///< The time step used in the physics simulation
+	double              physics_time_total                 = -1.;  		    ///< The total time for the physics simulation
+	uint32_t            iter_count_until_save              = 0;    		    ///< The number of iterations until saving the simulation
+	uint32_t            iter_count_until_balance_energy    = 1000;			///< The number of iterations until balancing the system's kinetic energy
+	BoundaryBehaviour   boundary_behaviour                 = Absorption;	///< Particle behavior if outside of boundaries
 };
+
+template <unsigned int n>
+struct SimulationConstraints {
+
+    SimulationConstraints(Vector<n> bottom_left, Vector<n> top_right)
+        : bottom_left(bottom_left), top_right(top_right), center((top_right+bottom_left)/2.), width((top_right-bottom_left)/2.) {};
+
+	Vector<n>   bottom_left;	///< Particle position can't go below this
+	Vector<n>   top_right;  	///< Particle position can't go above this
+	Vector<n>   center;     	///< The center of the universe
+	Vector<n>   width;      	///< The distance from the center to the universe's borders for each dimension
+};
+
 
 /**
  * @class Universe
@@ -65,39 +57,33 @@ private:
 template <unsigned int n>
 class Universe {
 public:
-    Universe(Vector<n> bottom_left, Vector<n> top_right, double cell_size, BoundaryBehaviour boundary_behaviour);
 
-    void add(Vector<n> position, Vector<n> velocity, double mass, Category category);
-    int add_packed_particles(Vector<n> bottom_left, Vector<n> top_right, Vector<n> velocity, double mass, Category category, Vector<n> particle_count);
-    void random_fill(uint32_t particle_count);
+    Universe(SimulationConstraints<n> constraints, double cell_size);
 
-    void simulate(double t_end, double dt, bool gravitational, bool lennard_jones, bool use_grid, uint32_t save_each, uint32_t threads);
 
-    void save_state(const std::string &filename);
+    void    add(Vector<n> position, Vector<n> velocity, double mass, Category category);
+    int     add_packed_particles(Vector<n> bottom_left, Vector<n> top_right, Vector<n> velocity, double mass, Category category, Vector<n> particle_count);
+    int     fill_sphere(Vector<n> bottom_left, Vector<n> top_right, Vector<n> velocity, double mass, Category category, Vector<n> particle_count);
+    void    random_fill(uint32_t particle_count);
+
+    void    simulate(SimulationSettings settings);
+
+    void    save_state(const std::string &filename);
 
 private:
-    typedef emhash8::HashSet<uint32_t, ankerl::unordered_dense::hash<Particle<n>>> FastHashSet;
 
-    std::array<int, n> _neighbour_cell_offsets; ///< the offset to get the neightbour of a cell for each dimension
+	SimulationSettings          _settings;              ///< The simulation settings
+	SimulationConstraints<n>    _constraints;       	///< The simulation constraints
+	Grid<n>                     _grid; 	                ///< The grid characteristics
 
-    std::vector<Particle<n>> _particles; ///< The universe particles
+	std::vector<Particle<n>>    _particles;        		///< The universe particles
 
-    // Simulation Constraints
-    BoundaryBehaviour _boundary_behaviour; /// Particule behaviour if outside of boundaries
-    Vector<n> _bottom_left; ///< Particule postion can't go below this
-    Vector<n> _top_right;///< Particule postion can't go above this
-    Vector<n> _center;
-    Vector<n> _width;
+	void compute_simulation();
 
-    // Grid characteristics
-    double _cell_size; ///< The size of each grid cell
-    uint32_t _cells_count; ///< The number of cells
-    std::vector<Cell> _cells; ///< The array of cells
-    std::array<int32_t, n> _grid_dimensions; ///< The dimensions of the grid
 
     /// @brief Initialize the universe grid with the dimensions `size`
     /// @param size the dimensions of the grid
-    void init_grid(std::array<int32_t, n> size);
+    void init_grid(double cell_size);
 
 
     /*
@@ -114,7 +100,7 @@ private:
 
     /// @brief Compute the neightbour cell of cell with id `id`
     /// @param id
-    std::vector<int32_t> compute_cell_neighbours(int32_t id);
+    void compute_cell_neighbours(int32_t id, Cell &cell);
 
     /// @brief Empty the grid
     void empty_grid();
@@ -125,26 +111,21 @@ private:
     /// @brief move all the universe's particles in their coresponding cell
     void update_particles_cells();
 
+    void update_active_cells();
+
     /*
      * Simulation utility functions
      */
 
-    /// @brief Update all the particles forces field without using the grid
-    /// @param gravitational should the gravitational force be taken into account
-    /// @param lennard_jones should the lennard_jones potential force be taken into account
-    void update_forces_without_grid(bool gravitational, bool lennard_jones);
-
     /// @brief Update all the particles forces field using the grid
     /// @param gravitational should the gravitational force be taken into account
     /// @param lennard_jones should the lennard_jones potential force be taken into account
-    void update_forces_with_grid(bool gravitational, bool lennard_jones, uint32_t threads);
+    void update_forces_with_grid();
 
-    /// @brief Update all the particles forces field using the grid
-    /// @param gravitational should the gravitational force be taken into account
-    /// @param lennard_jones should the lennard_jones potential force be taken into account
-    /// @param grid_lb grid lower bound index (included)
-    /// @param grid_lb grid upper bound index (not included)
-    void update_forces_with_grid_range(bool gravitational, bool lennard_jones, int32_t grid_lb, int32_t grid_ub);
+    void apply_boundary_force(Particle<n>& particle, const std::vector<bool>& boundaries);
+
+    double compute_kinetic_energy();
+    void balance_kinetic_energy();
 
     /// @brief Reset all particles forces to zero
     void reset_forces();
