@@ -25,10 +25,6 @@ double* fill_vectors(double*, int);
 void print_matrix(double** , int);
 double trace (double** , int);
 
-vector<double> euler_explicite(int iter_count, double initial_value, const function<double(double, double)>& phi);
-vector<double> euler_implicite(int iter_count, double initial_value, const function<double(double, double)>& phi);
-
-
 /*----------- PART 1 : Code Correction -------------------*/
 /// Driver principal pour le calcul de la tace d'une matrice
 void compute_trace()
