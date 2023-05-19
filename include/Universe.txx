@@ -351,6 +351,9 @@ void Universe<n>::update_forces_with_grid() {
 template<unsigned int n>
 void Universe<n>::simulate(SimulationSettings settings) {
 
+    assert(settings.physics_time_step <= settings.physics_time_total && "Cannot have a time step greater than the time of the simulation");
+    assert(settings.iter_count_until_save > 0 && "The number of iterations between each saving needs to be strictly greater than 0");
+
     // Initializing simulation
     _settings = settings;
 

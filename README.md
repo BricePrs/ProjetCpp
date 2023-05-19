@@ -1,5 +1,6 @@
 # Dépot du projet de C++ de Brice PERES et Hélène HASSAN - RENDU FINAL
 ---
+(Rapport de projet dans le dossier doc/)
 
 # Simulateur de particules en C++
 
@@ -40,9 +41,9 @@ univers.simulate(settings);
 
 Il est possible d'initialiser les particules du système de deux manières qui requièrent toutes les deux la vitesse, masse, et catégorie (Neutron, Proton, Electron) pour chacune d'entre elles.
 
-Il est possible de donner une position explicite à chaque particule, dans ce cas-là il faudra appeler la méthode  ***add*** de la classe **Universe** qui permettra d'ajouter une seule particule à l'univers. 
+La position de chaque particule peut être donnée explicitement à l'initialisation, dans ce cas-là il faudra appeler la méthode  ***add*** de la classe **Universe** qui permettra d'ajouter une seule particule à l'univers. 
 
-Si jamais on souhaite générer un univers de particules de même nature (même masse, vitesse, catégorie) régulièrement espacées les unes des autres dans un espace de dimension *n* = 1, 2 ou 3 on peut utiliser la méthode ***add_packed_particles*** de la classe **Universe** qui renvoie le nombre de particules utilisé pour remplir l'espace en fin de fonction. La description de ces deux méthodes de la classe est présente dans la documentation.
+Il est également possible de générer un univers de particules de même nature (même masse, vitesse, catégorie) régulièrement espacées les unes des autres dans un espace de dimension *n* = 1, 2 ou 3 on peut avec la méthode ***add_packed_particles*** de la classe **Universe** qui renvoie le nombre de particules utilisé pour remplir l'espace en fin de fonction. La description de ces deux méthodes de la classe est présente dans la documentation.
 
 *Exemple d'utilisation :*
 
