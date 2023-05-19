@@ -484,15 +484,21 @@ void Universe<n>::update_particles_cells() {
                     case Reflexive: {
                         while (0 > new_cell_id || new_cell_id >= _grid.cells_count) {
                             Vector rel_pos = _particles[*it].get_pos() - _constraints.center;
+                            Vector<n> offset;
                             Vector<n> p_velocity = _particles[*it].get_speed();
                             for (int i = 0; i < n; ++i) {
-                                rel_pos[i] = fmax((fabs(rel_pos[i]) - _constraints.width[i]), 0.);
-                                if (rel_pos[i] > 0.) {
+                                offset[i] = fabs(rel_pos[i]) - _constraints.width[i];
+                                if (offset[i] >= 0.) {
                                     p_velocity[i] = -p_velocity[i];
+                                } else {
+                                    offset[i] = 0.;
+                                }
+                                if (rel_pos[i] < 0.) {
+                                    offset[i] *= -1.;
                                 }
                             }
                             _particles[*it].set_speed(p_velocity);
-                            _particles[*it].set_pos(_particles[*it].get_pos() - 2.*rel_pos);
+                            _particles[*it].set_pos(_particles[*it].get_pos() - 2.*offset);
                             new_cell_id = get_cell_id(_particles[*it].get_pos());
                         }
                     }
