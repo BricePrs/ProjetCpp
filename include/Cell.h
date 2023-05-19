@@ -11,7 +11,7 @@ public:
     /**
      * @brief Default constructor.
      */
-    Cell() = default;
+    Cell();
 
     /**
      * @brief Place a particle in the cell.
