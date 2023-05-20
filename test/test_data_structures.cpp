@@ -1,12 +1,3 @@
-//
-// Created by helen on 23/02/23.
-//
-/**
- * Test that compares the different data structures (set, queue, vector, list) which can be used to store Particles.
- * We can see from the output that the vector structure is the most efficient, followed by the queue and the list, then the set.
- * Therefore, we used a vector to store our particles in our Universe class.
- * This test answers Part 2 of Lab 2.
- */
 #include "Particle.h"
 #include <chrono>
 #include <fstream>

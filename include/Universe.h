@@ -60,6 +60,14 @@ public:
 
     Universe(SimulationConstraints<n> constraints, double cell_size);
 
+    /*
+     * Getter
+     */
+    /// @brief Returns the amount of particles inside the Universe.
+    /// \return
+    int get_particles_count() {
+        return _particles.size();
+    }
 
     void    add(Vector<n> position, Vector<n> velocity, double mass, Category category);
     int     add_packed_particles(Vector<n> bottom_left, Vector<n> top_right, Vector<n> velocity, double mass, Category category, Vector<n> particle_count);
@@ -84,7 +92,6 @@ private:
     /// @brief Initialize the universe grid with the dimensions `size`
     /// @param size the dimensions of the grid
     void init_grid(double cell_size);
-
 
     /*
      * Cell utility functions

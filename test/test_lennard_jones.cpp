@@ -1,20 +1,3 @@
-/**
- * Test that displays Lennard-Jones potential for a system composed of 2 particles.
- * This test answers to the first question of Lab 4.
- *
- * Here are the commands to execute in gnuplot (each command needs to be on separate lines)
- * after running the test to display the actual graph:
- * set xlabel "r"
- * set ylabel "U"
- * set xzeroaxis lt -1 lw 1
- * set yrange [-3: 5]
- * plot "lennard_jones.dat" u 1:2 with line lt2 title "U (Lennard Jones' potential)
- *
- * Notes:
- * F (interaction based on Lennard Jones' potential) is repulsive when 0 <= r < 1.12 and attractive when r > 1.12
- * when r = 1.12, the 2 particles are in equilibrium (F=0).
- */
-
 #include <vector>
 #include <Particle.h>
 #include <fstream>
@@ -49,7 +32,7 @@ void lennard_jones_potential(std::vector<Particle<3>> particles) {
 
     std::string source_path = __FILE__;
     size_t last_separator = source_path.find_last_of("/\\");
-    std::string file_path = source_path.substr(0, last_separator + 1) + "lennard_jones.dat";
+    std::string file_path = source_path.substr(0, last_separator + 1) + "dat_files/lennard_jones.dat";
 
     std::ofstream file(file_path);
 
