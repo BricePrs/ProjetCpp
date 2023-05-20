@@ -133,11 +133,9 @@ int     Universe<n>::fill_disk(Vector<n> center, double spacing, Vector<n> veloc
 
     add(center, velocity, mass, category);
 
-    double spacing_sq = spacing*spacing;
     uint32_t counter = 1;
     double radius = 0.;
     while (counter < particle_count) {
-        Vector<n> prev_pos = Vector<n>::zero();
         radius += spacing;
         int max_pt = floor(2.*PI*radius/spacing);
         double dth = 2.*PI / max_pt;
