@@ -17,8 +17,8 @@ int main() {
     SimulationSettings settings = SimulationSettings();
     settings.lennard_jones_interaction = true;
     settings.physics_time_total = 19.5;
-    settings.physics_time_step = 0.00005;
-    settings.iter_count_until_save = 2000;
+    settings.physics_time_step = 0.0005;
+    settings.iter_count_until_save = 200;
     univers.simulate(settings);
 
 }
