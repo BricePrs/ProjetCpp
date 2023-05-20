@@ -9,6 +9,7 @@
 int main() {
     auto start = std::chrono::steady_clock::now();
 
+
     SimulationConstraints constraints = SimulationConstraints(Vector<2>(0.), Vector<2>(250., 180.));
     Universe<2> universe(constraints, 2.5);
 
@@ -34,6 +35,13 @@ int main() {
 
     std::cout << "Instantiating " << a << " and " << b << " particles." << std::endl;
 
+
+    PhysicsConstants constants = {
+            -12.,
+            1.,
+            1.
+    };
+
     auto settings = SimulationSettings {
         true,
         false,
@@ -43,7 +51,8 @@ int main() {
         29.5,
         1000,
         1000,
-        Reflexive
+        Reflexive,
+        constants
     };
 
     universe.simulate(settings);

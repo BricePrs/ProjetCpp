@@ -140,7 +140,7 @@ int     Universe<n>::fill_disk(Vector<n> center, double spacing, Vector<n> veloc
         Vector<n> prev_pos = Vector<n>::zero();
         radius += spacing;
         int max_pt = floor(2.*PI*radius/spacing);
-        double dth = 2.*PI*radius / max_pt;
+        double dth = 2.*PI / max_pt;
         double theta = 0.;
         for (int i = 0; i < max_pt; ++i) {
             Vector<2> new_pos = Vector<2>(cos(theta), sin(theta))*radius;
@@ -360,6 +360,7 @@ void Universe<n>::simulate(SimulationSettings settings) {
 
     // Initializing simulation
     _settings = settings;
+    Particle<n>::set_particles_constants(settings.constants);
 
     // Actual simulation
     compute_simulation();

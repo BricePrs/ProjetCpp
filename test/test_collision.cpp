@@ -29,16 +29,18 @@ int main() {
 
     std::cout << "Instantiating " << a << " and " << b << " particles." << std::endl;
 
+    PhysicsConstants constants = {
+            .eps =  5.,
+            .sigma =  1.
+    };
+
     auto settings = SimulationSettings {
-        false,
-        false,
-        true,
-        -1.,
-        0.00005,
-        19.5,
-        2000,
-        1000,
-        Absorption
+        .lennard_jones_interaction = true,
+        .physics_time_step = .00005,
+        .physics_time_total = .5,
+        .iter_count_until_save = 2000,
+        .boundary_behaviour = Absorption,
+        .constants = constants
     };
 
     universe.simulate(settings);

@@ -26,12 +26,21 @@ La structure publique **SimulationSettings** permet de définir plusieurs param�
 *Exemple d'utilisation : *
 
 ```cpp
-# Création d'une simulation prenant en compte les forces d'intéraction de Lennard-Joes, avec un pas de simulation de 0.00005 secondes et un temps total de simulation de 19.5 secondes. La simulation est sauvegardée toutes les 2000 itérations.
-SimulationSettings settings = SimulationSettings();  
-settings.lennard_jones_interaction = true;  
-settings.physics_time_total = 19.5;  
-settings.physics_time_step = 0.00005;  
-settings.iter_count_until_save = 2000;
+# Création d'une simulation prenant en compte les forces d'intéraction de Lennard-Joes avec les parametres eps = 5. et sigma = 1., avec un pas de simulation de 0.00005 secondes et un temps total de simulation de 19.5 secondes. La simulation est sauvegardée toutes les 2000 itérations.
+    
+    PhysicsConstants constants = {
+            .eps =  5.,
+            .sigma =  1.
+    };
+
+    auto settings = SimulationSettings {
+        .lennard_jones_interaction = true,
+        .physics_time_step = .00005,
+        .physics_time_total = .5,
+        .iter_count_until_save = 2000,
+        .boundary_behaviour = Absorption,
+        .constants = constants
+    };
 
 # Simulation
 univers.simulate(settings);

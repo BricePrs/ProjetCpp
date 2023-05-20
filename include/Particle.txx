@@ -2,6 +2,15 @@
 #include <iostream>
 #include "Particle.h"
 
+
+template<unsigned int n>
+void Particle<n>::set_particles_constants(PhysicsConstants constants) {
+    eps = constants.eps;
+    g = constants.g;
+    sigma = constants.sigma;
+    sigma_exp_six = pow(sigma, 6.);
+}
+
 template <unsigned int n>
 Particle<n>::Particle(uint32_t id, Vector<n> pos, Vector<n> speed, double mass, Category category) :
     _id(id), _position(pos), _speed(speed), _mass(mass), _category(category), _force(Vector<n>::zero()) {}
@@ -16,10 +25,10 @@ Particle<n> Particle<n>::random(uint32_t id) {
     return Particle(
             id,
             Vector<n>::random_in_unit_pos_cube(),
-            Vector<n>::random_in_unit_pos_cube(),
+            Vector<n>::random_in_unit_pos_cube()*2.-Vector<n>(1.),
             dist(mt),
             static_cast<Category>(rand() % 3) // TODO : avoid rand
-            );
+    );
 }
 
 template<unsigned int n>
@@ -39,11 +48,11 @@ template<unsigned int n>
 void Particle<n>::apply_gravity() {
     Vector up = Vector<n>::zero();
     up[1] = 1.;
-    apply_force(CST_G * _mass * up);
+    apply_force(g * _mass * up);
 }
 
 template<unsigned int n>
-inline void Particle<n>::compute_forces(Particle &a, Particle &b, bool gravitational, bool lennard_jones) {
+inline void Particle<n>::compute_forces(Particle &a, Particle &b, Simulation) {
     double F_length = 0.;
 
     Vector<n> R_ij(b.get_pos() - a.get_pos());
