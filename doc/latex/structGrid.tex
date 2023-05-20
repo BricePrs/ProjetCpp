@@ -1,0 +1,123 @@
+\hypertarget{structGrid}{}\doxysection{Grid$<$ n $>$ Struct Template Reference}
+\label{structGrid}\index{Grid$<$ n $>$@{Grid$<$ n $>$}}
+
+
+{\ttfamily \#include $<$Grid.\+h$>$}
+
+
+
+Collaboration diagram for Grid$<$ n $>$\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=250pt]{structGrid__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+typedef \mbox{\hyperlink{classemhash8_1_1HashSet}{emhash8\+::\+Hash\+Set}}$<$ uint32\+\_\+t $>$ \mbox{\hyperlink{structGrid_a270e044d4104e8a6262481b142a5150b}{Cell\+Hash\+Set}}
+\begin{DoxyCompactList}\small\item\em Fast Hash set used to store active cells. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::array$<$ int, n $>$ \mbox{\hyperlink{structGrid_a3519c4a9e18de014fb8cf555a255a296}{neighbour\+\_\+cell\+\_\+offsets}}
+\begin{DoxyCompactList}\small\item\em The offset to get the neighbor of a cell for each dimension. \end{DoxyCompactList}\item 
+std\+::array$<$ int32\+\_\+t, n $>$ \mbox{\hyperlink{structGrid_a2618dfe8892a654a65f7bc7618d95e3f}{grid\+\_\+dimensions}}
+\begin{DoxyCompactList}\small\item\em The dimensions of the cells\textquotesingle{} grid. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{structGrid_af2c50432e36e645639c1aeb972c5b8ad}{cell\+\_\+size}}
+\begin{DoxyCompactList}\small\item\em The physical size of each grid cell. \end{DoxyCompactList}\item 
+uint32\+\_\+t \mbox{\hyperlink{structGrid_ae7490926b571eda2a3e05011f45a6221}{cells\+\_\+count}}
+\begin{DoxyCompactList}\small\item\em The number of cells. \end{DoxyCompactList}\item 
+std\+::vector$<$ \mbox{\hyperlink{classCell}{Cell}} $>$ \mbox{\hyperlink{structGrid_a12b723c348ec3cc532c79a0a5c78e663}{cells}}
+\begin{DoxyCompactList}\small\item\em The array holding the cells. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structGrid_a270e044d4104e8a6262481b142a5150b}{Cell\+Hash\+Set}} \mbox{\hyperlink{structGrid_a3d6fb391b174ee04a0b5943642d24281}{active\+\_\+cells}}
+\begin{DoxyCompactList}\small\item\em The cells currently holding at least one particle. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Typedef Documentation}
+\mbox{\Hypertarget{structGrid_a270e044d4104e8a6262481b142a5150b}\label{structGrid_a270e044d4104e8a6262481b142a5150b}} 
+\index{Grid$<$ n $>$@{Grid$<$ n $>$}!CellHashSet@{CellHashSet}}
+\index{CellHashSet@{CellHashSet}!Grid$<$ n $>$@{Grid$<$ n $>$}}
+\doxysubsubsection{\texorpdfstring{CellHashSet}{CellHashSet}}
+{\footnotesize\ttfamily template$<$unsigned int n$>$ \\
+typedef \mbox{\hyperlink{classemhash8_1_1HashSet}{emhash8\+::\+Hash\+Set}}$<$uint32\+\_\+t$>$ \mbox{\hyperlink{structGrid}{Grid}}$<$ n $>$\+::\mbox{\hyperlink{structGrid_a270e044d4104e8a6262481b142a5150b}{Cell\+Hash\+Set}}}
+
+
+
+Fast Hash set used to store active cells. 
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{structGrid_a3d6fb391b174ee04a0b5943642d24281}\label{structGrid_a3d6fb391b174ee04a0b5943642d24281}} 
+\index{Grid$<$ n $>$@{Grid$<$ n $>$}!active\_cells@{active\_cells}}
+\index{active\_cells@{active\_cells}!Grid$<$ n $>$@{Grid$<$ n $>$}}
+\doxysubsubsection{\texorpdfstring{active\_cells}{active\_cells}}
+{\footnotesize\ttfamily template$<$unsigned int n$>$ \\
+\mbox{\hyperlink{structGrid_a270e044d4104e8a6262481b142a5150b}{Cell\+Hash\+Set}} \mbox{\hyperlink{structGrid}{Grid}}$<$ n $>$\+::active\+\_\+cells}
+
+
+
+The cells currently holding at least one particle. 
+
+\mbox{\Hypertarget{structGrid_af2c50432e36e645639c1aeb972c5b8ad}\label{structGrid_af2c50432e36e645639c1aeb972c5b8ad}} 
+\index{Grid$<$ n $>$@{Grid$<$ n $>$}!cell\_size@{cell\_size}}
+\index{cell\_size@{cell\_size}!Grid$<$ n $>$@{Grid$<$ n $>$}}
+\doxysubsubsection{\texorpdfstring{cell\_size}{cell\_size}}
+{\footnotesize\ttfamily template$<$unsigned int n$>$ \\
+double \mbox{\hyperlink{structGrid}{Grid}}$<$ n $>$\+::cell\+\_\+size}
+
+
+
+The physical size of each grid cell. 
+
+\mbox{\Hypertarget{structGrid_a12b723c348ec3cc532c79a0a5c78e663}\label{structGrid_a12b723c348ec3cc532c79a0a5c78e663}} 
+\index{Grid$<$ n $>$@{Grid$<$ n $>$}!cells@{cells}}
+\index{cells@{cells}!Grid$<$ n $>$@{Grid$<$ n $>$}}
+\doxysubsubsection{\texorpdfstring{cells}{cells}}
+{\footnotesize\ttfamily template$<$unsigned int n$>$ \\
+std\+::vector$<$\mbox{\hyperlink{classCell}{Cell}}$>$ \mbox{\hyperlink{structGrid}{Grid}}$<$ n $>$\+::cells}
+
+
+
+The array holding the cells. 
+
+\mbox{\Hypertarget{structGrid_ae7490926b571eda2a3e05011f45a6221}\label{structGrid_ae7490926b571eda2a3e05011f45a6221}} 
+\index{Grid$<$ n $>$@{Grid$<$ n $>$}!cells\_count@{cells\_count}}
+\index{cells\_count@{cells\_count}!Grid$<$ n $>$@{Grid$<$ n $>$}}
+\doxysubsubsection{\texorpdfstring{cells\_count}{cells\_count}}
+{\footnotesize\ttfamily template$<$unsigned int n$>$ \\
+uint32\+\_\+t \mbox{\hyperlink{structGrid}{Grid}}$<$ n $>$\+::cells\+\_\+count}
+
+
+
+The number of cells. 
+
+\mbox{\Hypertarget{structGrid_a2618dfe8892a654a65f7bc7618d95e3f}\label{structGrid_a2618dfe8892a654a65f7bc7618d95e3f}} 
+\index{Grid$<$ n $>$@{Grid$<$ n $>$}!grid\_dimensions@{grid\_dimensions}}
+\index{grid\_dimensions@{grid\_dimensions}!Grid$<$ n $>$@{Grid$<$ n $>$}}
+\doxysubsubsection{\texorpdfstring{grid\_dimensions}{grid\_dimensions}}
+{\footnotesize\ttfamily template$<$unsigned int n$>$ \\
+std\+::array$<$int32\+\_\+t, n$>$ \mbox{\hyperlink{structGrid}{Grid}}$<$ n $>$\+::grid\+\_\+dimensions}
+
+
+
+The dimensions of the cells\textquotesingle{} grid. 
+
+\mbox{\Hypertarget{structGrid_a3519c4a9e18de014fb8cf555a255a296}\label{structGrid_a3519c4a9e18de014fb8cf555a255a296}} 
+\index{Grid$<$ n $>$@{Grid$<$ n $>$}!neighbour\_cell\_offsets@{neighbour\_cell\_offsets}}
+\index{neighbour\_cell\_offsets@{neighbour\_cell\_offsets}!Grid$<$ n $>$@{Grid$<$ n $>$}}
+\doxysubsubsection{\texorpdfstring{neighbour\_cell\_offsets}{neighbour\_cell\_offsets}}
+{\footnotesize\ttfamily template$<$unsigned int n$>$ \\
+std\+::array$<$int, n$>$ \mbox{\hyperlink{structGrid}{Grid}}$<$ n $>$\+::neighbour\+\_\+cell\+\_\+offsets}
+
+
+
+The offset to get the neighbor of a cell for each dimension. 
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/\mbox{\hyperlink{Grid_8h}{Grid.\+h}}\end{DoxyCompactItemize}

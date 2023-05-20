@@ -1,0 +1,93 @@
+\hypertarget{test__data__structures_8cpp}{}\doxysection{test/test\+\_\+data\+\_\+structures.cpp File Reference}
+\label{test__data__structures_8cpp}\index{test/test\_data\_structures.cpp@{test/test\_data\_structures.cpp}}
+{\ttfamily \#include \char`\"{}Particle.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$chrono$>$}\newline
+{\ttfamily \#include $<$fstream$>$}\newline
+{\ttfamily \#include $<$deque$>$}\newline
+{\ttfamily \#include $<$set$>$}\newline
+{\ttfamily \#include $<$list$>$}\newline
+Include dependency graph for test\+\_\+data\+\_\+structures.\+cpp\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{test__data__structures_8cpp__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+auto \mbox{\hyperlink{test__data__structures_8cpp_a6380538a94b211ae2098bd9e2a95fdaf}{new\+\_\+random\+\_\+vec3}} (std\+::mt19937 \&gen, std\+::uniform\+\_\+real\+\_\+distribution$<$ double $>$ \&distribution) -\/$>$ \mbox{\hyperlink{classVector}{Vector}}$<$ 3 $>$
+\item 
+auto \mbox{\hyperlink{test__data__structures_8cpp_ab800019ebb5d2c6cc414828b4cba8be7}{new\+\_\+random\+\_\+double}} (std\+::mt19937 \&gen, std\+::uniform\+\_\+real\+\_\+distribution$<$ double $>$ \&distribution) -\/$>$ double
+\item 
+std\+::list$<$ \mbox{\hyperlink{classParticle}{Particle}}$<$ 3 $>$ $>$ \mbox{\hyperlink{test__data__structures_8cpp_ae07f88128de7a8b86ec8e710d69523a7}{generate\+\_\+particles\+\_\+list}} (uint32\+\_\+t nb\+\_\+particles)
+\item 
+std\+::deque$<$ \mbox{\hyperlink{classParticle}{Particle}}$<$ 3 $>$ $>$ \mbox{\hyperlink{test__data__structures_8cpp_a32e1de621491b9cdcee301a601ff63bb}{generate\+\_\+particles\+\_\+queue}} (uint32\+\_\+t nb\+\_\+particles)
+\item 
+std\+::set$<$ \mbox{\hyperlink{classParticle}{Particle}}$<$ 3 $>$ $>$ \mbox{\hyperlink{test__data__structures_8cpp_a6e628a3d84864c7a2783af85f3e844e8}{generate\+\_\+particles\+\_\+set}} (uint32\+\_\+t nb\+\_\+particles)
+\item 
+std\+::vector$<$ \mbox{\hyperlink{classParticle}{Particle}}$<$ 3 $>$ $>$ \mbox{\hyperlink{test__data__structures_8cpp_a1e55dfa9d28317bb5c120b83667d3349}{generate\+\_\+particles\+\_\+vector}} (uint32\+\_\+t nb\+\_\+particles)
+\item 
+void \mbox{\hyperlink{test__data__structures_8cpp_a090511cc1401916b8e84f656ba2c4aff}{run}} (std\+::list$<$ uint32\+\_\+t $>$ particles\+\_\+sizes)
+\item 
+void \mbox{\hyperlink{test__data__structures_8cpp_a66b695b888d91b8545c8ed272f34a175}{data\+\_\+structures\+\_\+comparison}} ()
+\item 
+int \mbox{\hyperlink{test__data__structures_8cpp_ae66f6b31b5ad750f1fe042a706a4e3d4}{main}} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{test__data__structures_8cpp_a66b695b888d91b8545c8ed272f34a175}\label{test__data__structures_8cpp_a66b695b888d91b8545c8ed272f34a175}} 
+\index{test\_data\_structures.cpp@{test\_data\_structures.cpp}!data\_structures\_comparison@{data\_structures\_comparison}}
+\index{data\_structures\_comparison@{data\_structures\_comparison}!test\_data\_structures.cpp@{test\_data\_structures.cpp}}
+\doxysubsubsection{\texorpdfstring{data\_structures\_comparison()}{data\_structures\_comparison()}}
+{\footnotesize\ttfamily void data\+\_\+structures\+\_\+comparison (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{test__data__structures_8cpp_ae07f88128de7a8b86ec8e710d69523a7}\label{test__data__structures_8cpp_ae07f88128de7a8b86ec8e710d69523a7}} 
+\index{test\_data\_structures.cpp@{test\_data\_structures.cpp}!generate\_particles\_list@{generate\_particles\_list}}
+\index{generate\_particles\_list@{generate\_particles\_list}!test\_data\_structures.cpp@{test\_data\_structures.cpp}}
+\doxysubsubsection{\texorpdfstring{generate\_particles\_list()}{generate\_particles\_list()}}
+{\footnotesize\ttfamily std\+::list$<$\mbox{\hyperlink{classParticle}{Particle}}$<$3$>$ $>$ generate\+\_\+particles\+\_\+list (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{nb\+\_\+particles }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{test__data__structures_8cpp_a32e1de621491b9cdcee301a601ff63bb}\label{test__data__structures_8cpp_a32e1de621491b9cdcee301a601ff63bb}} 
+\index{test\_data\_structures.cpp@{test\_data\_structures.cpp}!generate\_particles\_queue@{generate\_particles\_queue}}
+\index{generate\_particles\_queue@{generate\_particles\_queue}!test\_data\_structures.cpp@{test\_data\_structures.cpp}}
+\doxysubsubsection{\texorpdfstring{generate\_particles\_queue()}{generate\_particles\_queue()}}
+{\footnotesize\ttfamily std\+::deque$<$\mbox{\hyperlink{classParticle}{Particle}}$<$3$>$ $>$ generate\+\_\+particles\+\_\+queue (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{nb\+\_\+particles }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{test__data__structures_8cpp_a6e628a3d84864c7a2783af85f3e844e8}\label{test__data__structures_8cpp_a6e628a3d84864c7a2783af85f3e844e8}} 
+\index{test\_data\_structures.cpp@{test\_data\_structures.cpp}!generate\_particles\_set@{generate\_particles\_set}}
+\index{generate\_particles\_set@{generate\_particles\_set}!test\_data\_structures.cpp@{test\_data\_structures.cpp}}
+\doxysubsubsection{\texorpdfstring{generate\_particles\_set()}{generate\_particles\_set()}}
+{\footnotesize\ttfamily std\+::set$<$\mbox{\hyperlink{classParticle}{Particle}}$<$3$>$ $>$ generate\+\_\+particles\+\_\+set (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{nb\+\_\+particles }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{test__data__structures_8cpp_a1e55dfa9d28317bb5c120b83667d3349}\label{test__data__structures_8cpp_a1e55dfa9d28317bb5c120b83667d3349}} 
+\index{test\_data\_structures.cpp@{test\_data\_structures.cpp}!generate\_particles\_vector@{generate\_particles\_vector}}
+\index{generate\_particles\_vector@{generate\_particles\_vector}!test\_data\_structures.cpp@{test\_data\_structures.cpp}}
+\doxysubsubsection{\texorpdfstring{generate\_particles\_vector()}{generate\_particles\_vector()}}
+{\footnotesize\ttfamily std\+::vector$<$\mbox{\hyperlink{classParticle}{Particle}}$<$3$>$ $>$ generate\+\_\+particles\+\_\+vector (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{nb\+\_\+particles }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{test__data__structures_8cpp_ae66f6b31b5ad750f1fe042a706a4e3d4}\label{test__data__structures_8cpp_ae66f6b31b5ad750f1fe042a706a4e3d4}} 
+\index{test\_data\_structures.cpp@{test\_data\_structures.cpp}!main@{main}}
+\index{main@{main}!test\_data\_structures.cpp@{test\_data\_structures.cpp}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{test__data__structures_8cpp_ab800019ebb5d2c6cc414828b4cba8be7}\label{test__data__structures_8cpp_ab800019ebb5d2c6cc414828b4cba8be7}} 
+\index{test\_data\_structures.cpp@{test\_data\_structures.cpp}!new\_random\_double@{new\_random\_double}}
+\index{new\_random\_double@{new\_random\_double}!test\_data\_structures.cpp@{test\_data\_structures.cpp}}
+\doxysubsubsection{\texorpdfstring{new\_random\_double()}{new\_random\_double()}}
+{\footnotesize\ttfamily auto new\+\_\+random\+\_\+double (\begin{DoxyParamCaption}\item[{std\+::mt19937 \&}]{gen,  }\item[{std\+::uniform\+\_\+real\+\_\+distribution$<$ double $>$ \&}]{distribution }\end{DoxyParamCaption}) -\/$>$ double }
+
+\mbox{\Hypertarget{test__data__structures_8cpp_a6380538a94b211ae2098bd9e2a95fdaf}\label{test__data__structures_8cpp_a6380538a94b211ae2098bd9e2a95fdaf}} 
+\index{test\_data\_structures.cpp@{test\_data\_structures.cpp}!new\_random\_vec3@{new\_random\_vec3}}
+\index{new\_random\_vec3@{new\_random\_vec3}!test\_data\_structures.cpp@{test\_data\_structures.cpp}}
+\doxysubsubsection{\texorpdfstring{new\_random\_vec3()}{new\_random\_vec3()}}
+{\footnotesize\ttfamily auto new\+\_\+random\+\_\+vec3 (\begin{DoxyParamCaption}\item[{std\+::mt19937 \&}]{gen,  }\item[{std\+::uniform\+\_\+real\+\_\+distribution$<$ double $>$ \&}]{distribution }\end{DoxyParamCaption}) -\/$>$ \mbox{\hyperlink{classVector}{Vector}}$<$3$>$ }
+
+\mbox{\Hypertarget{test__data__structures_8cpp_a090511cc1401916b8e84f656ba2c4aff}\label{test__data__structures_8cpp_a090511cc1401916b8e84f656ba2c4aff}} 
+\index{test\_data\_structures.cpp@{test\_data\_structures.cpp}!run@{run}}
+\index{run@{run}!test\_data\_structures.cpp@{test\_data\_structures.cpp}}
+\doxysubsubsection{\texorpdfstring{run()}{run()}}
+{\footnotesize\ttfamily void run (\begin{DoxyParamCaption}\item[{std\+::list$<$ uint32\+\_\+t $>$}]{particles\+\_\+sizes }\end{DoxyParamCaption})}
+

@@ -1,0 +1,160 @@
+\hypertarget{test__euler__edo_8cpp}{}\doxysection{test/test\+\_\+euler\+\_\+edo.cpp File Reference}
+\label{test__euler__edo_8cpp}\index{test/test\_euler\_edo.cpp@{test/test\_euler\_edo.cpp}}
+{\ttfamily \#include $<$cstdlib$>$}\newline
+{\ttfamily \#include $<$cmath$>$}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$functional$>$}\newline
+{\ttfamily \#include $<$random$>$}\newline
+Include dependency graph for test\+\_\+euler\+\_\+edo.\+cpp\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{test__euler__edo_8cpp__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+double $\ast$$\ast$ \mbox{\hyperlink{test__euler__edo_8cpp_a45828a2798596351a4e9645918950ce6}{initialization}} (int n)
+\begin{DoxyCompactList}\small\item\em Routine d\textquotesingle{}initialization qui permet d\textquotesingle{}allouer la mémoire pour une matrice carrée de taille n et renvoie un pointer vers la matrice allouée. \end{DoxyCompactList}\item 
+double $\ast$ \mbox{\hyperlink{test__euler__edo_8cpp_a21728410da0a0fa8a1ac535925b6a6e7}{fill\+\_\+vectors}} (double $\ast$vec, int n)
+\begin{DoxyCompactList}\small\item\em Intitialise un vecteur avec des valeurs aléatoires comprises entre dans l\textquotesingle{}intervalle \mbox{[}-\/10;10\mbox{]}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{test__euler__edo_8cpp_ae1139f8290e363825b39d0d8b51786b8}{print\+\_\+matrix}} (double $\ast$$\ast$matrix, int n)
+\begin{DoxyCompactList}\small\item\em Affiche les éléments d\textquotesingle{}une matrice de taille n. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{test__euler__edo_8cpp_a0cdc4ed69ee9bee547327bba3def8bda}{trace}} (double $\ast$$\ast$matrix, int n)
+\begin{DoxyCompactList}\small\item\em Calcule la trace d\textquotesingle{}une matrice. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{test__euler__edo_8cpp_a08a0bb478a00f8a2bf443c86d8557907}{compute\+\_\+trace}} ()
+\begin{DoxyCompactList}\small\item\em Driver principal pour le calcul de la tace d\textquotesingle{}une matrice. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{test__euler__edo_8cpp_a1765a556e32f5642239abbcc64c1efe3}{phi}} (double x, double u\+\_\+x)
+\item 
+double \mbox{\hyperlink{test__euler__edo_8cpp_a3dc70a83580e4981dc62e8b331cf42f7}{phi2}} (double x, double u\+\_\+x)
+\item 
+vector$<$ double $>$ \mbox{\hyperlink{test__euler__edo_8cpp_a9d0122574d77f00e2b00cd9bb8c04dc9}{euler\+\_\+explicit}} (int iter\+\_\+count, double initial\+\_\+value, const function$<$ double(double, double)$>$ \&\mbox{\hyperlink{test__euler__edo_8cpp_a1765a556e32f5642239abbcc64c1efe3}{phi}})
+\item 
+vector$<$ double $>$ \mbox{\hyperlink{test__euler__edo_8cpp_aa865838e9eb321c98600be54167c1d61}{euler\+\_\+implicit}} (int iter\+\_\+count, double initial\+\_\+value, const function$<$ double(double, double)$>$ \&\mbox{\hyperlink{test__euler__edo_8cpp_a1765a556e32f5642239abbcc64c1efe3}{phi}})
+\item 
+void \mbox{\hyperlink{test__euler__edo_8cpp_ad4fae22dc8f54f47e715d02554d8e9e2}{run\+\_\+euler\+\_\+methods}} (int iter\+\_\+count, double initial\+\_\+value, const function$<$ double(double, double)$>$ \&\mbox{\hyperlink{test__euler__edo_8cpp_a1765a556e32f5642239abbcc64c1efe3}{phi}})
+\item 
+int \mbox{\hyperlink{test__euler__edo_8cpp_ae66f6b31b5ad750f1fe042a706a4e3d4}{main}} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{test__euler__edo_8cpp_a08a0bb478a00f8a2bf443c86d8557907}\label{test__euler__edo_8cpp_a08a0bb478a00f8a2bf443c86d8557907}} 
+\index{test\_euler\_edo.cpp@{test\_euler\_edo.cpp}!compute\_trace@{compute\_trace}}
+\index{compute\_trace@{compute\_trace}!test\_euler\_edo.cpp@{test\_euler\_edo.cpp}}
+\doxysubsubsection{\texorpdfstring{compute\_trace()}{compute\_trace()}}
+{\footnotesize\ttfamily void compute\+\_\+trace (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Driver principal pour le calcul de la tace d\textquotesingle{}une matrice. 
+
+\mbox{\Hypertarget{test__euler__edo_8cpp_a9d0122574d77f00e2b00cd9bb8c04dc9}\label{test__euler__edo_8cpp_a9d0122574d77f00e2b00cd9bb8c04dc9}} 
+\index{test\_euler\_edo.cpp@{test\_euler\_edo.cpp}!euler\_explicit@{euler\_explicit}}
+\index{euler\_explicit@{euler\_explicit}!test\_euler\_edo.cpp@{test\_euler\_edo.cpp}}
+\doxysubsubsection{\texorpdfstring{euler\_explicit()}{euler\_explicit()}}
+{\footnotesize\ttfamily vector$<$double$>$ euler\+\_\+explicit (\begin{DoxyParamCaption}\item[{int}]{iter\+\_\+count,  }\item[{double}]{initial\+\_\+value,  }\item[{const function$<$ double(double, double)$>$ \&}]{phi }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{test__euler__edo_8cpp_aa865838e9eb321c98600be54167c1d61}\label{test__euler__edo_8cpp_aa865838e9eb321c98600be54167c1d61}} 
+\index{test\_euler\_edo.cpp@{test\_euler\_edo.cpp}!euler\_implicit@{euler\_implicit}}
+\index{euler\_implicit@{euler\_implicit}!test\_euler\_edo.cpp@{test\_euler\_edo.cpp}}
+\doxysubsubsection{\texorpdfstring{euler\_implicit()}{euler\_implicit()}}
+{\footnotesize\ttfamily vector$<$double$>$ euler\+\_\+implicit (\begin{DoxyParamCaption}\item[{int}]{iter\+\_\+count,  }\item[{double}]{initial\+\_\+value,  }\item[{const function$<$ double(double, double)$>$ \&}]{phi }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{test__euler__edo_8cpp_a21728410da0a0fa8a1ac535925b6a6e7}\label{test__euler__edo_8cpp_a21728410da0a0fa8a1ac535925b6a6e7}} 
+\index{test\_euler\_edo.cpp@{test\_euler\_edo.cpp}!fill\_vectors@{fill\_vectors}}
+\index{fill\_vectors@{fill\_vectors}!test\_euler\_edo.cpp@{test\_euler\_edo.cpp}}
+\doxysubsubsection{\texorpdfstring{fill\_vectors()}{fill\_vectors()}}
+{\footnotesize\ttfamily double $\ast$ fill\+\_\+vectors (\begin{DoxyParamCaption}\item[{double $\ast$}]{vec,  }\item[{int}]{n }\end{DoxyParamCaption})}
+
+
+
+Intitialise un vecteur avec des valeurs aléatoires comprises entre dans l\textquotesingle{}intervalle \mbox{[}-\/10;10\mbox{]}. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em vec} & est le vecteur à initialiser \\
+\hline
+\mbox{\texttt{ in}}  & {\em n} & est la taille du vecteur à initialiser \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Renvoie le vecteur initialisé. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{test__euler__edo_8cpp_a45828a2798596351a4e9645918950ce6}\label{test__euler__edo_8cpp_a45828a2798596351a4e9645918950ce6}} 
+\index{test\_euler\_edo.cpp@{test\_euler\_edo.cpp}!initialization@{initialization}}
+\index{initialization@{initialization}!test\_euler\_edo.cpp@{test\_euler\_edo.cpp}}
+\doxysubsubsection{\texorpdfstring{initialization()}{initialization()}}
+{\footnotesize\ttfamily double $\ast$$\ast$ initialization (\begin{DoxyParamCaption}\item[{int}]{n }\end{DoxyParamCaption})}
+
+
+
+Routine d\textquotesingle{}initialization qui permet d\textquotesingle{}allouer la mémoire pour une matrice carrée de taille n et renvoie un pointer vers la matrice allouée. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em n} & est la taille souhaitée de la matrice \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Renvoie le pointeur vers la matrice allouée 
+\end{DoxyReturn}
+\mbox{\Hypertarget{test__euler__edo_8cpp_ae66f6b31b5ad750f1fe042a706a4e3d4}\label{test__euler__edo_8cpp_ae66f6b31b5ad750f1fe042a706a4e3d4}} 
+\index{test\_euler\_edo.cpp@{test\_euler\_edo.cpp}!main@{main}}
+\index{main@{main}!test\_euler\_edo.cpp@{test\_euler\_edo.cpp}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{test__euler__edo_8cpp_a1765a556e32f5642239abbcc64c1efe3}\label{test__euler__edo_8cpp_a1765a556e32f5642239abbcc64c1efe3}} 
+\index{test\_euler\_edo.cpp@{test\_euler\_edo.cpp}!phi@{phi}}
+\index{phi@{phi}!test\_euler\_edo.cpp@{test\_euler\_edo.cpp}}
+\doxysubsubsection{\texorpdfstring{phi()}{phi()}}
+{\footnotesize\ttfamily double phi (\begin{DoxyParamCaption}\item[{double}]{x,  }\item[{double}]{u\+\_\+x }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{test__euler__edo_8cpp_a3dc70a83580e4981dc62e8b331cf42f7}\label{test__euler__edo_8cpp_a3dc70a83580e4981dc62e8b331cf42f7}} 
+\index{test\_euler\_edo.cpp@{test\_euler\_edo.cpp}!phi2@{phi2}}
+\index{phi2@{phi2}!test\_euler\_edo.cpp@{test\_euler\_edo.cpp}}
+\doxysubsubsection{\texorpdfstring{phi2()}{phi2()}}
+{\footnotesize\ttfamily double phi2 (\begin{DoxyParamCaption}\item[{double}]{x,  }\item[{double}]{u\+\_\+x }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{test__euler__edo_8cpp_ae1139f8290e363825b39d0d8b51786b8}\label{test__euler__edo_8cpp_ae1139f8290e363825b39d0d8b51786b8}} 
+\index{test\_euler\_edo.cpp@{test\_euler\_edo.cpp}!print\_matrix@{print\_matrix}}
+\index{print\_matrix@{print\_matrix}!test\_euler\_edo.cpp@{test\_euler\_edo.cpp}}
+\doxysubsubsection{\texorpdfstring{print\_matrix()}{print\_matrix()}}
+{\footnotesize\ttfamily void print\+\_\+matrix (\begin{DoxyParamCaption}\item[{double $\ast$$\ast$}]{matrix,  }\item[{int}]{n }\end{DoxyParamCaption})}
+
+
+
+Affiche les éléments d\textquotesingle{}une matrice de taille n. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em matrix} & est la matrice à afficher \\
+\hline
+\mbox{\texttt{ in}}  & {\em n} & est la taille de la matrice à afficher \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{test__euler__edo_8cpp_ad4fae22dc8f54f47e715d02554d8e9e2}\label{test__euler__edo_8cpp_ad4fae22dc8f54f47e715d02554d8e9e2}} 
+\index{test\_euler\_edo.cpp@{test\_euler\_edo.cpp}!run\_euler\_methods@{run\_euler\_methods}}
+\index{run\_euler\_methods@{run\_euler\_methods}!test\_euler\_edo.cpp@{test\_euler\_edo.cpp}}
+\doxysubsubsection{\texorpdfstring{run\_euler\_methods()}{run\_euler\_methods()}}
+{\footnotesize\ttfamily void run\+\_\+euler\+\_\+methods (\begin{DoxyParamCaption}\item[{int}]{iter\+\_\+count,  }\item[{double}]{initial\+\_\+value,  }\item[{const function$<$ double(double, double)$>$ \&}]{phi }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{test__euler__edo_8cpp_a0cdc4ed69ee9bee547327bba3def8bda}\label{test__euler__edo_8cpp_a0cdc4ed69ee9bee547327bba3def8bda}} 
+\index{test\_euler\_edo.cpp@{test\_euler\_edo.cpp}!trace@{trace}}
+\index{trace@{trace}!test\_euler\_edo.cpp@{test\_euler\_edo.cpp}}
+\doxysubsubsection{\texorpdfstring{trace()}{trace()}}
+{\footnotesize\ttfamily double trace (\begin{DoxyParamCaption}\item[{double $\ast$$\ast$}]{matrix,  }\item[{int}]{n }\end{DoxyParamCaption})}
+
+
+
+Calcule la trace d\textquotesingle{}une matrice. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em matrix} & est la matrice dont on souhaite connaître la trace. \\
+\hline
+\mbox{\texttt{ in}}  & {\em } & \\
+\hline
+\end{DoxyParams}

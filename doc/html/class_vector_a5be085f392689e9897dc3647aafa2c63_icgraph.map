@@ -1,0 +1,5 @@
+<map id="Vector::zero" name="Vector::zero">
+<area shape="rect" id="node1" title="Returns a zero vector." alt="" coords="149,31,248,57"/>
+<area shape="rect" id="node2" href="$test__vector_8cpp.html#af2724fae663fc2d117967d2600415ed0" title=" " alt="" coords="26,5,81,32"/>
+<area shape="rect" id="node3" href="$class_vector.html#ae3c539c9cf34c5dc27900f165f5062c3" title="Returns a vector with 1 on the i&#45;dimension and 0 for all the other components." alt="" coords="5,56,101,83"/>
+</map>

@@ -1,0 +1,129 @@
+\hypertarget{classCell}{}\doxysection{Cell Class Reference}
+\label{classCell}\index{Cell@{Cell}}
+
+
+Class representing a cell in the grid.  
+
+
+
+
+{\ttfamily \#include $<$Cell.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classCell_a394510643e8664cf12b5efaf5cb99f71}{Cell}} ()
+\begin{DoxyCompactList}\small\item\em Default constructor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classCell_a3fd0534316c23368c7f5804a3251c74c}{place}} (uint32\+\_\+t id)
+\begin{DoxyCompactList}\small\item\em Place a particle in the cell. \end{DoxyCompactList}\item 
+std\+::vector$<$ uint32\+\_\+t $>$ \& \mbox{\hyperlink{classCell_a7e037e85c2414a03d55dafcd1551217a}{get\+\_\+particles}} ()
+\begin{DoxyCompactList}\small\item\em Get the IDs of all particles in the cell. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classCell_a86de29383fa307621fb3a702a14b7eba}{empty}} ()
+\begin{DoxyCompactList}\small\item\em Remove all particles from the cell. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::vector$<$ int32\+\_\+t $>$ \mbox{\hyperlink{classCell_a9e4e36ec0e24fc69bc0b9119d7fd6269}{\+\_\+neighbours}}
+\begin{DoxyCompactList}\small\item\em Indices of neighbouring cells. \end{DoxyCompactList}\item 
+std\+::vector$<$ bool $>$ \mbox{\hyperlink{classCell_abf1e66bb17a50eab46e1e658b549071d}{is\+\_\+boundary}}
+\begin{DoxyCompactList}\small\item\em vector of 1+2$\ast$n where n is the dimension of the grid the cell is in. The first value is true if the cell is at least a boundary cell. The second (resp. third) element after is true if the cell is a left (resp. right) boundary for the first dimension. The following couple of values hold the booleans for the next dimensions. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::vector$<$ uint32\+\_\+t $>$ \mbox{\hyperlink{classCell_a2aeaf51d71dc0d9378f78e4f3598f856}{\+\_\+particles}}
+\begin{DoxyCompactList}\small\item\em IDs of particles in the cell. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Class representing a cell in the grid. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classCell_a394510643e8664cf12b5efaf5cb99f71}\label{classCell_a394510643e8664cf12b5efaf5cb99f71}} 
+\index{Cell@{Cell}!Cell@{Cell}}
+\index{Cell@{Cell}!Cell@{Cell}}
+\doxysubsubsection{\texorpdfstring{Cell()}{Cell()}}
+{\footnotesize\ttfamily Cell\+::\+Cell (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Default constructor. 
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classCell_a86de29383fa307621fb3a702a14b7eba}\label{classCell_a86de29383fa307621fb3a702a14b7eba}} 
+\index{Cell@{Cell}!empty@{empty}}
+\index{empty@{empty}!Cell@{Cell}}
+\doxysubsubsection{\texorpdfstring{empty()}{empty()}}
+{\footnotesize\ttfamily void Cell\+::empty (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Remove all particles from the cell. 
+
+\mbox{\Hypertarget{classCell_a7e037e85c2414a03d55dafcd1551217a}\label{classCell_a7e037e85c2414a03d55dafcd1551217a}} 
+\index{Cell@{Cell}!get\_particles@{get\_particles}}
+\index{get\_particles@{get\_particles}!Cell@{Cell}}
+\doxysubsubsection{\texorpdfstring{get\_particles()}{get\_particles()}}
+{\footnotesize\ttfamily std\+::vector$<$ uint32\+\_\+t $>$ \& Cell\+::get\+\_\+particles (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Get the IDs of all particles in the cell. 
+
+\begin{DoxyReturn}{Returns}
+\mbox{\hyperlink{classVector}{Vector}} of particle IDs. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classCell_a3fd0534316c23368c7f5804a3251c74c}\label{classCell_a3fd0534316c23368c7f5804a3251c74c}} 
+\index{Cell@{Cell}!place@{place}}
+\index{place@{place}!Cell@{Cell}}
+\doxysubsubsection{\texorpdfstring{place()}{place()}}
+{\footnotesize\ttfamily void Cell\+::place (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{id }\end{DoxyParamCaption})}
+
+
+
+Place a particle in the cell. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id} & \mbox{\hyperlink{classParticle}{Particle}} ID. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classCell_a9e4e36ec0e24fc69bc0b9119d7fd6269}\label{classCell_a9e4e36ec0e24fc69bc0b9119d7fd6269}} 
+\index{Cell@{Cell}!\_neighbours@{\_neighbours}}
+\index{\_neighbours@{\_neighbours}!Cell@{Cell}}
+\doxysubsubsection{\texorpdfstring{\_neighbours}{\_neighbours}}
+{\footnotesize\ttfamily std\+::vector$<$int32\+\_\+t$>$ Cell\+::\+\_\+neighbours}
+
+
+
+Indices of neighbouring cells. 
+
+\mbox{\Hypertarget{classCell_a2aeaf51d71dc0d9378f78e4f3598f856}\label{classCell_a2aeaf51d71dc0d9378f78e4f3598f856}} 
+\index{Cell@{Cell}!\_particles@{\_particles}}
+\index{\_particles@{\_particles}!Cell@{Cell}}
+\doxysubsubsection{\texorpdfstring{\_particles}{\_particles}}
+{\footnotesize\ttfamily std\+::vector$<$uint32\+\_\+t$>$ Cell\+::\+\_\+particles\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+IDs of particles in the cell. 
+
+\mbox{\Hypertarget{classCell_abf1e66bb17a50eab46e1e658b549071d}\label{classCell_abf1e66bb17a50eab46e1e658b549071d}} 
+\index{Cell@{Cell}!is\_boundary@{is\_boundary}}
+\index{is\_boundary@{is\_boundary}!Cell@{Cell}}
+\doxysubsubsection{\texorpdfstring{is\_boundary}{is\_boundary}}
+{\footnotesize\ttfamily std\+::vector$<$bool$>$ Cell\+::is\+\_\+boundary}
+
+
+
+vector of 1+2$\ast$n where n is the dimension of the grid the cell is in. The first value is true if the cell is at least a boundary cell. The second (resp. third) element after is true if the cell is a left (resp. right) boundary for the first dimension. The following couple of values hold the booleans for the next dimensions. 
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/\mbox{\hyperlink{Cell_8h}{Cell.\+h}}\end{DoxyCompactItemize}

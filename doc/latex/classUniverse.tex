@@ -1,0 +1,369 @@
+\hypertarget{classUniverse}{}\doxysection{Universe$<$ n $>$ Class Template Reference}
+\label{classUniverse}\index{Universe$<$ n $>$@{Universe$<$ n $>$}}
+
+
+Class representing the simulation universe.  
+
+
+
+
+{\ttfamily \#include $<$Universe.\+h$>$}
+
+
+
+Collaboration diagram for Universe$<$ n $>$\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=189pt]{classUniverse__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classUniverse_afa303c711e695bc69e5e3a092dd182f6}{Universe}} (\mbox{\hyperlink{structSimulationConstraints}{Simulation\+Constraints}}$<$ n $>$ constraints, double cell\+\_\+size)
+\item 
+int \mbox{\hyperlink{classUniverse_a56a667baf55eecfcd8839784e806bca8}{get\+\_\+particles\+\_\+count}} ()
+\begin{DoxyCompactList}\small\item\em Returns the amount of particles inside the \mbox{\hyperlink{classUniverse}{Universe}}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classUniverse_ad8768915b843222d7509d6e5ed6c236f}{add}} (\mbox{\hyperlink{classVector}{Vector}}$<$ n $>$ position, \mbox{\hyperlink{classVector}{Vector}}$<$ n $>$ velocity, double mass, \mbox{\hyperlink{Particle_8h_a9ca8f05608edcbf85ab6c2c85a439ccb}{Category}} category)
+\item 
+int \mbox{\hyperlink{classUniverse_abc152b502c95b0310afb5a425719aaa0}{add\+\_\+packed\+\_\+particles}} (\mbox{\hyperlink{classVector}{Vector}}$<$ n $>$ bottom\+\_\+left, \mbox{\hyperlink{classVector}{Vector}}$<$ n $>$ top\+\_\+right, \mbox{\hyperlink{classVector}{Vector}}$<$ n $>$ velocity, double mass, \mbox{\hyperlink{Particle_8h_a9ca8f05608edcbf85ab6c2c85a439ccb}{Category}} category, \mbox{\hyperlink{classVector}{Vector}}$<$ n $>$ particle\+\_\+count)
+\item 
+int \mbox{\hyperlink{classUniverse_aed2c9aae7e2a813b83098defaa5d6116}{fill\+\_\+sphere}} (\mbox{\hyperlink{classVector}{Vector}}$<$ n $>$ bottom\+\_\+left, \mbox{\hyperlink{classVector}{Vector}}$<$ n $>$ top\+\_\+right, \mbox{\hyperlink{classVector}{Vector}}$<$ n $>$ velocity, double mass, \mbox{\hyperlink{Particle_8h_a9ca8f05608edcbf85ab6c2c85a439ccb}{Category}} category, \mbox{\hyperlink{classVector}{Vector}}$<$ n $>$ particle\+\_\+count)
+\item 
+void \mbox{\hyperlink{classUniverse_aa32e06b7dd304695a92624c96deb74a0}{random\+\_\+fill}} (uint32\+\_\+t particle\+\_\+count)
+\item 
+void \mbox{\hyperlink{classUniverse_aeae4f5cf3f3f567724a5314485fd564a}{simulate}} (\mbox{\hyperlink{structSimulationSettings}{Simulation\+Settings}} settings)
+\item 
+void \mbox{\hyperlink{classUniverse_a715c815cbd02f50f997d8c93cdeb85e5}{save\+\_\+state}} (const std\+::string \&filename)
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classUniverse_a4e7d8ebed61ac74465b5c6daea66343d}{compute\+\_\+simulation}} ()
+\item 
+void \mbox{\hyperlink{classUniverse_ac25a189e222c827384e2cd02f23efac5}{init\+\_\+grid}} (double cell\+\_\+size)
+\begin{DoxyCompactList}\small\item\em Initialize the universe grid with the dimensions {\ttfamily size} \end{DoxyCompactList}\item 
+int32\+\_\+t \mbox{\hyperlink{classUniverse_abe30efdee05b8083ee0e26c697e6ace9}{get\+\_\+cell\+\_\+id}} (\mbox{\hyperlink{classVector}{Vector}}$<$ n $>$ position)
+\begin{DoxyCompactList}\small\item\em Compute the id of the cell that contains {\ttfamily position} \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classCell}{Cell}} \mbox{\hyperlink{classUniverse_a0c6b482cf147e76f61e076690fb46779}{get\+\_\+cell\+\_\+with\+\_\+id}} (int32\+\_\+t id)
+\begin{DoxyCompactList}\small\item\em Getter for the cell with id {\ttfamily id} \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classUniverse_aefa50d4fd713bffa78c171b18e37a528}{compute\+\_\+cell\+\_\+neighbours}} (int32\+\_\+t id, \mbox{\hyperlink{classCell}{Cell}} \&cell)
+\begin{DoxyCompactList}\small\item\em Compute the neightbour cell of cell with id {\ttfamily id} \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classUniverse_a53a79a799f441637e68c2956e2442d82}{empty\+\_\+grid}} ()
+\begin{DoxyCompactList}\small\item\em Empty the grid. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classUniverse_a93d7d0a2299ffaf6daa3ab86a57a2807}{place\+\_\+particles}} ()
+\begin{DoxyCompactList}\small\item\em place all the universe\textquotesingle{}s particles in their coresponding cell \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classUniverse_ae3adc35a42ae1ed1d3d96866ab291d1a}{update\+\_\+particles\+\_\+cells}} ()
+\begin{DoxyCompactList}\small\item\em move all the universe\textquotesingle{}s particles in their coresponding cell \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classUniverse_abc81c8669afc0a8935ea8c32f6cc775f}{update\+\_\+active\+\_\+cells}} ()
+\item 
+void \mbox{\hyperlink{classUniverse_aac41bc142ecccdc52aa880570a67b4b6}{update\+\_\+forces\+\_\+with\+\_\+grid}} ()
+\begin{DoxyCompactList}\small\item\em Update all the particles forces field using the grid. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classUniverse_a1f63dcebc59ce8087948d0d609c90a59}{apply\+\_\+boundary\+\_\+force}} (\mbox{\hyperlink{classParticle}{Particle}}$<$ n $>$ \&particle, const std\+::vector$<$ bool $>$ \&boundaries)
+\item 
+double \mbox{\hyperlink{classUniverse_a5ae77e9b07debc9baa545982d6f0ec8e}{compute\+\_\+kinetic\+\_\+energy}} ()
+\item 
+void \mbox{\hyperlink{classUniverse_a5655a1c93b8a9737e12a70a794c1d3d3}{balance\+\_\+kinetic\+\_\+energy}} ()
+\item 
+void \mbox{\hyperlink{classUniverse_a14eca1472255b7e6920a5f55c0075b59}{reset\+\_\+forces}} ()
+\begin{DoxyCompactList}\small\item\em Reset all particles forces to zero. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structSimulationSettings}{Simulation\+Settings}} \mbox{\hyperlink{classUniverse_a0026a71d192db308f58882388d628525}{\+\_\+settings}}
+\begin{DoxyCompactList}\small\item\em The simulation settings. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structSimulationConstraints}{Simulation\+Constraints}}$<$ n $>$ \mbox{\hyperlink{classUniverse_a42c83187c58fe9770c4267c1e5146038}{\+\_\+constraints}}
+\begin{DoxyCompactList}\small\item\em The simulation constraints. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structGrid}{Grid}}$<$ n $>$ \mbox{\hyperlink{classUniverse_a493f907bbfa9d53e12ca31cfe7894dc8}{\+\_\+grid}}
+\begin{DoxyCompactList}\small\item\em The grid characteristics. \end{DoxyCompactList}\item 
+std\+::vector$<$ \mbox{\hyperlink{classParticle}{Particle}}$<$ n $>$ $>$ \mbox{\hyperlink{classUniverse_aad18d5de8f1092eb85409c3eb0bb17ff}{\+\_\+particles}}
+\begin{DoxyCompactList}\small\item\em The universe particles. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$unsigned int n$>$\newline
+class Universe$<$ n $>$}
+
+Class representing the simulation universe. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classUniverse_afa303c711e695bc69e5e3a092dd182f6}\label{classUniverse_afa303c711e695bc69e5e3a092dd182f6}} 
+\index{Universe$<$ n $>$@{Universe$<$ n $>$}!Universe@{Universe}}
+\index{Universe@{Universe}!Universe$<$ n $>$@{Universe$<$ n $>$}}
+\doxysubsubsection{\texorpdfstring{Universe()}{Universe()}}
+{\footnotesize\ttfamily template$<$unsigned int n$>$ \\
+\mbox{\hyperlink{classUniverse}{Universe}}$<$ n $>$\+::\mbox{\hyperlink{classUniverse}{Universe}} (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structSimulationConstraints}{Simulation\+Constraints}}$<$ n $>$}]{constraints,  }\item[{double}]{cell\+\_\+size }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classUniverse_ad8768915b843222d7509d6e5ed6c236f}\label{classUniverse_ad8768915b843222d7509d6e5ed6c236f}} 
+\index{Universe$<$ n $>$@{Universe$<$ n $>$}!add@{add}}
+\index{add@{add}!Universe$<$ n $>$@{Universe$<$ n $>$}}
+\doxysubsubsection{\texorpdfstring{add()}{add()}}
+{\footnotesize\ttfamily template$<$unsigned int n$>$ \\
+void \mbox{\hyperlink{classUniverse}{Universe}}$<$ n $>$\+::add (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classVector}{Vector}}$<$ n $>$}]{position,  }\item[{\mbox{\hyperlink{classVector}{Vector}}$<$ n $>$}]{velocity,  }\item[{double}]{mass,  }\item[{\mbox{\hyperlink{Particle_8h_a9ca8f05608edcbf85ab6c2c85a439ccb}{Category}}}]{category }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classUniverse_abc152b502c95b0310afb5a425719aaa0}\label{classUniverse_abc152b502c95b0310afb5a425719aaa0}} 
+\index{Universe$<$ n $>$@{Universe$<$ n $>$}!add\_packed\_particles@{add\_packed\_particles}}
+\index{add\_packed\_particles@{add\_packed\_particles}!Universe$<$ n $>$@{Universe$<$ n $>$}}
+\doxysubsubsection{\texorpdfstring{add\_packed\_particles()}{add\_packed\_particles()}}
+{\footnotesize\ttfamily template$<$unsigned int n$>$ \\
+int \mbox{\hyperlink{classUniverse}{Universe}}$<$ n $>$\+::add\+\_\+packed\+\_\+particles (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classVector}{Vector}}$<$ n $>$}]{bottom\+\_\+left,  }\item[{\mbox{\hyperlink{classVector}{Vector}}$<$ n $>$}]{top\+\_\+right,  }\item[{\mbox{\hyperlink{classVector}{Vector}}$<$ n $>$}]{velocity,  }\item[{double}]{mass,  }\item[{\mbox{\hyperlink{Particle_8h_a9ca8f05608edcbf85ab6c2c85a439ccb}{Category}}}]{category,  }\item[{\mbox{\hyperlink{classVector}{Vector}}$<$ n $>$}]{particle\+\_\+count }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classUniverse_a1f63dcebc59ce8087948d0d609c90a59}\label{classUniverse_a1f63dcebc59ce8087948d0d609c90a59}} 
+\index{Universe$<$ n $>$@{Universe$<$ n $>$}!apply\_boundary\_force@{apply\_boundary\_force}}
+\index{apply\_boundary\_force@{apply\_boundary\_force}!Universe$<$ n $>$@{Universe$<$ n $>$}}
+\doxysubsubsection{\texorpdfstring{apply\_boundary\_force()}{apply\_boundary\_force()}}
+{\footnotesize\ttfamily template$<$unsigned int n$>$ \\
+void \mbox{\hyperlink{classUniverse}{Universe}}$<$ n $>$\+::apply\+\_\+boundary\+\_\+force (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classParticle}{Particle}}$<$ n $>$ \&}]{particle,  }\item[{const std\+::vector$<$ bool $>$ \&}]{boundaries }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classUniverse_a5655a1c93b8a9737e12a70a794c1d3d3}\label{classUniverse_a5655a1c93b8a9737e12a70a794c1d3d3}} 
+\index{Universe$<$ n $>$@{Universe$<$ n $>$}!balance\_kinetic\_energy@{balance\_kinetic\_energy}}
+\index{balance\_kinetic\_energy@{balance\_kinetic\_energy}!Universe$<$ n $>$@{Universe$<$ n $>$}}
+\doxysubsubsection{\texorpdfstring{balance\_kinetic\_energy()}{balance\_kinetic\_energy()}}
+{\footnotesize\ttfamily template$<$unsigned int n$>$ \\
+void \mbox{\hyperlink{classUniverse}{Universe}}$<$ n $>$\+::balance\+\_\+kinetic\+\_\+energy (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classUniverse_aefa50d4fd713bffa78c171b18e37a528}\label{classUniverse_aefa50d4fd713bffa78c171b18e37a528}} 
+\index{Universe$<$ n $>$@{Universe$<$ n $>$}!compute\_cell\_neighbours@{compute\_cell\_neighbours}}
+\index{compute\_cell\_neighbours@{compute\_cell\_neighbours}!Universe$<$ n $>$@{Universe$<$ n $>$}}
+\doxysubsubsection{\texorpdfstring{compute\_cell\_neighbours()}{compute\_cell\_neighbours()}}
+{\footnotesize\ttfamily template$<$unsigned int n$>$ \\
+void \mbox{\hyperlink{classUniverse}{Universe}}$<$ n $>$\+::compute\+\_\+cell\+\_\+neighbours (\begin{DoxyParamCaption}\item[{int32\+\_\+t}]{id,  }\item[{\mbox{\hyperlink{classCell}{Cell}} \&}]{cell }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Compute the neightbour cell of cell with id {\ttfamily id} 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classUniverse_a5ae77e9b07debc9baa545982d6f0ec8e}\label{classUniverse_a5ae77e9b07debc9baa545982d6f0ec8e}} 
+\index{Universe$<$ n $>$@{Universe$<$ n $>$}!compute\_kinetic\_energy@{compute\_kinetic\_energy}}
+\index{compute\_kinetic\_energy@{compute\_kinetic\_energy}!Universe$<$ n $>$@{Universe$<$ n $>$}}
+\doxysubsubsection{\texorpdfstring{compute\_kinetic\_energy()}{compute\_kinetic\_energy()}}
+{\footnotesize\ttfamily template$<$unsigned int n$>$ \\
+double \mbox{\hyperlink{classUniverse}{Universe}}$<$ n $>$\+::compute\+\_\+kinetic\+\_\+energy (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classUniverse_a4e7d8ebed61ac74465b5c6daea66343d}\label{classUniverse_a4e7d8ebed61ac74465b5c6daea66343d}} 
+\index{Universe$<$ n $>$@{Universe$<$ n $>$}!compute\_simulation@{compute\_simulation}}
+\index{compute\_simulation@{compute\_simulation}!Universe$<$ n $>$@{Universe$<$ n $>$}}
+\doxysubsubsection{\texorpdfstring{compute\_simulation()}{compute\_simulation()}}
+{\footnotesize\ttfamily template$<$unsigned int n$>$ \\
+void \mbox{\hyperlink{classUniverse}{Universe}}$<$ n $>$\+::compute\+\_\+simulation (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classUniverse_a53a79a799f441637e68c2956e2442d82}\label{classUniverse_a53a79a799f441637e68c2956e2442d82}} 
+\index{Universe$<$ n $>$@{Universe$<$ n $>$}!empty\_grid@{empty\_grid}}
+\index{empty\_grid@{empty\_grid}!Universe$<$ n $>$@{Universe$<$ n $>$}}
+\doxysubsubsection{\texorpdfstring{empty\_grid()}{empty\_grid()}}
+{\footnotesize\ttfamily template$<$unsigned int n$>$ \\
+void \mbox{\hyperlink{classUniverse}{Universe}}$<$ n $>$\+::empty\+\_\+grid (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Empty the grid. 
+
+\mbox{\Hypertarget{classUniverse_aed2c9aae7e2a813b83098defaa5d6116}\label{classUniverse_aed2c9aae7e2a813b83098defaa5d6116}} 
+\index{Universe$<$ n $>$@{Universe$<$ n $>$}!fill\_sphere@{fill\_sphere}}
+\index{fill\_sphere@{fill\_sphere}!Universe$<$ n $>$@{Universe$<$ n $>$}}
+\doxysubsubsection{\texorpdfstring{fill\_sphere()}{fill\_sphere()}}
+{\footnotesize\ttfamily template$<$unsigned int n$>$ \\
+int \mbox{\hyperlink{classUniverse}{Universe}}$<$ n $>$\+::fill\+\_\+sphere (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classVector}{Vector}}$<$ n $>$}]{bottom\+\_\+left,  }\item[{\mbox{\hyperlink{classVector}{Vector}}$<$ n $>$}]{top\+\_\+right,  }\item[{\mbox{\hyperlink{classVector}{Vector}}$<$ n $>$}]{velocity,  }\item[{double}]{mass,  }\item[{\mbox{\hyperlink{Particle_8h_a9ca8f05608edcbf85ab6c2c85a439ccb}{Category}}}]{category,  }\item[{\mbox{\hyperlink{classVector}{Vector}}$<$ n $>$}]{particle\+\_\+count }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classUniverse_abe30efdee05b8083ee0e26c697e6ace9}\label{classUniverse_abe30efdee05b8083ee0e26c697e6ace9}} 
+\index{Universe$<$ n $>$@{Universe$<$ n $>$}!get\_cell\_id@{get\_cell\_id}}
+\index{get\_cell\_id@{get\_cell\_id}!Universe$<$ n $>$@{Universe$<$ n $>$}}
+\doxysubsubsection{\texorpdfstring{get\_cell\_id()}{get\_cell\_id()}}
+{\footnotesize\ttfamily template$<$unsigned int n$>$ \\
+int32\+\_\+t \mbox{\hyperlink{classUniverse}{Universe}}$<$ n $>$\+::get\+\_\+cell\+\_\+id (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classVector}{Vector}}$<$ n $>$}]{position }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Compute the id of the cell that contains {\ttfamily position} 
+
+
+\begin{DoxyParams}{Parameters}
+{\em postion} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classUniverse_a0c6b482cf147e76f61e076690fb46779}\label{classUniverse_a0c6b482cf147e76f61e076690fb46779}} 
+\index{Universe$<$ n $>$@{Universe$<$ n $>$}!get\_cell\_with\_id@{get\_cell\_with\_id}}
+\index{get\_cell\_with\_id@{get\_cell\_with\_id}!Universe$<$ n $>$@{Universe$<$ n $>$}}
+\doxysubsubsection{\texorpdfstring{get\_cell\_with\_id()}{get\_cell\_with\_id()}}
+{\footnotesize\ttfamily template$<$unsigned int n$>$ \\
+\mbox{\hyperlink{classCell}{Cell}} \mbox{\hyperlink{classUniverse}{Universe}}$<$ n $>$\+::get\+\_\+cell\+\_\+with\+\_\+id (\begin{DoxyParamCaption}\item[{int32\+\_\+t}]{id }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Getter for the cell with id {\ttfamily id} 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classUniverse_a56a667baf55eecfcd8839784e806bca8}\label{classUniverse_a56a667baf55eecfcd8839784e806bca8}} 
+\index{Universe$<$ n $>$@{Universe$<$ n $>$}!get\_particles\_count@{get\_particles\_count}}
+\index{get\_particles\_count@{get\_particles\_count}!Universe$<$ n $>$@{Universe$<$ n $>$}}
+\doxysubsubsection{\texorpdfstring{get\_particles\_count()}{get\_particles\_count()}}
+{\footnotesize\ttfamily template$<$unsigned int n$>$ \\
+int \mbox{\hyperlink{classUniverse}{Universe}}$<$ n $>$\+::get\+\_\+particles\+\_\+count (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Returns the amount of particles inside the \mbox{\hyperlink{classUniverse}{Universe}}. 
+
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+\mbox{\Hypertarget{classUniverse_ac25a189e222c827384e2cd02f23efac5}\label{classUniverse_ac25a189e222c827384e2cd02f23efac5}} 
+\index{Universe$<$ n $>$@{Universe$<$ n $>$}!init\_grid@{init\_grid}}
+\index{init\_grid@{init\_grid}!Universe$<$ n $>$@{Universe$<$ n $>$}}
+\doxysubsubsection{\texorpdfstring{init\_grid()}{init\_grid()}}
+{\footnotesize\ttfamily template$<$unsigned int n$>$ \\
+void \mbox{\hyperlink{classUniverse}{Universe}}$<$ n $>$\+::init\+\_\+grid (\begin{DoxyParamCaption}\item[{double}]{cell\+\_\+size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Initialize the universe grid with the dimensions {\ttfamily size} 
+
+
+\begin{DoxyParams}{Parameters}
+{\em size} & the dimensions of the grid \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classUniverse_a93d7d0a2299ffaf6daa3ab86a57a2807}\label{classUniverse_a93d7d0a2299ffaf6daa3ab86a57a2807}} 
+\index{Universe$<$ n $>$@{Universe$<$ n $>$}!place\_particles@{place\_particles}}
+\index{place\_particles@{place\_particles}!Universe$<$ n $>$@{Universe$<$ n $>$}}
+\doxysubsubsection{\texorpdfstring{place\_particles()}{place\_particles()}}
+{\footnotesize\ttfamily template$<$unsigned int n$>$ \\
+void \mbox{\hyperlink{classUniverse}{Universe}}$<$ n $>$\+::place\+\_\+particles (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+place all the universe\textquotesingle{}s particles in their coresponding cell 
+
+\mbox{\Hypertarget{classUniverse_aa32e06b7dd304695a92624c96deb74a0}\label{classUniverse_aa32e06b7dd304695a92624c96deb74a0}} 
+\index{Universe$<$ n $>$@{Universe$<$ n $>$}!random\_fill@{random\_fill}}
+\index{random\_fill@{random\_fill}!Universe$<$ n $>$@{Universe$<$ n $>$}}
+\doxysubsubsection{\texorpdfstring{random\_fill()}{random\_fill()}}
+{\footnotesize\ttfamily template$<$unsigned int n$>$ \\
+void \mbox{\hyperlink{classUniverse}{Universe}}$<$ n $>$\+::random\+\_\+fill (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{particle\+\_\+count }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classUniverse_a14eca1472255b7e6920a5f55c0075b59}\label{classUniverse_a14eca1472255b7e6920a5f55c0075b59}} 
+\index{Universe$<$ n $>$@{Universe$<$ n $>$}!reset\_forces@{reset\_forces}}
+\index{reset\_forces@{reset\_forces}!Universe$<$ n $>$@{Universe$<$ n $>$}}
+\doxysubsubsection{\texorpdfstring{reset\_forces()}{reset\_forces()}}
+{\footnotesize\ttfamily template$<$unsigned int n$>$ \\
+void \mbox{\hyperlink{classUniverse}{Universe}}$<$ n $>$\+::reset\+\_\+forces (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Reset all particles forces to zero. 
+
+\mbox{\Hypertarget{classUniverse_a715c815cbd02f50f997d8c93cdeb85e5}\label{classUniverse_a715c815cbd02f50f997d8c93cdeb85e5}} 
+\index{Universe$<$ n $>$@{Universe$<$ n $>$}!save\_state@{save\_state}}
+\index{save\_state@{save\_state}!Universe$<$ n $>$@{Universe$<$ n $>$}}
+\doxysubsubsection{\texorpdfstring{save\_state()}{save\_state()}}
+{\footnotesize\ttfamily template$<$unsigned int n$>$ \\
+void \mbox{\hyperlink{classUniverse}{Universe}}$<$ n $>$\+::save\+\_\+state (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{filename }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classUniverse_aeae4f5cf3f3f567724a5314485fd564a}\label{classUniverse_aeae4f5cf3f3f567724a5314485fd564a}} 
+\index{Universe$<$ n $>$@{Universe$<$ n $>$}!simulate@{simulate}}
+\index{simulate@{simulate}!Universe$<$ n $>$@{Universe$<$ n $>$}}
+\doxysubsubsection{\texorpdfstring{simulate()}{simulate()}}
+{\footnotesize\ttfamily template$<$unsigned int n$>$ \\
+void \mbox{\hyperlink{classUniverse}{Universe}}$<$ n $>$\+::simulate (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structSimulationSettings}{Simulation\+Settings}}}]{settings }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classUniverse_abc81c8669afc0a8935ea8c32f6cc775f}\label{classUniverse_abc81c8669afc0a8935ea8c32f6cc775f}} 
+\index{Universe$<$ n $>$@{Universe$<$ n $>$}!update\_active\_cells@{update\_active\_cells}}
+\index{update\_active\_cells@{update\_active\_cells}!Universe$<$ n $>$@{Universe$<$ n $>$}}
+\doxysubsubsection{\texorpdfstring{update\_active\_cells()}{update\_active\_cells()}}
+{\footnotesize\ttfamily template$<$unsigned int n$>$ \\
+void \mbox{\hyperlink{classUniverse}{Universe}}$<$ n $>$\+::update\+\_\+active\+\_\+cells (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{classUniverse_aac41bc142ecccdc52aa880570a67b4b6}\label{classUniverse_aac41bc142ecccdc52aa880570a67b4b6}} 
+\index{Universe$<$ n $>$@{Universe$<$ n $>$}!update\_forces\_with\_grid@{update\_forces\_with\_grid}}
+\index{update\_forces\_with\_grid@{update\_forces\_with\_grid}!Universe$<$ n $>$@{Universe$<$ n $>$}}
+\doxysubsubsection{\texorpdfstring{update\_forces\_with\_grid()}{update\_forces\_with\_grid()}}
+{\footnotesize\ttfamily template$<$unsigned int n$>$ \\
+void \mbox{\hyperlink{classUniverse}{Universe}}$<$ n $>$\+::update\+\_\+forces\+\_\+with\+\_\+grid (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Update all the particles forces field using the grid. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em gravitational} & should the gravitational force be taken into account \\
+\hline
+{\em lennard\+\_\+jones} & should the lennard\+\_\+jones potential force be taken into account \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classUniverse_ae3adc35a42ae1ed1d3d96866ab291d1a}\label{classUniverse_ae3adc35a42ae1ed1d3d96866ab291d1a}} 
+\index{Universe$<$ n $>$@{Universe$<$ n $>$}!update\_particles\_cells@{update\_particles\_cells}}
+\index{update\_particles\_cells@{update\_particles\_cells}!Universe$<$ n $>$@{Universe$<$ n $>$}}
+\doxysubsubsection{\texorpdfstring{update\_particles\_cells()}{update\_particles\_cells()}}
+{\footnotesize\ttfamily template$<$unsigned int n$>$ \\
+void \mbox{\hyperlink{classUniverse}{Universe}}$<$ n $>$\+::update\+\_\+particles\+\_\+cells (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+move all the universe\textquotesingle{}s particles in their coresponding cell 
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classUniverse_a42c83187c58fe9770c4267c1e5146038}\label{classUniverse_a42c83187c58fe9770c4267c1e5146038}} 
+\index{Universe$<$ n $>$@{Universe$<$ n $>$}!\_constraints@{\_constraints}}
+\index{\_constraints@{\_constraints}!Universe$<$ n $>$@{Universe$<$ n $>$}}
+\doxysubsubsection{\texorpdfstring{\_constraints}{\_constraints}}
+{\footnotesize\ttfamily template$<$unsigned int n$>$ \\
+\mbox{\hyperlink{structSimulationConstraints}{Simulation\+Constraints}}$<$n$>$ \mbox{\hyperlink{classUniverse}{Universe}}$<$ n $>$\+::\+\_\+constraints\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The simulation constraints. 
+
+\mbox{\Hypertarget{classUniverse_a493f907bbfa9d53e12ca31cfe7894dc8}\label{classUniverse_a493f907bbfa9d53e12ca31cfe7894dc8}} 
+\index{Universe$<$ n $>$@{Universe$<$ n $>$}!\_grid@{\_grid}}
+\index{\_grid@{\_grid}!Universe$<$ n $>$@{Universe$<$ n $>$}}
+\doxysubsubsection{\texorpdfstring{\_grid}{\_grid}}
+{\footnotesize\ttfamily template$<$unsigned int n$>$ \\
+\mbox{\hyperlink{structGrid}{Grid}}$<$n$>$ \mbox{\hyperlink{classUniverse}{Universe}}$<$ n $>$\+::\+\_\+grid\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The grid characteristics. 
+
+\mbox{\Hypertarget{classUniverse_aad18d5de8f1092eb85409c3eb0bb17ff}\label{classUniverse_aad18d5de8f1092eb85409c3eb0bb17ff}} 
+\index{Universe$<$ n $>$@{Universe$<$ n $>$}!\_particles@{\_particles}}
+\index{\_particles@{\_particles}!Universe$<$ n $>$@{Universe$<$ n $>$}}
+\doxysubsubsection{\texorpdfstring{\_particles}{\_particles}}
+{\footnotesize\ttfamily template$<$unsigned int n$>$ \\
+std\+::vector$<$\mbox{\hyperlink{classParticle}{Particle}}$<$n$>$ $>$ \mbox{\hyperlink{classUniverse}{Universe}}$<$ n $>$\+::\+\_\+particles\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The universe particles. 
+
+\mbox{\Hypertarget{classUniverse_a0026a71d192db308f58882388d628525}\label{classUniverse_a0026a71d192db308f58882388d628525}} 
+\index{Universe$<$ n $>$@{Universe$<$ n $>$}!\_settings@{\_settings}}
+\index{\_settings@{\_settings}!Universe$<$ n $>$@{Universe$<$ n $>$}}
+\doxysubsubsection{\texorpdfstring{\_settings}{\_settings}}
+{\footnotesize\ttfamily template$<$unsigned int n$>$ \\
+\mbox{\hyperlink{structSimulationSettings}{Simulation\+Settings}} \mbox{\hyperlink{classUniverse}{Universe}}$<$ n $>$\+::\+\_\+settings\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The simulation settings. 
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/\mbox{\hyperlink{Universe_8h}{Universe.\+h}}\end{DoxyCompactItemize}
