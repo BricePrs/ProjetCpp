@@ -1,7 +1,0 @@
-<map id="compute_trace" name="compute_trace">
-<area shape="rect" id="node1" title="Driver principal pour le calcul de la tace d&#39;une matrice." alt="" coords="5,81,124,108"/>
-<area shape="rect" id="node2" href="$test__euler__edo_8cpp.html#a21728410da0a0fa8a1ac535925b6a6e7" title="Intitialise un vecteur avec des valeurs aléatoires comprises entre dans l&#39;intervalle [&#45;10;10]." alt="" coords="177,5,270,32"/>
-<area shape="rect" id="node3" href="$test__euler__edo_8cpp.html#a45828a2798596351a4e9645918950ce6" title="Routine d&#39;initialization qui permet d&#39;allouer la mémoire pour une matrice carrée de taille n et renvo..." alt="" coords="172,56,275,83"/>
-<area shape="rect" id="node4" href="$test__euler__edo_8cpp.html#ae1139f8290e363825b39d0d8b51786b8" title="Affiche les éléments d&#39;une matrice de taille n." alt="" coords="172,107,275,133"/>
-<area shape="rect" id="node5" href="$test__euler__edo_8cpp.html#a0cdc4ed69ee9bee547327bba3def8bda" title="Calcule la trace d&#39;une matrice." alt="" coords="196,157,251,184"/>
-</map>

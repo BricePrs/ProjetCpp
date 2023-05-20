@@ -1,7 +1,0 @@
-<map id="TEST" name="TEST">
-<area shape="rect" id="node1" title=" " alt="" coords="5,81,60,108"/>
-<area shape="rect" id="node2" href="$class_vector.html#aeb4388b639cab2fbc3a7428917c9fb42" title="cross Computes the cross product of two vectors." alt="" coords="127,5,233,32"/>
-<area shape="rect" id="node3" href="$class_vector.html#a40ea8b8b1233c6a6ee1d363690fd2dea" title="dot Computes the dot product of two vectors." alt="" coords="134,56,226,83"/>
-<area shape="rect" id="node4" href="$class_vector.html#a57718965dd7c139df713aa915ca9be25" title="length Returns the length of the vector." alt="" coords="124,107,236,133"/>
-<area shape="rect" id="node5" href="$class_vector.html#a9a64bbad5c181c167a05426d6176c18a" title="normalized Returns a normalized copy of the vector." alt="" coords="108,157,252,184"/>
-</map>

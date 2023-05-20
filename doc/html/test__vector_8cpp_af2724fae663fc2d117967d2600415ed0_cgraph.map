@@ -1,8 +1,0 @@
-<map id="TEST" name="TEST">
-<area shape="rect" id="node1" title=" " alt="" coords="5,107,60,133"/>
-<area shape="rect" id="node2" href="$class_vector.html#a40ea8b8b1233c6a6ee1d363690fd2dea" title="dot Computes the dot product of two vectors." alt="" coords="130,5,222,32"/>
-<area shape="rect" id="node3" href="$class_vector.html#a57718965dd7c139df713aa915ca9be25" title="length Returns the length of the vector." alt="" coords="120,56,232,83"/>
-<area shape="rect" id="node4" href="$class_vector.html#a43c89662d624955b39df328baae9794a" title="normalize Normalizes the vector." alt="" coords="108,107,244,133"/>
-<area shape="rect" id="node5" href="$class_vector.html#a2c0a3d8f44255541db733ad38e57af4e" title="sq_length Returns the square of the length of the vector." alt="" coords="109,157,243,184"/>
-<area shape="rect" id="node6" href="$class_vector.html#a5be085f392689e9897dc3647aafa2c63" title="Returns a zero vector." alt="" coords="127,208,225,235"/>
-</map>
