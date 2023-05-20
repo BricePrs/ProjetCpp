@@ -45,6 +45,13 @@ La position de chaque particule peut être donnée explicitement à l'initialisa
 
 Il est également possible de générer un univers de particules de même nature (même masse, vitesse, catégorie) régulièrement espacées les unes des autres dans un espace de dimension *n* = 1, 2 ou 3 on peut avec la méthode ***add_packed_particles*** de la classe **Universe** qui renvoie le nombre de particules utilisé pour remplir l'espace en fin de fonction. La description de ces deux méthodes de la classe est présente dans la documentation.
 
+À l'inverse, il est également possible de générer un univers de particules dans un espace de dimension n (cube en dimension 3, carré en dimension 2 et ligne en dimension 1) avec des paramètres aléatoires pour chacun d'entre elles.
+Pour cela, il faudra utiliser la méthode **_random_fill_**.
+
+Lorsque l'Univers est réglé en dimension 2, il est possible de remplir ce dernier à l'aide de la méthode **_fill_disk_** qui va remplir un disque (2D).
+
+La description des méthodes précédentes est disponible dans la documentation.
+
 *Exemple d'utilisation :*
 
 ```cpp
@@ -66,6 +73,15 @@ univers.add(Vector<2>(34.75, 0.), Vector<2>(0., 0.0296), 1.0e-14, Category::NEUT
 double spacing = pow(2., 1./6.)*.1;
 int a = univers.add_packed_particles(Vector<3>(-20., 20., -20.)*spacing+Vector<3>(0., 5., 0.), Vector<3>(20., 60., 20.)*spacing+Vector<3>(0., 5., 0.), Vector<3>(0., -10., 0.), 1., NEUTRON, Vector<3>(4, 4, 4));  
 int b = univers.add_packed_particles(Vector<3>(-80., -20., -80.)*spacing, Vector<3>(80., 20., 80.)*spacing, Vector<3>(0.), 1., NEUTRON, Vector<3>(16, 4, 16));
+
+---
+// Création d'un univers composé d'un carré contenant 'k' particules initialisée aléatoirement (position, vitesse, masse et catégorie)
+univers.random_fill(k);
+
+---
+// Création d'un univers composé d'un disque contenant 'k' particules régulièrement espacées dans un cercle de centre (1.0, 0.0, 1.0) avec une masse de 1.0, une vitesse de Vector<3>(0., -10., 0.) et de type NEUTRON
+double spacing = pow(2., 1./6.)*.1;
+univers.fill_disk(Vector<3>(1.0, 0.0, 1.0), spacing, Vector<3>(0., -10., 0.), 1., NEUTRON, k)
 
 ```
 

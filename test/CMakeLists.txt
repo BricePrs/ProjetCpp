@@ -2,7 +2,7 @@
 add_executable(TestDataStructures test_data_structures.cpp)
 add_executable(TestEulerEDO test_euler_edo.cpp)
 add_executable(TestLennardJones test_lennard_jones.cpp)
-add_executable(TestUnivers test_universe.cpp)
+add_executable(TestUniversPerf test_universe.cpp)
 add_executable(TestSystemeSolaire test_solar_system.cpp)
 add_executable(TestCollision test_collision.cpp)
 add_executable(TwoAtomCollision two_atom_collision.cpp)
