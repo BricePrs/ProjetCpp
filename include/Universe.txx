@@ -125,28 +125,32 @@ int Universe<n>::add_packed_particles(Vector<n> bottom_left, Vector<n> top_right
 }
 
 template<unsigned int n>
-int Universe<n>::fill_sphere(Vector<n> bottom_left, Vector<n> top_right, Vector<n> velocity, double mass, Category category, Vector<n> particle_count) {
-    Vector<n> spacing = (top_right - bottom_left) / (particle_count - Vector<n>(1.));
-    int particle_total = 1.;
-    for (int dim = 0; dim < n; ++dim) {
-        particle_total *= particle_count[dim];
-    }
+int     Universe<n>::fill_disk(Vector<n> center, double spacing, Vector<n> velocity, double mass, Category category,
+                               uint32_t particle_count) {
+    static_assert(n == 2, "fill_disk only work in a dimension 2 universe");
+    assert(particle_count > 0);
+    static double PI = 3.141592;
 
-    Vector<n> index = Vector<n>(0.);
-    index[0] = -1;
-    for (int i = 0; i < particle_total; ++i) {
-        index[0] += 1;
-        for (int dim = 0; dim < n; ++dim) {
-            if (index[dim] >= particle_count[dim]) {
-                index[dim] = 0;
-                index[dim + 1]++;
-            }
+    add(center, velocity, mass, category);
+
+    double spacing_sq = spacing*spacing;
+    uint32_t counter = 1;
+    double radius = 0.;
+    while (counter < particle_count) {
+        Vector<n> prev_pos = Vector<n>::zero();
+        radius += spacing;
+        int max_pt = floor(2.*PI*radius/spacing);
+        double dth = 2.*PI*radius / max_pt;
+        double theta = 0.;
+        for (int i = 0; i < max_pt; ++i) {
+            Vector<2> new_pos = Vector<2>(cos(theta), sin(theta))*radius;
+            add(center+new_pos, velocity, mass, category);
+            theta+=dth;
+            ++counter;
         }
-        auto a = index * spacing;
-        add(bottom_left + index * spacing, velocity, mass, category);
-
     }
-    return particle_total;
+
+    return particle_count;
 }
 
 template <unsigned int n>
@@ -325,8 +329,8 @@ void Universe<n>::update_forces_with_grid() {
                         Particle<n>::compute_forces(
                                 current_particle,
                                 neighbour_particle,
-                                _settings.lennard_jones_interaction,
-                                _settings.gravitational_interaction
+                                _settings.gravitational_interaction,
+                                _settings.lennard_jones_interaction
                         );
                     }
                 }

@@ -176,8 +176,8 @@ private:
     inline static double r_cut_sq = 2.5*2.5;
 
     // parameters for Lennard Jones' potential
-    inline static double eps = 5.0;
-    inline static double CST_G = -9.81;
+    inline static double eps = 1.0;
+    inline static double CST_G = -12.;
     inline static double sigma = 1.0;
     inline static double sigma_exp_six = pow(sigma, 6);
 

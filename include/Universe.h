@@ -71,7 +71,7 @@ public:
 
     void    add(Vector<n> position, Vector<n> velocity, double mass, Category category);
     int     add_packed_particles(Vector<n> bottom_left, Vector<n> top_right, Vector<n> velocity, double mass, Category category, Vector<n> particle_count);
-    int     fill_sphere(Vector<n> bottom_left, Vector<n> top_right, Vector<n> velocity, double mass, Category category, Vector<n> particle_count);
+    int     fill_disk(Vector<n> center, double spacing, Vector<n> velocity, double mass, Category category, uint32_t particle_count);
     void    random_fill(uint32_t particle_count);
 
     void    simulate(SimulationSettings settings);

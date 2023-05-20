@@ -10,11 +10,14 @@ set(CMAKE_CXX_STANDARD 17)
 ## Indique les options de compilations pour le projet
 ## -pg : donne la possibilité de faire du profiling
 ## -Wall : affiche les warnings
-set(CMAKE_CXX_FLAGS "-Wall -pg")
+set(CMAKE_CXX_FLAGS "-Wall -pg -O3")
 
 ## Définir la localisation des entêtes.
 ## include_directories sera propagé à l'ensemble du projet
 include_directories(${CMAKE_SOURCE_DIR}/include)
+
+# Header only library
+include_directories(${CMAKE_SOURCE_DIR}/vendors)
 
 ## Parcours les sous répertoires contenant les définitions (.cxx)
 ## On commence par créer une bibliothèque
@@ -27,9 +30,6 @@ add_subdirectory(test)
 
 ## On crée la démo pour la bibliothèque
 add_subdirectory(demo)
-
-
-#add_subdirectory(vendors)
 
 # Find Doxygen package
 find_package(Doxygen REQUIRED)

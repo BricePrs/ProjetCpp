@@ -20,7 +20,7 @@ public:
      * @brief Constructor that initializes all components with the same value.
      * @param a The value to initialize the components with.
      */
-    Vector(double a);
+    explicit Vector(double a);
 
     /**
      * @brief Move constructor for Vector class.

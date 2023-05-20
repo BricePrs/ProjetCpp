@@ -39,7 +39,7 @@ template<unsigned int n>
 void Particle<n>::apply_gravity() {
     Vector up = Vector<n>::zero();
     up[1] = 1.;
-    apply_force(CST_G * _mass);
+    apply_force(CST_G * _mass * up);
 }
 
 template<unsigned int n>

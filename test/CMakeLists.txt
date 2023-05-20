@@ -8,6 +8,8 @@ add_executable(TestCollision test_collision.cpp)
 add_executable(TwoAtomCollision two_atom_collision.cpp)
 add_executable(TestReflexive reflexive_borders.cpp)
 add_executable(TestCollision3D test_collision_3D.cpp)
+add_executable(TestCollisionBorder test_collision_border.cpp)
+add_executable(TestFinal test_final.cpp)
 
 
 # Fait le lien avec la bibliothèque créée précedemment

@@ -34,3 +34,6 @@
 debug_build
 release_build
 .idea
+/cmake-build-debug/
+/doc/html/
+/doc/latex/

@@ -38,7 +38,7 @@ int main() {
         19.5,
         2000,
         1000,
-        Periodic
+        Absorption
     };
 
     universe.simulate(settings);
