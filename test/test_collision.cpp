@@ -37,7 +37,7 @@ int main() {
     auto settings = SimulationSettings {
         .lennard_jones_interaction = true,
         .physics_time_step = .00005,
-        .physics_time_total = .5,
+        .physics_time_total = 19.5,
         .iter_count_until_save = 2000,
         .boundary_behaviour = Absorption,
         .constants = constants

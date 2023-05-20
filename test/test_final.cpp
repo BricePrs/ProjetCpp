@@ -17,7 +17,7 @@ int main() {
 
     int a = universe.add_packed_particles(
             Vector<2>(spacing),
-            Vector<2>(250.-spacing, 45.*spacing),
+            Vector<2>(250.-spacing, 35.*spacing),
             Vector<2>(0., 0.),
             1.,
             NEUTRON,

@@ -52,7 +52,7 @@ void Particle<n>::apply_gravity() {
 }
 
 template<unsigned int n>
-inline void Particle<n>::compute_forces(Particle &a, Particle &b, Simulation) {
+inline void Particle<n>::compute_forces(Particle &a, Particle &b, bool gravitational, bool lennard_jones) {
     double F_length = 0.;
 
     Vector<n> R_ij(b.get_pos() - a.get_pos());
