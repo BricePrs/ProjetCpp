@@ -236,7 +236,7 @@ void Universe<n>::compute_cell_neighbours(int32_t id, Cell &cell) {
     // repeat two bool for each dimension
     bool is_boundary = false;
     auto boundaries = std::vector<bool>(1 + 2*n);
-    for (uint32_t j = 0; j < 2*n; ++j) {
+    for (uint32_t j = 0; j < n; ++j) {
         if (coords[j] == 0) {
             boundaries[1+2*j] = true;
             is_boundary = true;
